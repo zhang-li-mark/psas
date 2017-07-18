@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>明细</title>
+	<link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="${ctx.contextPath}/res/jquery-easyui-1.4.4/themes/bootstrap/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="${ctx.contextPath}/res/jquery-easyui-1.4.4/themes/icon.css" />
+    <link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="${ctx.contextPath}/res/jquery-easyui-1.4.4/jquery.easyui.min.js"></script>
+	<script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	<style>
+    .datagrid-cell-group {
+        height: auto;
+    }
+</style>
+</head>
+<body style="overflow: hidden;">
+<script type="text/javascript">
+var editIndex = undefined;
+function endEditing() {
+    if (editIndex == undefined) { return true }
+    if ($('#demoTable').datagrid('validateRow', editIndex)) {
+        $('#demoTable').datagrid('endEdit', editIndex);
+        editIndex = undefined;
+        return true;
+    } else {
+        return false;
+    }
+}
+        var cpmxxh=request("cpmxxh");
+        var rybz=request("rybz");
+        var $obj = null;
+        $(function () {
+            $obj = $('#demoTable');
+            /****/
+            $obj.datagrid({
+            	url: "${ctx.contextPath}/mzcp/getCpJgMx?rybz="+rybz+"&cpmxxh="+cpmxxh,
+                method: 'post',
+                nowrap: false,
+                rownumbers:true,
+                singleSelect:true,
+                cache:false,
+                onClickCell: editCell
+                //onClickRow: editrow
+            , onBeforeEdit: function (index, row) {
+                row.editing = true;
+                $obj.datagrid('refreshRow', index);
+            },
+                onAfterEdit: function (index, row) {
+                    row.editing = false;
+                    $obj.datagrid('refreshRow', index);
+                }
+            });
+            $obj.datagrid('hideColumn', 'pjdf');
+            $obj.datagrid('hideColumn', 'xh');
+            $obj.datagrid('hideColumn', 'pjcxh');
+            $obj.datagrid('hideColumn', 'cpmxxh');
+            $obj.datagrid('hideColumn', '_bz');
+        });
+            var EUIGrid = {
+                //设置列的值(适用于所有列)
+                setFieldValue: function (fieldName, value, index, grid) {
+                    if (grid == undefined || grid == '') {
+                        return;
+                    }
+                    var row = grid.datagrid('getRows')[index];
+                    if (row != null) {
+                        var editor = grid.datagrid('getEditor', { index: index, field: fieldName });
+                        if (editor != null) {
+                            this.setValueToEditor(editor, value);
+                        }
+                        else {
+                            var view = $('.datagrid-view');
+                            for (var i = 0; i < view.length; i++) {
+                                if ($(view[i]).children(grid.selector).length > 0) {
+                                    var view = $(view[i]).children('.datagrid-view2');
+                                    var td = $(view).find('.datagrid-body td[field="' + fieldName + '"]')[index]
+                                    var div = $(td).find('div')[0];
+                                    $(div).html(value);
+                                }
+                            }
+                            row[fieldName] = value;
+                        }
+                        grid.datagrid('clearSelections');
+                    }
+                },
+                //设置datagrid的编辑器的值
+                setValueToEditor: function (editor, value) {
+                    switch (editor.type) {
+                        case "combobox":
+                            editor.target.combobox("setValue", value);
+                            break;
+                        case "combotree":
+                            editor.target.combotree("setValue", value);
+                            break;
+                        case "textbox":
+                            editor.target.textbox("setValue", value);
+                            break;
+                        case "numberbox":
+                            editor.target.numberbox("setValue", value);
+                            break;
+                        case "datebox":
+                            editor.target.datebox("setValue", value);
+                            break;
+                        case "datetimebox":
+                            editor.target.datebox("setValue", value);
+                            break;
+                        default:
+                            editor.html = value;
+                            break;
+                    }
+                }
+            }
+            function editCell(index, field, value) {
+                if (!endEditing()) { return; }
+                $obj.datagrid('selectRow', index);
+                editIndex = index;
+                //dnqj
+                if (field == "da" || field == "db" || field == "dc" ||
+                		field == "na" || field == "nb" || field == "nc"||
+                		field == "qa" || field == "qb" || field == "qc"||
+                		field == "ja" || field == "jb" || field == "jc") {
+                    var ok = "<img src='${ctx.contextPath}/res/jquery-easyui-1.4.4/themes/icons/ok.png'/>";
+                    var no = "";
+
+                    EUIGrid.setFieldValue('da', no, index, $obj);
+                    EUIGrid.setFieldValue('db', no, index, $obj);
+                    EUIGrid.setFieldValue('dc', no, index, $obj);
+                    
+                    EUIGrid.setFieldValue('na', no, index, $obj);
+                    EUIGrid.setFieldValue('nb', no, index, $obj);
+                    EUIGrid.setFieldValue('nc', no, index, $obj);
+                    
+                    EUIGrid.setFieldValue('qa', no, index, $obj);
+                    EUIGrid.setFieldValue('qb', no, index, $obj);
+                    EUIGrid.setFieldValue('qc', no, index, $obj);
+                    
+                    EUIGrid.setFieldValue('ja', no, index, $obj);
+                    EUIGrid.setFieldValue('jb', no, index, $obj);
+                    EUIGrid.setFieldValue('jc', no, index, $obj);
+
+                    EUIGrid.setFieldValue(field, ok, index, $obj);
+                    var df = 0;
+                    switch (field) {
+                        case 'da': df = 100; break;
+                        case 'db': df = 96; break;
+                        case 'dc': df = 92; break;
+                        case 'na': df = 90; break;
+                        case 'nb': df = 85; break;
+                        case 'nc': df = 80; break;
+                        case 'qa': df = 75; break;
+                        case 'qb': df = 70; break;
+                        case 'qc': df = 65; break;
+                        case 'ja': df = 60; break;
+                        case 'jb': df = 55; break;
+                        case 'jc': df = 50; break;
+                    }
+                    EUIGrid.setFieldValue('pjdf', df, index, $obj);
+                    if (df <65) {
+                    	dialogContent({
+                    	        id: "_cDiv",
+                    	        title: '评价为“差”等次的需填写以下说明',
+                    	        width: "630px",
+                    	        height: "600px",
+                    	        content:$("#_cxxDiv").html(),
+                    	        btn: ['确认'],
+                    	        callBack:function(id){
+                    	        	//
+                    	        	var d=[],bz=[];
+                    	        	top.$("#_cDiv .active").each(function(i,row){
+                    	        		var obj = $(".card-box-content",$(this));
+                	        			d.push(obj.text());
+                	        			bz.push(obj.attr("id"));
+                	        		});
+               	        			//console.log(d.join(","));
+               	        			//console.log(bz.join(","));
+               	        			EUIGrid.setFieldValue('pjcxh', bz.join("$"), index, $obj);
+               	        			EUIGrid.setFieldValue('pjbz', suolve(d.join("$"), 30), index, $obj);//
+               	        			EUIGrid.setFieldValue('_bz', d.join("$"), index, $obj);
+               	        			//EUIGrid.setFieldValue('pjbz',d.join(","), index, $obj);//
+               	        			//如果没有选择，取消选择差选型
+               	        			if(d.length==0){
+               	        				EUIGrid.setFieldValue('ja', no, index, $obj);
+               	                     	EUIGrid.setFieldValue('jb', no, index, $obj);
+               	                     	EUIGrid.setFieldValue('jc', no, index, $obj);
+               	                     	//
+               	                     	EUIGrid.setFieldValue('cpmxxh', "", index, $obj);
+                	        			EUIGrid.setFieldValue('xh', "", index, $obj);
+                	        			EUIGrid.setFieldValue('pjdf', 0, index, $obj);
+               	        			}
+               	        			parent.layer.closeAll('page'); 
+               	        			//top.dialogClose();
+                    	        }
+                    	    });
+                    }else{
+                    	EUIGrid.setFieldValue('pjcxh', "", index, $obj);
+   	        			EUIGrid.setFieldValue('pjbz',"", index, $obj);//
+   	        			EUIGrid.setFieldValue('_bz', "", index, $obj);
+   	        			//
+                    }
+                }
+            }
+            function _formatter(value, row, index) {
+            	var ok = "<img src='${ctx.contextPath}/res/jquery-easyui-1.4.4/themes/icons/ok.png'/>";
+                var field = null;
+                switch (value) {
+                    case 100: field = "da"; break;
+                    case 96: field = "db"; break;
+                    case 92: field = "dc"; break;
+                    case 90: field = "na"; break;
+                    case 85: field = "nb"; break;
+                    case 80: field = "nc"; break;
+                    case 75: field = "qa"; break;
+                    case 70: field = "qb"; break;
+                    case 65: field = "qc"; break;
+                    case 60: field = "ja"; break;
+                    case 55: field = "jb"; break;
+                    case 50: field = "jc"; break;
+                }
+                EUIGrid.setFieldValue(field, ok, index, $obj);
+            }
+
+            function getIndexAfterDel() {
+                var selected = $obj.datagrid('getSelected');
+                var index = $obj.datagrid('getRowIndex', selected);
+                return index;
+            }
+            //save
+            function saverow() {
+                var tmpIndex = getIndexAfterDel();
+                $obj.datagrid('endEdit', tmpIndex);
+                //处理所有行 
+                var rows = $obj.datagrid("getRows");
+                for (var i = 0; i < rows.length; i++) {
+                    //获取每一行的数据
+                    $obj.datagrid('beginEdit', i);
+                    $obj.datagrid('endEdit', i);
+                }
+                if (rows.length>0) {
+                    //
+                    var data = [rows.length];
+                    var numFCH = 0;//非常好
+                    var allSame = true;
+                    var needPjyj = false;
+                    //未填写测评信息
+                    var wcp = 0;
+                    for (var i = 0; i < rows.length; i++) {
+                        var d = rows[i];
+                    	if(!d.pjdf||d.pjdf<1){wcp++;}
+                        data[i] = {cpmxxh:d.cpmxxh,xh:d.xh,pjdf: d.pjdf,pjyj: d.pjyj,pjcxh:d.pjcxh,pjbz:d._bz};
+                        if (d.pjdf>90) {//FIXME 优秀率控制
+                            numFCH++;
+                        }
+                        /**
+                        if (d.pjdf == 100) {
+                            numFCH++;
+                        }
+                        if ((d.pjdf >= 90 || d.pjdf <= 60) && (d.pjyj == null || d.pjyj.length <= 0)) {
+                            needPjyj = true;
+                        }
+                        if (i > 0 && updated[i - 1].pjdf != updated[i].pjdf) {
+                            allSame = false;
+                        }**/
+
+                    }
+                    if (numFCH > Math.max(rows.length * 0.4,1)) {
+                    	dialogAlert("所给评价格次为“优秀”的人数不能超过所需评价人数的40%！", 0);
+                        return;
+                    }
+                    /**
+                    if (rowCount > 1 && allSame) {
+                        $.messager.alert('无法保存', '对所有评价对象“评价格次”全部一致的视为无效评价。', 'error');
+                        return;
+                    }
+                    if (needPjyj) {
+                        $.messager.alert('无法保存', '“评价格次”定为“非常好”、“好”以及“较差”、“差”的人员，评价人须在“评价意见”栏内填写所给评价格次理由！', 'error');
+                        return;
+                    }**/
+                    // 统计是否全部完成
+                    if(wcp>0){
+                    	dialogAlert("尚有【"+wcp+"】人未测评，无法保存信息！", 0);return;
+                    }
+                    var data = JSON.stringify(data);
+                    //console.log(data);return;
+                    $.ConfirmAjax({
+                		msg:"保存测评结果，是否继续提交？",
+                		url: "${ctx.contextPath}/mzcp/editCpjgSubmit",
+                        param: {jsonArr:data},
+                        close:false,
+                        loading: "正在保存测评结果...",
+                        success: function (data) {
+                        	top.__startCp.dialogClose();
+                        	$.currentIframe().$("#gridTable").trigger("reloadGrid");
+                        }
+                    });
+                    
+                } else {
+                    $.messager.alert('提示', '无数据变更项！', 'info');
+                    return;
+                }
+            }//save
+            function nameFormatter(value, row, index) {
+                var userid = row.yhid;
+                var khnd = row.khnd;
+                return '<a target="_blank" style="color: rgb(51, 102, 255);" href="@Url.Action("UserTableDetail", "YearAssess")?userid=' + userid + '&khnd=' + khnd + '">' + row.xm + '</a>';
+            }
+            function _pjyj(value) {
+                if (!value || value.length < 1) { return ""; }
+                return suolve(value, 30);
+            }
+            function _zw(value) {
+                if (!value || value.length < 1) { return ""; }
+                return top.clientdataItem[104] == null ? "" : top.clientdataItem[104][value];
+            }
+            function suolve(str, sub_length) {//内容截断
+                //var sub_length = 60;
+                var temp1 = str.replace(/[^\x00-\xff]/g, "**");
+                var temp2 = temp1.substring(0, sub_length);
+                var x_length = temp2.split("\*").length - 1;
+                var hanzi_num = x_length / 2;
+                sub_length = sub_length - hanzi_num;
+                var res = str.substring(0, sub_length);
+                if (sub_length < str.length) {
+                    var end = res + "…";
+                } else {
+                    var end = res;
+                }
+                return end;
+            }
+            function styler(value) {
+                return 'background-color:#EFEFEF;';
+            }
+    </script>
+
+    <div class="tablebody">
+        <table id="demoTable" class="easyui-datagrid" toolbar="#tb" style="width: auto; height:460px">
+            <thead frozen="true">
+                <tr>
+                    <th data-options="field:'bpjrmc',width:60,align:'left'">姓名</th>
+                    <th data-options="formatter:_zw,field:'zw',width:80,align:'left'">职务</th>
+                    <th data-options="formatter:_formatter,field:'pjdf',width:0">pjdf</th>
+                    <th data-options="field:'xh',width:0">jgxh</th>
+                    <th data-options="field:'cpmxxh',width:0">cpmxxh</th>
+                    <th data-options="field:'pjcxh',width:0">pjcxh</th>
+                    <th data-options="field:'_bz',width:0">_bz</th>
+                </tr>
+            </thead>
+            <thead>
+             <tr>
+                <th colspan="3">优</th>
+                <th colspan="3">良</th>
+                <th colspan="3">中</th>
+                <th colspan="3">差</th>
+                <th rowspan="2" data-options="formatter:_pjyj,field:'pjbz',width:220,align:'center'">说明</th>
+            </tr>
+            <tr>
+                <th data-options="field:'da',width:60,align:'center'">上(100分)</th>
+                <th data-options="field:'db',width:50,align:'center'">中(96分)</th>
+                <th data-options="field:'dc',width:50,align:'center'">下(92分)</th>
+
+                <th data-options="field:'na',width:50,align:'center'">上(90分)</th>
+                <th data-options="field:'nb',width:50,align:'center'">中(85分)</th>
+                <th data-options="field:'nc',width:50,align:'center'">下(80分)</th>
+
+                <th data-options="field:'qa',width:50,align:'center'">上(75分)</th>
+                <th data-options="field:'qb',width:50,align:'center'">中(70分)</th>
+                <th data-options="field:'qc',width:50,align:'center'">下(65分)</th>
+
+                <th styler="styler" data-options="field:'ja',width:50,align:'center'">上(60分)</th>
+                <th styler="styler" data-options="field:'jb',width:50,align:'center'">中(55分)</th>
+                <th styler="styler" data-options="field:'jc',width:90,align:'center'">下(50分及以下)</th>
+
+            </tr>
+            </thead>
+        </table>
+    
+
+</div>
+<div id="tb" style="padding:3px;height:auto">
+    <div>
+        <a id="saveBtn" href="javascript:void(0)" onclick="saverow()" class="easyui-linkbutton" iconcls="icon-save" style="margin-left:15px" >保存结果</a>
+        <div style="float: right; color: red; padding-top: 5px">单击选择评价格次，（评价格次，不反馈给被评价人）</div>
+    </div>
+</div>
+
+
+<!-- 差模板 -->
+<div id="_cxxDiv" style="display: none;">
+<style>
+.card-box {width:460px;height:35px;margin-left:3px;margin-top:5px;margin-right:3px;}
+.card-box-img{width:35px;height:35px;}
+td{text-align: center;}
+</style>
+<script>
+$(".card-box").removeClass("active");
+$(".card-box").click(function () {
+    if (!$(this).hasClass("active")) {
+    	$(this).addClass("active");
+    } else {
+    	$(this).removeClass("active");
+    }
+});
+</script>
+<table border="1">
+  <tr>
+    <td rowspan="4" width="90"><strong>德</strong></td>
+    <td width="90">政治素养</td>
+    <td rowspan="4" width="460">
+    <div class="card-box">
+    	<div class="card-box-img"></div>
+    	<div id="d1" class="card-box-content" >1.执行上级党组织决策不坚决；</div><i></i>
+    </div>
+    <div class="card-box">
+    	<div class="card-box-img"></div>
+    	<div id="d2" class="card-box-content" >2.思想颓废，不求上进，情趣低俗，精神状态不佳；</div><i></i>
+    </div>
+    <div class="card-box">
+    	<div class="card-box-img"></div>
+    	<div id="d3" class="card-box-content" >3.违反社会公德和职业道德，铺张浪费，作风散懒，说一套、做一套；</div><i></i>
+    </div>
+    <div class="card-box">
+    	<div class="card-box-img"></div>
+    	<div id="d4" class="card-box-content" >4. 发表有损党和集体的言论。</div><i></i>
+    </div>
+     </td>
+  </tr>
+  <tr>
+    <td>道德品质</td>
+  </tr>
+  <tr>
+    <td>服从命令</td>
+  </tr>
+  <tr>
+    <td>职业规范</td>
+  </tr>
+  <tr>
+    <td rowspan="4" width="90"><strong>能</strong></td>
+    <td width="90">政策水平</td>
+    <td rowspan="4" width="460">
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="n1" class="card-box-content" >1.业务知识学习、培训不主动，业务技能掌握不全面；</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="n2" class="card-box-content" >2.完成部门月度计划工作滞后，不能完成本职工作；</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="n3" class="card-box-content" >3.理解、领会上级意图有偏差，贯彻、落实工作任务质量不高；</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="n4" class="card-box-content" >4.工作按部就班，创新思维和能力不足。</div><i></i>
+    	</div>
+    </td>
+  </tr>
+  <tr>
+    <td>业务能力 </td>
+  </tr>
+  <tr>
+    <td>克难创新</td>
+  </tr>
+  <tr>
+    <td>职业规范</td>
+  </tr>
+  <tr>
+    <td rowspan="4" width="90"><strong>勤</strong></td>
+    <td width="90">敬业精神 </td>
+    <td rowspan="4" width="460">
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="q1" class="card-box-content" >1.不热爱本职工作，上班时间做与工作无关的事项；</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="q2" class="card-box-content" >2.工作大而化之，有被通报、诫免谈话等情形；</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="q3" class="card-box-content" >3.不团结同志，闹内耗，影响部门团结； </div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="q4" class="card-box-content" >4.上班旷工或迟到、早退、中途溜号、擅离职守等。</div><i></i>
+    	</div>
+</td>
+  </tr>
+  <tr>
+    <td>责任意识</td>
+  </tr>
+  <tr>
+    <td>团结协作</td>
+  </tr>
+  <tr>
+    <td>出勤情况</td>
+  </tr>
+  <tr>
+    <td rowspan="4" width="90"><strong>绩</strong></td>
+    <td width="90">工作数量</td>
+    <td rowspan="4" width="460">
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="j1" class="card-box-content" >1.不干本职工作，完成本职工作量少。</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="j2" class="card-box-content" >2.工作瑕疵多质量差，经指导仍无改善。</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="j3" class="card-box-content" >3.工作拖沓，效率差，经常不能按时完成工作。</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="j4" class="card-box-content" >4. 岗位专业知识不足，不具备该岗位能力。</div><i></i>
+    	</div>
+</td>
+  </tr>
+  <tr>
+    <td>工作质量</td>
+  </tr>
+  <tr>
+    <td>工作效率 </td>
+  </tr>
+  <tr>
+    <td>业务水平</td>
+  </tr>
+    <tr>
+    <td rowspan="4" width="90"><strong>廉</strong></td>
+    <td width="90">依法办事 </td>
+    <td rowspan="4" width="460">
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="l1" class="card-box-content" >1.存在违法违纪行为；</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="l2" class="card-box-content" >2.廉洁自律不严，存在吃拿卡要等行为的； </div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="l3" class="card-box-content" >3被群众投诉，查证属实的；</div><i></i>
+    	</div>
+    	<div class="card-box"><div class="card-box-img"></div>
+    	<div id="l4" class="card-box-content" >4.存在生活作风问题。 </div><i></i>
+    	</div>
+</td>
+  </tr>
+  <tr>
+    <td>作风正派 </td>
+  </tr>
+  <tr>
+    <td>情趣健康 </td>
+  </tr>
+  <tr>
+    <td>遵规守纪</td>
+  </tr>
+</table>
+</div>
+</body>
+</html>

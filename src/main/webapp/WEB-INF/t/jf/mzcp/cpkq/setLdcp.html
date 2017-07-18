@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>开启测评-领导测评</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+    <style>
+        body {
+            margin: 10px;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td style="padding-left: 2px;">
+                设置领导评分权重
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="b-ref" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="b-szldcp" class="btn btn-default" onclick="btn_szldcp()"><i class="fa fa-plus"></i>&nbsp;选择领导测评</a>
+        </div>
+       <!--   <script>$('.toolbar').authorizeButton()</script>-->
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+<style>
+.edit-cell input {
+	color:#000;
+}
+</style>
+<script>
+var cpxh = request('cpxh');
+var cpmxxh = request('cpmxxh');
+var f = request('f');
+var ryArr = [];
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGridEx({
+        	height: $(window).height() - 126.5,
+        	datatype: "jsonstring",
+            datastr: [],//组合使用，初始化显示空数据
+            colModel:[{ label: '主键', name: 'xh', hidden: true,key:true},
+                { label: '主键', name: 'pjrxh', hidden: true},
+                {label: '姓名', name: 'pjrmc', width: 100, align: 'center',sortable:false},
+                { label: '部门名称', name: 'deptId', width: 180, align: 'center',sortable:false,
+                	formatter: function (cellvalue, options, rowObject) {
+                    return top.clientdepartmentData[cellvalue] == null ? "" : top.clientdepartmentData[cellvalue].name;
+                }},
+                { label: '职务', name: 'zw', width: 120, align: 'center',sortable:false,
+                	formatter: function (cellvalue, options, rowObject) {
+                		if(!cellvalue) return "";
+                        return top.clientdataItem[104] == null ? "" : top.clientdataItem[104][cellvalue];
+                    }
+               	},
+                { label: '评分权重(%)', name: 'pjrqz', width: 100, align: 'center',sortable:false,editable:true, autowidth: false,formatter: "integer",
+               		formatoptions: {
+     	                decimalPlaces: 0
+     	            }
+               	}
+            ],
+            unwritten: false,//不提示是否找到数据
+            cellEdit: true,
+            cellsubmit: "clientArray",
+            pager: false
+        });
+        if(cpmxxh){
+        	// xhs
+        	var xhs = parent.__newCpDwRy.$('#gridTable').jqGridRowValue("xh");
+        	if(xhs.length<1 || xhs==','){//
+        		dialogMsg('请选择需要设置领导测评的数据行！', 0);
+        		return;
+        	}
+	        $.ajax({
+	            url: "${ctx.contextPath}/mzcp/getMzcpDwRyList?f=2&cpxh="+cpxh+"&cpmxxh="+cpmxxh,
+	            type: "post",
+	            data:{bpjrxh:xhs},
+	            dataType: "json",
+	            success: function (data) {
+	            	listToGrid(data);
+	            },
+	        });
+        }
+    }
+  //测评
+    function btn_szldcp() {
+    	dialogOpen({
+            id: "setLdCpry",
+            title: '选择领导测评人员',
+            url: "${ctx.contextPath}/mzcp/setCpry?f=2&cpxh="+cpxh+"&cpmxxh="+cpmxxh,//
+            width: "900px",
+            height: "500px",
+            callBack: function (iframeId) {
+            	top.frames[iframeId].ldcpList(function (data) {
+            		listToGrid(data);
+                });
+            }
+        });
+    };
+    function listToGrid(ryList) {//人员详细信息
+    	for(var i=0;i<ryList.length;i++){
+    		ryArr.push(ryList[i]);
+    	}
+    	$('#gridTable').clearGridData();
+    	$('#gridTable')[0].addJSONData({rows:ryList});
+    }
+    setLdcpSubmit=function(xhs){
+    	var $gridTable = $('#gridTable');
+    	//取消编辑框
+    	$(".edit-cell").parents("tr").trigger("click");
+    	//TODO 验证百分比
+    	var ldArr =[],ldMc=[],qzs=[];
+    	//判断是否空行
+    	var ryCount = $gridTable.getGridParam("reccount");
+    	if(ryCount<1){dialogMsg('未添加领导测评人员！',-1);return;}
+    	for(var i=1;i<=ryCount;i++){
+	        var row = $('#gridTable').jqGrid('getRowData', i);
+    		ldArr.push(row.pjrxh);
+    		ldMc.push(row.pjrmc);
+    		qzs.push(row.pjrqz);
+    	}
+    	var pData= {userIds:ldArr.join(","),userNames:ldMc.join(","),qzs:qzs.join(","),cpxh:cpxh,cpmxxh:cpmxxh,f:f,rys:xhs};
+        //console.log(pData);return;
+        $.ConfirmAjax({
+    		msg:"设置领导测评人员【"+ryCount+"】人，是否继续提交？",
+    		url: "${ctx.contextPath}/mzcp/setCprySubmit",
+            param: pData,
+            loading: "正在保存领导测评人员设置...",
+            success: function (data) {
+                parent.__newCpDwRy.$("#gridTable").trigger("reloadGrid");
+            }
+        });
+    }
+</script>
+</body>
+</html>

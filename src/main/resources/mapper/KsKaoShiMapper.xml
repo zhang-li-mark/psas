@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.KsKaoShiMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.KsKaoShi">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="fbrid" jdbcType="VARCHAR" property="fbrid" />
+    <result column="kszt" jdbcType="VARCHAR" property="kszt" />
+    <result column="kssj" jdbcType="TIMESTAMP" property="kssj" />
+    <result column="jssj" jdbcType="TIMESTAMP" property="jssj" />
+    <result column="tjsj" jdbcType="TIMESTAMP" property="tjsj" />
+    <result column="zpbms" jdbcType="INTEGER" property="zpbms" />
+    <result column="zpbm" jdbcType="VARCHAR" property="zpbm" />
+    <result column="zf" jdbcType="DECIMAL" property="zf" />
+    <result column="jf" jdbcType="DECIMAL" property="jf" />
+    <result column="kstm" jdbcType="VARCHAR" property="kstm" />
+    <result column="sjlx" jdbcType="INTEGER" property="sjlx" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fbrid, kszt, kssj, jssj, tjsj, zpbms, zpbm, zf, jf, kstm, sjlx
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ks_kaoshi
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ks_kaoshi
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.KsKaoShi">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ks_kaoshi (fbrid, kszt, kssj, 
+      jssj, tjsj, zpbms, 
+      zpbm, zf, jf, kstm, 
+      sjlx)
+    values (#{fbrid,jdbcType=VARCHAR}, #{kszt,jdbcType=VARCHAR}, #{kssj,jdbcType=TIMESTAMP}, 
+      #{jssj,jdbcType=TIMESTAMP}, #{tjsj,jdbcType=TIMESTAMP}, #{zpbms,jdbcType=INTEGER}, 
+      #{zpbm,jdbcType=VARCHAR}, #{zf,jdbcType=DECIMAL}, #{jf,jdbcType=DECIMAL}, #{kstm,jdbcType=VARCHAR}, 
+      #{sjlx,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.KsKaoShi">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ks_kaoshi
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fbrid != null">
+        fbrid,
+      </if>
+      <if test="kszt != null">
+        kszt,
+      </if>
+      <if test="kssj != null">
+        kssj,
+      </if>
+      <if test="jssj != null">
+        jssj,
+      </if>
+      <if test="tjsj != null">
+        tjsj,
+      </if>
+      <if test="zpbms != null">
+        zpbms,
+      </if>
+      <if test="zpbm != null">
+        zpbm,
+      </if>
+      <if test="zf != null">
+        zf,
+      </if>
+      <if test="jf != null">
+        jf,
+      </if>
+      <if test="kstm != null">
+        kstm,
+      </if>
+      <if test="sjlx != null">
+        sjlx,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fbrid != null">
+        #{fbrid,jdbcType=VARCHAR},
+      </if>
+      <if test="kszt != null">
+        #{kszt,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null">
+        #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tjsj != null">
+        #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zpbms != null">
+        #{zpbms,jdbcType=INTEGER},
+      </if>
+      <if test="zpbm != null">
+        #{zpbm,jdbcType=VARCHAR},
+      </if>
+      <if test="zf != null">
+        #{zf,jdbcType=DECIMAL},
+      </if>
+      <if test="jf != null">
+        #{jf,jdbcType=DECIMAL},
+      </if>
+      <if test="kstm != null">
+        #{kstm,jdbcType=VARCHAR},
+      </if>
+      <if test="sjlx != null">
+        #{sjlx,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.KsKaoShi">
+    update ks_kaoshi
+    <set>
+      <if test="fbrid != null">
+        fbrid = #{fbrid,jdbcType=VARCHAR},
+      </if>
+      <if test="kszt != null">
+        kszt = #{kszt,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null">
+        kssj = #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        jssj = #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tjsj != null">
+        tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zpbms != null">
+        zpbms = #{zpbms,jdbcType=INTEGER},
+      </if>
+      <if test="zpbm != null">
+        zpbm = #{zpbm,jdbcType=VARCHAR},
+      </if>
+      <if test="zf != null">
+        zf = #{zf,jdbcType=DECIMAL},
+      </if>
+      <if test="jf != null">
+        jf = #{jf,jdbcType=DECIMAL},
+      </if>
+      <if test="kstm != null">
+        kstm = #{kstm,jdbcType=VARCHAR},
+      </if>
+      <if test="sjlx != null">
+        sjlx = #{sjlx,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.KsKaoShi">
+    update ks_kaoshi
+    set fbrid = #{fbrid,jdbcType=VARCHAR},
+      kszt = #{kszt,jdbcType=VARCHAR},
+      kssj = #{kssj,jdbcType=TIMESTAMP},
+      jssj = #{jssj,jdbcType=TIMESTAMP},
+      tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      zpbms = #{zpbms,jdbcType=INTEGER},
+      zpbm = #{zpbm,jdbcType=VARCHAR},
+      zf = #{zf,jdbcType=DECIMAL},
+      jf = #{jf,jdbcType=DECIMAL},
+      kstm = #{kstm,jdbcType=VARCHAR},
+      sjlx = #{sjlx,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="getKsRws" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ks_kaoshi
+    where fbrid = #{sbr,jdbcType=VARCHAR}
+    <if test="kszt != null">
+        kszt =  like concat('%',#{kszt},'%'),
+   </if>
+  </select>
+</mapper>

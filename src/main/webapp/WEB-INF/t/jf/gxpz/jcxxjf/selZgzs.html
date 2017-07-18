@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>选取资格证书</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <script src="${ctx.contextPath}/res/jquery/jquery.layout.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+.card-box {width:460px;height:35px;margin-left:3px;margin-top:5px;margin-right:3px;}
+.card-box-img{width:35px;height:35px;}
+td{text-align: center;}
+</style>
+</head>
+<body>
+<div class="gridPanel" >
+<table border="1">
+  <tr>
+    <td width="200"><strong>执法资格证书</strong></td>
+    <td width="360" id="zs106">
+     </td>
+  </tr>
+    <tr>
+    <td width="200"><strong>刑事科学技术和技术侦察队伍专业技术资格证书</strong></td>
+    <td width="360" id="zs107">
+     </td>
+  </tr>
+    <tr>
+    <td width="200"><strong>心理咨询师资格证书</strong></td>
+    <td width="360" id="zs108">
+     </td>
+  </tr>
+    <tr>
+    <td width="200"><strong>审计师资格证书</strong></td>
+    <td width="360" id="zs109">
+     </td>
+  </tr>
+</table>
+</div>
+<script>
+var ids = request("ids");
+    $(function () {
+        InitialPage();
+        initZs();
+        //answerquestion
+    });
+    //初始化页面
+    function InitialPage() {
+        $('.gridPanel').height($(window).height() - 20);
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('.gridPanel').height($(window).height() - 20);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //
+    function getZsData(){
+    	var txt=[],ids=[];
+    	$(".active").each(function(i,row){
+    		var obj = $(".card-box-content",$(this));
+			txt.push(obj.text());
+			ids.push(obj.attr("dictid"));
+		});
+    	return {txt:txt.join(","),ids:ids.join(",")};
+    }
+    bindEvent=function(){
+    	if(ids && ids.length>0){
+	        var idsArr = ids.split(",");
+	        for(var i=0;i<idsArr.length;i++){
+		        $(".card-box-content[dictid='"+idsArr[i]+"']").parent().addClass("active");
+	        }
+        }
+        $(".card-box").click(function () {
+            if (!$(this).hasClass("active")) {
+            	$(this).addClass("active");
+            } else {
+            	$(this).removeClass("active");
+            }
+        });
+    }
+    initZs=function(){
+    	$.when(
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=106",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#zs106").append("<div class='card-box'><div class='card-box-img'></div><div class='card-box-content' dictid='"+xl.dictid+"'>执法资格证书【"+xl.fullname+"】</div><i></i></div>");
+    		});
+    	}),
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=107",function(re){
+    		$.each(re,function(i,xl){
+    			$("#zs107").append("<div class='card-box'><div class='card-box-img'></div><div class='card-box-content' dictid='"+xl.dictid+"'>刑事科学技术和技术侦察队伍专业技术资格证书【"+xl.fullname+"】</div><i></i></div>");
+    		});
+    	}),
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=108",function(re){
+    		$.each(re,function(i,xl){
+    			$("#zs108").append("<div class='card-box'><div class='card-box-img'></div><div class='card-box-content' dictid='"+xl.dictid+"'>心理咨询师资格证书【"+xl.fullname+"】</div><i></i></div>");
+    		});
+    	}),
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=109",function(re){
+    		$.each(re,function(i,xl){
+    			$("#zs109").append("<div class='card-box'><div class='card-box-img'></div><div class='card-box-content' dictid='"+xl.dictid+"'>审计师资格证书【"+xl.fullname+"】</div><i></i></div>");
+    		});
+    	})).then(function(){
+    		bindEvent();
+    	})
+    	//
+    }
+</script>
+</body>
+</html>

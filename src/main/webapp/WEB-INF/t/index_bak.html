@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>平顶山市公安局人才积分培养管理系统</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet"/>
+    <link href="${ctx.contextPath}/res/ui/windows/index.css" rel="stylesheet"/>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" style="overflow: hidden;">
+    <div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; overflow: hidden;">
+        <img src="${ctx.contextPath}/res/ui/img/ajax-loader.gif" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
+    </div>
+    <div class="wrapper">
+        <!--头部信息-->
+        <header class="main-header">
+            <a href="#" class="logo" style="margin: 0px;padding: 0px;height: 60px;line-height: 60px;width: 640px;">
+            <!-- 
+                <span class="logo-lg">管理系统</span>
+              -->
+              <img src="${ctx.contextPath}/res/ui/index/sys-top-left.png" style="padding:0px;margin: 0px;"/>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a class="sidebar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            	<img src="${ctx.contextPath}/res/ui/index/sys-right-ico.png">
+                                <span class="hidden-xs">${name}<i class="fa fa-caret-down" style="padding-left: 10px;"></i></span>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <em></em>
+                                <li><a class="menuItem" data-id="userInfo" href="${ctx.contextPath}/personcenter/index"><i class="fa fa-user"></i>个人信息</a></li>
+                                <li><a href="javascript:void();"><i class="fa fa-trash-o"></i>清空缓存</a></li>
+                                <li class="divider"></li>
+                                <li><a href="javascript:void();" onclick="$.learunindex.indexOut()"><i class="ace-icon fa fa-power-off"></i>安全退出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!--左边导航-->
+        <div class="sidebar-menu">
+            <em></em>
+            <div class="sidebar-menu-left">
+                <div class="head">
+                    <i class="fa fa-user"></i>
+                </div>
+                <ul></ul>
+            </div>
+            <div class="sidebar-menu-right">
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <!--中间内容-->
+        <div id="content-wrapper" class="content-wrapper">
+            <div class="content-tabs">
+                <a class="start_menu" href="javascript:;" title="开始菜单">
+                    <i class="fa fa-windows" aria-hidden="true"></i>
+                </a>
+                <nav class="page-tabs menuTabs">
+                    <div class="page-tabs-content" style="margin-left: 0px;">
+                        <a href="javascript:;" class="menuTab active" data-id="${ctx.contextPath}/home">欢迎首页</a>
+                    </div>
+                </nav>
+                <button class="roll-nav roll-left tabLeft">
+                    <i class="fa fa-backward"></i>
+                </button>
+                <button class="roll-nav roll-right tabRight">
+                    <i class="fa fa-forward" style="margin-left: 3px;"></i>
+                </button>
+                <button class="roll-nav roll-right fullscreen"><i class="fa fa-arrows-alt"></i></button>
+            </div>
+            <div class="content-tabs-sub">
+                <div class="notice">
+                    <i class="fa fa-volume-up"></i>公告：
+                    <span>使用注意事项及新手指南
+                    </span>
+                </div>
+            </div>
+            <div class="content-iframe" style="overflow: hidden;">
+                <div class="mainContent" id="content-main" style="">
+                    <iframe onload="Loading(false);" class="POWERMS_iframe" width="100%" height="100%" src="${ctx.contextPath}/home" frameborder="0" data-id="${ctx.contextPath}/home"></iframe>
+                </div>
+            </div>
+        </div>
+        <!--底部-->
+        <div class="footer">
+            <div style="float: left; width: 30%;">
+                &nbsp;技术支持：<a href="javascript:void();" style="color: white;">郑州派威电子科技有限公司</a>
+            </div>
+            <div style="float: left; width: 40%; text-align: center;">
+                Copyright ©2017 By Power
+            </div>
+        </div>
+    </div>
+    <div id="loading_background" class="loading_background" style="display: none;"></div>
+    <div id="loading_manage">
+        正在拼了命为您加载…
+    </div>
+<script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+<script src="${ctx.contextPath}/res/jquery/jquery.cookie.js"></script>
+<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+<script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+<script src="${ctx.contextPath}/res/layui/lay/modules/layer.js"></script>
+<script src="${ctx.contextPath}/res/ui/windows/index.js?t=${.now?string('yyyyMMddHHmmss')}"></script>
+<script type="text/javascript">
+var contentPath = '/'.substr(0, '/'.length - 1);
+$(function () {
+	_init();//全局参数
+	window.setTimeout(function() {$("#ajax-loader").fadeOut()}, 50);
+	$.learunindex.load();//界面初始化
+	$.learunindex.loadMenu();//菜单
+	$.learuntab.init();//绑定事件
+});
+</script>
+</body>
+</html>

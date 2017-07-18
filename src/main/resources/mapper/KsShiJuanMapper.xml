@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.KsShiJuanMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.KsShiJuan">
+    <id column="xh" jdbcType="BIGINT" property="xh" />
+    <result column="sjbz" jdbcType="INTEGER" property="sjbz" />
+    <result column="sjmc" jdbcType="VARCHAR" property="sjmc" />
+    <result column="dwxh" jdbcType="VARCHAR" property="dwxh" />
+    <result column="kssj" jdbcType="TIMESTAMP" property="kssj" />
+    <result column="jssj" jdbcType="TIMESTAMP" property="jssj" />
+    <result column="tmbh" jdbcType="VARCHAR" property="tmbh" />
+    <result column="da" jdbcType="VARCHAR" property="da" />
+    <result column="dfmx" jdbcType="VARCHAR" property="dfmx" />
+    <result column="ksdf" jdbcType="INTEGER" property="ksdf" />
+    <result column="tmgs" jdbcType="INTEGER" property="tmgs" />
+    <result column="sjzt" jdbcType="INTEGER" property="sjzt" />
+    <result column="sjzf" jdbcType="INTEGER" property="sjzf" />
+    <result column="ksrxh" jdbcType="VARCHAR" property="ksrxh" />
+    <result column="kstjsj" jdbcType="TIMESTAMP" property="kstjsj" />
+    <result column="xksrs" jdbcType="INTEGER" property="xksrs" />
+    <result column="ksywcrs" jdbcType="INTEGER" property="ksywcrs" />
+    <result column="lrsj" jdbcType="TIMESTAMP" property="lrsj" />
+    <result column="lrrmc" jdbcType="VARCHAR" property="lrrmc" />
+    <result column="lrrxh" jdbcType="VARCHAR" property="lrrxh" />
+    <result column="qzf" jdbcType="INTEGER" property="qzf" />
+    <result column="zzjf" jdbcType="DECIMAL" property="zzjf" />
+    <result column="sjlx" jdbcType="INTEGER" property="sjlx" />
+    <result column="ksid" jdbcType="BIGINT" property="ksid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    xh, sjbz, sjmc, dwxh, kssj, jssj, tmbh, da, dfmx, ksdf, tmgs, sjzt, sjzf, ksrxh, 
+    kstjsj, xksrs, ksywcrs, lrsj, lrrmc, lrrxh, qzf, zzjf, sjlx, ksid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ks_shijuan
+    where xh = #{xh,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ks_shijuan
+    where xh = #{xh,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.KsShiJuan">
+    <selectKey keyProperty="xh" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ks_shijuan (sjbz, sjmc, dwxh, 
+      kssj, jssj, tmbh, 
+      da, dfmx, ksdf, tmgs, 
+      sjzt, sjzf, ksrxh, 
+      kstjsj, xksrs, ksywcrs, 
+      lrsj, lrrmc, lrrxh, 
+      qzf, zzjf, sjlx, ksid
+      )
+    values (#{sjbz,jdbcType=INTEGER}, #{sjmc,jdbcType=VARCHAR}, #{dwxh,jdbcType=VARCHAR}, 
+      #{kssj,jdbcType=TIMESTAMP}, #{jssj,jdbcType=TIMESTAMP}, #{tmbh,jdbcType=VARCHAR}, 
+      #{da,jdbcType=VARCHAR}, #{dfmx,jdbcType=VARCHAR}, #{ksdf,jdbcType=INTEGER}, #{tmgs,jdbcType=INTEGER}, 
+      #{sjzt,jdbcType=INTEGER}, #{sjzf,jdbcType=INTEGER}, #{ksrxh,jdbcType=VARCHAR}, 
+      #{kstjsj,jdbcType=TIMESTAMP}, #{xksrs,jdbcType=INTEGER}, #{ksywcrs,jdbcType=INTEGER}, 
+      #{lrsj,jdbcType=TIMESTAMP}, #{lrrmc,jdbcType=VARCHAR}, #{lrrxh,jdbcType=VARCHAR}, 
+      #{qzf,jdbcType=INTEGER}, #{zzjf,jdbcType=DECIMAL}, #{sjlx,jdbcType=INTEGER}, #{ksid,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.KsShiJuan">
+    <selectKey keyProperty="xh" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ks_shijuan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sjbz != null">
+        sjbz,
+      </if>
+      <if test="sjmc != null">
+        sjmc,
+      </if>
+      <if test="dwxh != null">
+        dwxh,
+      </if>
+      <if test="kssj != null">
+        kssj,
+      </if>
+      <if test="jssj != null">
+        jssj,
+      </if>
+      <if test="tmbh != null">
+        tmbh,
+      </if>
+      <if test="da != null">
+        da,
+      </if>
+      <if test="dfmx != null">
+        dfmx,
+      </if>
+      <if test="ksdf != null">
+        ksdf,
+      </if>
+      <if test="tmgs != null">
+        tmgs,
+      </if>
+      <if test="sjzt != null">
+        sjzt,
+      </if>
+      <if test="sjzf != null">
+        sjzf,
+      </if>
+      <if test="ksrxh != null">
+        ksrxh,
+      </if>
+      <if test="kstjsj != null">
+        kstjsj,
+      </if>
+      <if test="xksrs != null">
+        xksrs,
+      </if>
+      <if test="ksywcrs != null">
+        ksywcrs,
+      </if>
+      <if test="lrsj != null">
+        lrsj,
+      </if>
+      <if test="lrrmc != null">
+        lrrmc,
+      </if>
+      <if test="lrrxh != null">
+        lrrxh,
+      </if>
+      <if test="qzf != null">
+        qzf,
+      </if>
+      <if test="zzjf != null">
+        zzjf,
+      </if>
+      <if test="sjlx != null">
+        sjlx,
+      </if>
+      <if test="ksid != null">
+        ksid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sjbz != null">
+        #{sjbz,jdbcType=INTEGER},
+      </if>
+      <if test="sjmc != null">
+        #{sjmc,jdbcType=VARCHAR},
+      </if>
+      <if test="dwxh != null">
+        #{dwxh,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null">
+        #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tmbh != null">
+        #{tmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="da != null">
+        #{da,jdbcType=VARCHAR},
+      </if>
+      <if test="dfmx != null">
+        #{dfmx,jdbcType=VARCHAR},
+      </if>
+      <if test="ksdf != null">
+        #{ksdf,jdbcType=INTEGER},
+      </if>
+      <if test="tmgs != null">
+        #{tmgs,jdbcType=INTEGER},
+      </if>
+      <if test="sjzt != null">
+        #{sjzt,jdbcType=INTEGER},
+      </if>
+      <if test="sjzf != null">
+        #{sjzf,jdbcType=INTEGER},
+      </if>
+      <if test="ksrxh != null">
+        #{ksrxh,jdbcType=VARCHAR},
+      </if>
+      <if test="kstjsj != null">
+        #{kstjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xksrs != null">
+        #{xksrs,jdbcType=INTEGER},
+      </if>
+      <if test="ksywcrs != null">
+        #{ksywcrs,jdbcType=INTEGER},
+      </if>
+      <if test="lrsj != null">
+        #{lrsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lrrmc != null">
+        #{lrrmc,jdbcType=VARCHAR},
+      </if>
+      <if test="lrrxh != null">
+        #{lrrxh,jdbcType=VARCHAR},
+      </if>
+      <if test="qzf != null">
+        #{qzf,jdbcType=INTEGER},
+      </if>
+      <if test="zzjf != null">
+        #{zzjf,jdbcType=DECIMAL},
+      </if>
+      <if test="sjlx != null">
+        #{sjlx,jdbcType=INTEGER},
+      </if>
+      <if test="ksid != null">
+        #{ksid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.KsShiJuan">
+    update ks_shijuan
+    <set>
+      <if test="sjbz != null">
+        sjbz = #{sjbz,jdbcType=INTEGER},
+      </if>
+      <if test="sjmc != null">
+        sjmc = #{sjmc,jdbcType=VARCHAR},
+      </if>
+      <if test="dwxh != null">
+        dwxh = #{dwxh,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null">
+        kssj = #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        jssj = #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tmbh != null">
+        tmbh = #{tmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="da != null">
+        da = #{da,jdbcType=VARCHAR},
+      </if>
+      <if test="dfmx != null">
+        dfmx = #{dfmx,jdbcType=VARCHAR},
+      </if>
+      <if test="ksdf != null">
+        ksdf = #{ksdf,jdbcType=INTEGER},
+      </if>
+      <if test="tmgs != null">
+        tmgs = #{tmgs,jdbcType=INTEGER},
+      </if>
+      <if test="sjzt != null">
+        sjzt = #{sjzt,jdbcType=INTEGER},
+      </if>
+      <if test="sjzf != null">
+        sjzf = #{sjzf,jdbcType=INTEGER},
+      </if>
+      <if test="ksrxh != null">
+        ksrxh = #{ksrxh,jdbcType=VARCHAR},
+      </if>
+      <if test="kstjsj != null">
+        kstjsj = #{kstjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xksrs != null">
+        xksrs = #{xksrs,jdbcType=INTEGER},
+      </if>
+      <if test="ksywcrs != null">
+        ksywcrs = #{ksywcrs,jdbcType=INTEGER},
+      </if>
+      <if test="lrsj != null">
+        lrsj = #{lrsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lrrmc != null">
+        lrrmc = #{lrrmc,jdbcType=VARCHAR},
+      </if>
+      <if test="lrrxh != null">
+        lrrxh = #{lrrxh,jdbcType=VARCHAR},
+      </if>
+      <if test="qzf != null">
+        qzf = #{qzf,jdbcType=INTEGER},
+      </if>
+      <if test="zzjf != null">
+        zzjf = #{zzjf,jdbcType=DECIMAL},
+      </if>
+      <if test="sjlx != null">
+        sjlx = #{sjlx,jdbcType=INTEGER},
+      </if>
+      <if test="ksid != null">
+        ksid = #{ksid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where xh = #{xh,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.KsShiJuan">
+    update ks_shijuan
+    set sjbz = #{sjbz,jdbcType=INTEGER},
+      sjmc = #{sjmc,jdbcType=VARCHAR},
+      dwxh = #{dwxh,jdbcType=VARCHAR},
+      kssj = #{kssj,jdbcType=TIMESTAMP},
+      jssj = #{jssj,jdbcType=TIMESTAMP},
+      tmbh = #{tmbh,jdbcType=VARCHAR},
+      da = #{da,jdbcType=VARCHAR},
+      dfmx = #{dfmx,jdbcType=VARCHAR},
+      ksdf = #{ksdf,jdbcType=INTEGER},
+      tmgs = #{tmgs,jdbcType=INTEGER},
+      sjzt = #{sjzt,jdbcType=INTEGER},
+      sjzf = #{sjzf,jdbcType=INTEGER},
+      ksrxh = #{ksrxh,jdbcType=VARCHAR},
+      kstjsj = #{kstjsj,jdbcType=TIMESTAMP},
+      xksrs = #{xksrs,jdbcType=INTEGER},
+      ksywcrs = #{ksywcrs,jdbcType=INTEGER},
+      lrsj = #{lrsj,jdbcType=TIMESTAMP},
+      lrrmc = #{lrrmc,jdbcType=VARCHAR},
+      lrrxh = #{lrrxh,jdbcType=VARCHAR},
+      qzf = #{qzf,jdbcType=INTEGER},
+      zzjf = #{zzjf,jdbcType=DECIMAL},
+      sjlx = #{sjlx,jdbcType=INTEGER},
+      ksid = #{ksid,jdbcType=BIGINT}
+    where xh = #{xh,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteByKsID" parameterType="java.lang.Long">
+    delete from ks_shijuan
+    where ksid = #{ksid,jdbcType=BIGINT}
+  </delete>
+  <update id="updateJFAndTmByKsID" parameterType="com.power.common.entity.KsShiJuan">
+    update ks_shijuan
+    set 
+      sjmc = #{sjmc,jdbcType=VARCHAR},
+      zzjf = #{zzjf,jdbcType=DECIMAL},
+      qzf = #{qzf},
+      sjlx = #{sjlx}
+    where ksid = #{ksid,jdbcType=BIGINT}
+  </update>
+  <!-- 获取待考试信息列表 -->
+  <select id="getDKs" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ks_shijuan
+    where ksrxh = #{userid,jdbcType=BIGINT}
+    <if test="sjmc != null">
+        sjmc like concat('%',#{sjmc},'%'),
+   </if>
+  </select>
+   <select id="getUserKsTotalList" parameterType="java.lang.String" resultType="com.power.xuexi.entity.KsTotalList">
+	SELECT u.realname as uname,sj.sjmc,sj.ksdf,sj.qzf,sj.zzjf,ks.zf from ks_shijuan sj
+	LEFT JOIN ks_kaoshi ks on sj.ksid= ks.id
+	LEFT JOIN sys_user u on u.userid = sj.ksrxh
+	where sj.sjzt=1 and sj.ksrxh = #{userid}
+	<if test="kssj!=null and jssj==null">and substring(tjsj,1,length(#{kssj}))&gt;=#{kssj}</if>
+	<if test="jssj!=null and kssj==null">and substring(tjsj,1,length(#{jssj}))&lt;=#{jssj}</if>
+    <if test="kssj!=null and jssj!=null">and substring(tjsj,1,length(#{kssj})) between #{kssj} and #{jssj}</if>
+    ORDER BY tjsj
+  </select>
+  
+    <!-- getKsDcl 待处理数据行 -->
+  <select id="getKsDcl" parameterType="string" resultType="int">
+	SELECT count(*) FROM ks_shijuan  
+	where sjzt =0 and ksrxh = #{userid} and sjbz=2
+  </select>
+</mapper>

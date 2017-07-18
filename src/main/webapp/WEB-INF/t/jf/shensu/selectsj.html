@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html><head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>选择关联事件</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/zTree3.5/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/zTree3.5/js/jquery.ztree.all.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	
+    <style>
+        body {
+            margin: 10px;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+    
+<script>
+    $(document).ready(function () {
+        initialPage();
+        GetGrid();
+    });
+    //重设(表格)宽高
+    function initialPage() {
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 108.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGridEx({
+            url: "${ctx.contextPath}/jf/jfss/showJfSjByUID",
+            datatype: "json",
+            mtype:"POST",
+            height: $(window).height() - 136.5,
+            autowidth: true,
+            colModel: [
+                { label: '主键', name: 'sbid', hidden: true,key:true},
+                { label: "事件名称",name: "sjmc", width: 200, align: "left", sortable: false },
+                { label: "事件描述",name: "sjms", width: 200, align: "left", sortable: false },
+                { label: "申报人", name: "uname", width: 50, align: "center", sortable: false },
+                { label: "部门", name: "deptname", width: 50, align: "center", sortable: false },
+                { label: "职位", name: "zw", width: 50, align: "center", sortable: false },
+                { label: "个人分值", name: "fz", width: 80, align: "center", sortable: false,
+                },
+                { label: "总分值", name: "zongfen", width: 50, align: "center", sortable: false,
+                },
+                {
+                    label: "申报时间", name: "sbsj", width: 100, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                    	if(!cellvalue) return "";
+                        return formatDate(new Date(cellvalue), 'yyyy-MM-dd');
+                    }
+                },
+                { label: "申报状态", name: "status", width: 80, align: "center",autowidth: false,sortable: false,
+                	  formatter: function (cellvalue, options, rowObject) {
+                          if (cellvalue == 1) {
+                              return "<span class=\"label label-success\">待审核</span>";
+                          } else if(cellvalue == 2){
+                              return "<span class=\"label label-success\">审核中</span>";
+                          } else if(cellvalue == 3){
+                              return "<span class=\"label label-success\">审核成功</span>";
+                          } else if(cellvalue == 4){
+                              return "<span class=\"label label-danger\">审核失败</span>";
+                          }
+                      }
+                }
+            ],
+            viewrecords: true,
+            rowNum: 15,
+            rowList: [15, 30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'createdate',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $("#" + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $("#" + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+        //查询条件设置
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            $gridTable.jqGrid('setGridParam', {
+                postData: {
+                    condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                    keyword: $("#txt_Keyword").val()
+                }
+            }).trigger('reloadGrid');
+        });
+        //查询回车事件
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    }
+    function submit(){
+   	 var keyValue = $("#gridTable").jqGridRowValue("sbid");
+   	 var sjmc =   $("#gridTable").jqGridRowValue("sjmc");
+        if (keyValue) {
+       	 var d = {id:keyValue,sjmc:sjmc};
+       	 return d;
+        } else {
+            dialogMsg('请选择关联事件！', 0);
+            
+        }
+   	
+   }
+</script>
+
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <div id="queryCondition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="sjmc">事件名称</a></li>
+                            <li><a data-value="sbname">申报人姓名</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td style="padding-left: 2px;">
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="b_ref" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            
+        </div>
+        <!-- <script>$('.toolbar').authorizeButton()</script> -->
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+</body></html>

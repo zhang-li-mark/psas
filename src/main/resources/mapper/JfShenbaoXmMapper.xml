@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfShenbaoXmMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfShenbaoXm">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="jfxmc" jdbcType="VARCHAR" property="jfxmc" />
+    <result column="jfxms" jdbcType="VARCHAR" property="jfxms" />
+    <result column="fz" jdbcType="DECIMAL" property="fz" />
+    <result column="tjsj" jdbcType="TIMESTAMP" property="tjsj" />
+    <result column="xgsj" jdbcType="TIMESTAMP" property="xgsj" />
+    <result column="jflx" jdbcType="VARCHAR" property="jflx" />
+    <result column="jfjb" jdbcType="VARCHAR" property="jfjb" />
+    <result column="gwid" jdbcType="VARCHAR" property="gwid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, jfxmc, jfxms, fz, tjsj, xgsj, jflx, jfjb, gwid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_shenbao_xm
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jf_shenbao_xm
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfShenbaoXm">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shenbao_xm (jfxmc, jfxms, fz, 
+      tjsj, xgsj, jfjb,jflx, 
+      gwid)
+    values (#{jfxmc,jdbcType=VARCHAR}, #{jfxms,jdbcType=VARCHAR}, #{fz,jdbcType=DECIMAL}, 
+      #{tjsj,jdbcType=TIMESTAMP}, #{xgsj,jdbcType=TIMESTAMP},#{jfjb,jdbcType=VARCHAR}, #{jflx,jdbcType=VARCHAR}, 
+      #{gwid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfShenbaoXm">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shenbao_xm
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jfxmc != null">
+        jfxmc,
+      </if>
+      <if test="jfxms != null">
+        jfxms,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="tjsj != null">
+        tjsj,
+      </if>
+      <if test="xgsj != null">
+        xgsj,
+      </if>
+       <if test="jfjb != null">
+        jfjb,
+      </if>
+      <if test="jflx != null">
+        jflx,
+      </if>
+      <if test="gwid != null">
+        gwid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jfxmc != null">
+        #{jfxmc,jdbcType=VARCHAR},
+      </if>
+      <if test="jfxms != null">
+        #{jfxms,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="tjsj != null">
+        #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xgsj != null">
+        #{xgsj,jdbcType=TIMESTAMP},
+      </if>
+       <if test="jfjb != null">
+        #{jfjb,jdbcType=VARCHAR},
+      </if>
+      <if test="jflx != null">
+        #{jflx,jdbcType=VARCHAR},
+      </if>
+      <if test="gwid != null">
+        #{gwid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfShenbaoXm">
+    update jf_shenbao_xm
+    <set>
+      <if test="jfxmc != null">
+        jfxmc = #{jfxmc,jdbcType=VARCHAR},
+      </if>
+      <if test="jfxms != null">
+        jfxms = #{jfxms,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="tjsj != null">
+        tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xgsj != null">
+        xgsj = #{xgsj,jdbcType=TIMESTAMP},
+      </if>
+       <if test="jfjb != null">
+        jfjb = #{jfjb,jdbcType=VARCHAR},
+      </if>
+      <if test="jflx != null">
+        jflx = #{jflx,jdbcType=VARCHAR},
+      </if>
+      <if test="gwid != null">
+        gwid = #{gwid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfShenbaoXm">
+    update jf_shenbao_xm
+    set jfxmc = #{jfxmc,jdbcType=VARCHAR},
+      jfxms = #{jfxms,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=DECIMAL},
+      tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      xgsj = #{xgsj,jdbcType=TIMESTAMP},
+      jfjb = #{jfjb,jdbcType=VARCHAR},
+      jflx = #{jflx,jdbcType=VARCHAR},
+      gwid = #{gwid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="showPzs" parameterType="java.lang.String" resultType="com.power.pz.entity.JfPzVO">
+    select 
+    id, jfxmc, jfxms, fz, tjsj, xgsj, jfjb,jflx, gwid, r.fullname
+    from jf_shenbao_xm s left join sys_role r on r.roleid = s.gwid
+    <where>
+       <if test="gwid != null">
+      and gwid = #{gwid}
+      </if>
+      <if test="jflx != null">
+      	and jflx = #{jflx}
+      </if>
+      </where>
+  </select>
+  
+  <select id="getUserGwJfx" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT xm.* FROM jf_shenbao_xm xm,sys_userrelation t
+	WHERE xm.gwid = t.objectid 
+	AND t.category = 3
+	AND t.userid = #{userid}
+	<if test="jflx != null">
+      	and jflx = #{jflx}
+      </if>
+  </select>
+</mapper>

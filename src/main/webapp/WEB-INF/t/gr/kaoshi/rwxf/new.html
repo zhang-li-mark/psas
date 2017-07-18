@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>添加考试任务</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.extension.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/datepicker/WdatePicker.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+</head>
+<body>
+    <form id="form1">
+<div style="margin-left: 10px; margin-right: 10px;">
+    <div class="tab-content" style="padding-top: 10px;">
+    <input id="id" name="id" type="hidden" value=""/>
+    <input id="dws" name="dws" type="hidden" value=""/>
+    <input id="kstmid" name="kstmid" type="hidden" value=""/>
+                  <table class="form">    
+                    <tr>
+                     <td class="formTitle">开始日期<font face="宋体">*</font></td>
+                    <td class="formValue" style="width: 120px" >
+                       <input id="kssj" type="text" class="form-control input-wdatepicker" isvalid="yes" checkexpession="NotNull"/>
+                    </td>
+                     <td  class="formTitle">截至日期<font face="宋体">*</font></td>
+                    <td class="formValue" style="width: 120px">
+                       <input id="jssj" type="text" class="form-control input-wdatepicker" isvalid="yes" checkexpession="NotNull"/>
+                    </td>
+                    </tr>
+                 <tr>
+					<th class="formTitle" style="height: 37px;">对应积分数<font face="宋体">*</font></th>
+					<td class="formValue">
+					<input id="jf" type="text"
+						class="form-control" placeholder="请输入对应积分数" isvalid="yes"
+						checkexpession="NotNull" />
+					</td>
+					<td  class="formTitle">考试类型<font face="宋体">*</font></td>
+                    <td class="formValue" style="width: 120px">
+                    	<select name="sjlx" id="sjlx" class="">
+                    		<option value="1">闭卷考试</option>
+                    		<option value="2">开卷考试</option>
+                    	</select>
+                    </td>
+				</tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 4px;">考试主题<font face="宋体">*</font> </th>
+                    <td class="formValue" colspan="5">
+                        <textarea id="kszt" class="form-control" style="height: 50px;" isvalid="yes" checkexpession="NotNull"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 4px;">考试单位<font face="宋体">*</font> </th>
+                    <td class="formValue" colspan="5">
+                        <textarea id="zpbm" class="form-control" style="height: 50px;" isvalid="yes" checkexpession="NotNull"></textarea>
+                    </td>
+                </tr>
+                 <tr>
+            		<td class="formTitle">考试题目<font face="宋体">*</font></td>
+            		<td class="formValue">
+                  		<a id="b_add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;考试题目</a>
+            		</td>
+             	<tr>
+            		<th class="formTitle" valign="top" style="padding-top: 8px;"></th>
+            		<td class="formValue" colspan="8">
+                		<textarea id="kstm" class="form-control" rows="8" style="height:150px;" ></textarea>
+            		</td>
+        		</tr>
+            </table>
+    </div>
+</div>
+    </form>
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+        $("#jf").checkNum({integerLength: 5,decimalLength:2});
+        $("#kssj").bind("click",function(){
+        	WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'jssj\')}',onpicked:function(){jssj.click();},autoPickDate:true});
+	    });
+	    $("#jssj").bind("click",function(){
+	        WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'kssj\')}',autoPickDate:true});
+	    });
+    })
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "${ctx.contextPath}/gr/kaoshi/getRwFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    $("#kssj").val(formatDate(new Date(data.kssj), "yyyy-MM-dd"));
+                    $("#jssj").val(formatDate(new Date(data.jssj), "yyyy-MM-dd"));
+                }
+            });
+        }
+        //选择单位
+        $("#zpbm").attr('readonly', true).click(function(){
+        	dialogOpen({
+                id: "setXxdw",
+                title: '选择考试单位',
+                url: "${ctx.contextPath}/gr/xuexi/setXxdw",
+                width: "850px",
+                height: "480px",
+                callBack: function (iframeId) {
+                	var datas = top.__setXxdw.getSelDwxh();
+                	top.__setXxdw.dialogClose();
+                	//
+                	
+                	$("#dws").val(datas.ids);
+                	$("#zpbm").val(datas.dws);
+                }
+            });
+        });
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        if(keyValue){
+        	if(!$("#dws").val()&&$("#kstmid").val()){
+        		dialogMsg('请重新选择单位！', 0);
+        		return false
+        	}
+        	if(!$("#kstmid").val()&&$("#dws").val()){
+        		dialogMsg('请重新选择题目！', 0);
+        		return false
+        	}
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({url: "${ctx.contextPath}/gr/kaoshi/saveRwForm",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function (data) {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+      	});
+    }
+    
+    function btn_add(){
+    	dialogOpen({
+            id: "tmindex",
+            title: '考试题目',
+            url: "${ctx.contextPath}/gr/kaoshi/tmindex",//
+            width: "900px",
+            height: "500px",
+            callBack: function (iframeId) {
+            	var data = top.frames[iframeId].submit();
+            	if(data.bt){
+            		$("#kstmid").val(data.xh);
+            		$("#kstm").val(data.bt);
+            		top.frames[iframeId].dialogClose();
+            	}else{
+            		dialogMsg('请选择考试题目！', 0);
+            	}
+            }
+        });
+    	
+    }
+</script>
+</body>
+</html>

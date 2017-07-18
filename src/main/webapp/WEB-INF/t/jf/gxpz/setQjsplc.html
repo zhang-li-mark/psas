@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>请假审批设置</title>
+	<link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<style type="text/css">
+.orgchart {
+  background: #fff;
+}
+	</style>
+</head>
+<body style="overflow: hidden;">
+<div id="chart-container" style="height:450px;"></div>
+
+<ul class="dropdown-menu pull-right contextmenu" style="width:120px;">
+	<li class="reload"><a href="javascript:setRy(1);"><i class="fa fa-user-plus"></i> 添加上级</a></li> 
+	<li class="add"><a href="javascript:setRy(0);"><i class="fa fa-user-secret"></i> 设置当前</a></li>
+	<!-- 
+	<li class="del"><a href="javascript:setRy(2);"><i class="fa fa-close"></i> 删除节点</a></li> -->
+</ul>
+<link href="${ctx.contextPath}/res/orgchart/jquery.orgchart.css" rel="stylesheet"/>
+<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+<script src="${ctx.contextPath}/res/jquery/jquery-3.1.0.min.js"></script>
+<script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/res/orgchart/html2canvas.min.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/res/orgchart/jquery.orgchart.js"></script>
+<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+<script type="text/javascript">
+var f = request('f');//1请假，2积分申报
+var datascource = {
+	'id':'100',
+	'name': '---',
+	'zw': '待指定','children': []
+};
+  $(function() {
+	//获取上页面参数
+	var xhs = $.currentIframe().$('#gridTable').jqGridRowValue("userid").split(",");
+	var names = $.currentIframe().$('#gridTable').jqGridRowValue("realname").split(",");
+	var zws = $.currentIframe().$('#gridTable').jqGridRowValue("dutyid").split(",");
+  	if(xhs.length<1 || xhs==','){//
+  		dialogMsg('请选择需要设置审批关系的数据行！', 0);
+  		return;
+  	}
+	var base = [];
+	for(var i=0;i<xhs.length;i++){
+		base.push({name:names[i],zw:zws[i],id:1});
+	}
+	datascource.children = base;
+	//
+    $('#chart-container').orgchart({
+      'data' : datascource,
+      'nodeContent': 'zw'
+    });
+	//
+	$('.orgchart').width($(document).width()).height($(document).height());
+    //TODO 只设置最顶级
+    $(".node[id!='1']").on("contextmenu", function(){
+   	  $(this).trigger("click");
+	   	var curNode = $(".focused");
+		if(curNode[0] && curNode[0].id==100){
+			//隐藏上级
+			$(".contextmenu .reload").hide();
+		}else{
+			$(".contextmenu .reload").show();
+		}
+	   	});
+    $(".node[id!='1']").Contextmenu();
+    $('.node:first').trigger("click");
+    setRy(1);
+  });
+var $chartContainer = $('#chart-container');
+setRy=function(ry){//0本级，1上级 , 2删除
+	if(ry==2){
+		var curNode = $(".focused");
+		var first = $chartContainer.find('.node:first');
+		console.log(curNode[0].id);
+		if (curNode[0].id === $chartContainer.find('.node:first')[0].id || curNode[0].id==100) {
+			alert("---");
+        }else{
+        	$('#chart-container').orgchart('removeNodes', curNode);
+        }
+		return;
+	}
+	//
+	dialogOpen({
+         id: "setQjLdry",
+         title: '选择上级人员',
+         url: "${ctx.contextPath}/gxpz/setRy",//
+         width: "880px",
+         height: "500px",
+         callBack: function (iframeId) {
+        	 var d = top.frames[iframeId].getFormData();
+        	 top.frames[iframeId].dialogClose();
+        	 //console.log(d);
+        	 //console.log(ry);
+        	 if(ry==0){//更新信息
+        		$(".focused").attr("id",d[0].userid);
+        		$(".focused div.title").text(d[0].realname);
+        		$(".focused div.content").text(d[0].zw);
+        	 }else{
+        		if(d.length>0){
+        			var curNode = $(".focused");
+        			console.log(curNode);
+        			console.log(curNode[0].id);
+        			if(curNode[0] && curNode[0].id==100){
+        			//if(curNode[0]){
+        				$(".focused").attr("id",d[0].userid);
+                		$(".focused div.title").text(d[0].realname);
+                		$(".focused div.content").text(d[0].zw);
+		         		for(var i=1;i<d.length;i++){
+		        			$chartContainer.orgchart('addParent', $chartContainer.find('.node:first'), { 'name': d[i].realname, 'id':d[i].userid,'zw':d[i].zw});
+		        		}
+        			}else{
+		        		for(var i=0;i<d.length;i++){
+		        			$chartContainer.orgchart('addParent', $chartContainer.find('.node:first'), { 'name': d[i].realname, 'id':d[i].userid,'zw':d[i].zw});
+		        		}
+        			}
+        		}
+        	 }
+        	 $('.node:first').trigger("click");
+        	$(".node[id!='1']").off("contextmenu");
+       		$(".node[id!='1']").on("contextmenu", function(){
+       		    $(this).trigger("click");
+       		   	var curNode = $(".focused");
+	       		if(curNode[0].id==100 || $('.node:first')[0].id!=curNode[0].id){
+	       			//隐藏上级
+	       			$(".contextmenu .reload").hide();
+	       		}else{
+	       			$(".contextmenu .reload").show();
+	       		}
+       	   	});
+       	    $(".node[id!='1']").Contextmenu();
+         }
+     });
+}
+var selRy=[];
+getId=function(obj){
+	if(obj.children){
+		getId(obj.children[0]);
+	}
+	if(obj && obj.id){
+		selRy.push(obj.id);
+	}else{
+		return;
+	}
+}
+getData=function(){
+	//判断是否正确设置节点
+	var orgData = $chartContainer.orgchart('getAllData');
+	selRy=[];
+	getId(orgData);
+	var re = {json:JSON.stringify(orgData),rys:selRy.join(",")};
+	return re;
+}
+</script>
+</body>
+</html>

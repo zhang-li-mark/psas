@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>考试界面</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+<style type="text/css">
+.xinwenlb{width:1000px; padding:30px 0; margin:0 auto 40px; min-height:500px;}
+.xinwenlb ul li{padding:20px; border-bottom:1px solid #CCC;}
+.xinwenlb ul li:hover{background:#f5f5f5;}
+.xinwenlb ul{border-top:1px solid #CCC; padding-bottom:30px;}
+.gezi{ margin:0px; padding:0px;}
+.xinwenlb ul.gezi li{ width:30px; line-height:20px; float:left; margin:3px; border:1px #D5DFE8 dashed; text-align:center; padding:0;}
+.gezi li a{ text-decoration:none; color:#F00}
+.tishi {color: #F00;}
+.biaoge_ks{margin:0 1%; border:1px solid #ddd;}
+.biaoge_ks tr td{line-height:23px; padding:10px 1%;font-size:14px; }
+.biaoge_ks tr td span{font-size:14px;}
+.xuanze{background-color:#0C9;}
+.rowOdd{background-color: #f7fbff;}
+@media screen and (max-width:800px){ #youbianpf{ display:none;}}
+
+</style>
+</head>
+<body>
+    <form id="form1">
+<div class="xinwenlb" style="overflow:hidden;padding-top:20px;">
+<table align="left" cellpadding="0" cellspacing="0" bgcolor="#D5DFE8" class="biaoge_ks" width="98%">
+  <tr>
+    <td bgcolor="#FFFFFF" style="line-height:30px; font-size:15px;"> 考试人账号 : <span style="color:green; font-size:18px;">${user.realName}</span> &nbsp;&nbsp; &nbsp;&nbsp;   </td>
+  </tr>
+  <tr>
+    <td height="50" bgcolor="#FFFFFF" align="center" style="line-height:50px;"><strong style="color:#333; font-size:22px; font-weight:bolder;">${sj.sjmc} <#if sj.sjlx==2>【开卷考试】</#if></strong></td>
+  </tr>
+  <tr style="background-color: #D5DFE8">
+    <td >一、	单选题</td>
+  </tr>
+<#assign k = 0>
+<#list dxTm as tm>
+<#assign k = k + 1> 
+<tr><td height="67"><a name="${k}" id="${k}" class="_dx"></a><strong style="font-size:15px;">&nbsp;${k}、${tm.bt}</strong> <br />
+<#list tm.xx?split('#') as xx>
+<span style="color:#666;"><input onclick="document.getElementById('ybpf${k}').className='xuanze';" name="${tm.xh}" value="${(xx_index+1)?upper_abc}" type="radio" />${(xx_index+1)?upper_abc} ${xx}</span>&nbsp;&nbsp;
+</#list>
+<#if sj.sjlx==2><br/><span style="color:orange;">解析&nbsp; :&nbsp; ${tm.dajx}</span></#if>
+</td></tr>
+</#list>
+  <tr style="background-color: #D5DFE8">
+    <td >二、	多选题&nbsp;</td>
+  </tr>
+<#list duoxuanTm as tm>
+<#assign k = k + 1> 
+<tr><td height="67" ><a name="${k}" id="${k}" class="_duox"></a><strong style="font-size:15px;">&nbsp;${k}、${tm.bt}</strong> <br />
+<#list tm.xx?split('#') as xx>
+<span style="color:#666;"><input onclick="document.getElementById('ybpf${k}').className='xuanze';" name="${tm.xh}" value="${(xx_index+1)?upper_abc}" type="checkbox" />${(xx_index+1)?upper_abc} ${xx}</span>&nbsp;&nbsp;
+</#list>
+<#if sj.sjlx==2><br/><span style="color:orange;">解析&nbsp; :&nbsp; ${tm.dajx}</span></#if>
+</td></tr>
+</#list>
+  <tr style="background-color: #D5DFE8">
+    <td >三、	判断题&nbsp;</td>
+  </tr>
+<#list panduanTm as tm>
+<#assign k = k + 1> 
+<tr><td height="67" ><a name="${k}" id="${k}" class="_pd"></a><strong style="font-size:15px;">&nbsp;${k}、${tm.bt}</strong> <br />
+<#list tm.xx?split('#') as xx>
+<span style="color:#666;"><input onclick="document.getElementById('ybpf${k}').className='xuanze';" name="${tm.xh}" value="${(xx_index+1)?upper_abc}" type="radio" />${(xx_index+1)?upper_abc} ${xx}</span>&nbsp;&nbsp;
+</#list>
+<#if sj.sjlx==2><br/><span style="color:orange;">解析&nbsp; :&nbsp; ${tm.dajx}</span></#if>
+</td></tr>
+</#list>
+<!-- 
+  <tr>
+    <td >四、	填空题&nbsp;</td>
+  </tr>
+ -->
+  <tr style="background-color: #D5DFE8">
+    <td height="58"  >
+      <input type="button" id="tjsj"  value="提交试卷" style="color:white; padding:0 20px; border-radius:2px; background:#008dd8; font-size:16px; height:30px; border:#0079b8 solid 1px; margin:0 10px 0 0; transition:all 0.2s linear; cursor:pointer;" />
+    </td>
+    </tr>
+</table>
+<div id="youbianpf" style="overflow-y:auto;height:241px;width:205px; position: fixed; border: 1px solid #0499CA; top: 20px; z-index: 999; right:20px; padding:10px; background:white;" > 
+<div>
+    <ul class="gezi" style="padding:0;">        
+    </ul>
+</div>
+</div>
+
+
+</div>
+    </form>
+<script>
+$(function(){
+	$("._dx").parent().each(function(i,obj){
+		if((i+1)%2==0){
+			$(this).addClass('rowOdd');
+		}
+	});
+	$("._duox").parent().each(function(i,obj){
+		if((i+1)%2==0){
+			$(this).addClass('rowOdd');
+		}
+	});
+	$("._pd").parent().each(function(i,obj){
+		if((i+1)%2==0){
+			$(this).addClass('rowOdd');
+		}
+	});
+	//初始化右侧序号 gezi
+	//_dx _duox _pd _tk _mcjs _wdt
+	var _gezi = $(".gezi");
+	$("._dx").each(function(i,v){
+		var k = $(this).attr("id");
+		_gezi.append("<li><div class='buxuanz' id='ybpf"+k+"'><a href='#"+k+"'>"+k+"</a></div></li>");
+	});
+	$("._duox").each(function(i,v){
+		var k = $(this).attr("id");
+		_gezi.append("<li style='border:1px #E4052D solid;'><div class='buxuanz' id='ybpf"+k+"'><a href='#"+k+"'>"+k+"</a></div></li>");
+	});
+	$("._pd").each(function(i,v){
+		var k = $(this).attr("id");
+		_gezi.append("<li style='border-color:#057BE4;'><div class='buxuanz' id='ybpf"+k+"'><a href='#"+k+"'>"+k+"</a></div></li>");
+	});
+	$("._tk").each(function(i,v){
+		var k = $(this).attr("id");
+		_gezi.append("<li><div class='buxuanz' id='ybpf"+k+"'><a href='#"+k+"'>"+k+"</a></div></li>");
+	});
+	$("#tjsj").click(function(){//提交试卷
+		//统计未完成的题目
+		var zts = ${sj.tmgs};
+		var _ztm = $(".buxuanz").length;
+		if(_ztm>0){
+			dialogConfirm("还有【"+(_ztm)+"】题未做，是否提交考试试卷？", function (r) {
+				if(r){
+					_sub();
+				}
+			});
+		}else{
+			_sub();
+		}
+	});
+
+});
+_sub=function(){
+	var tmbh = "${sj.tmbh}".split(",");
+	var postData="";
+	$.each(tmbh,function(i,tm){
+		var val=$("input[name='"+tm+"']:checked").map(function(){return $(this).val();}).get().join(",");
+		postData = postData+ (postData==""?tm+'='+val:'&'+tm+'='+val);
+		
+	});
+	//console.log(postData);return;
+	$.SaveForm({url: "${ctx.contextPath}/gr/kaoshi/ksSubmit",
+        param: {xh:${sj.xh},da:postData},
+        loading: "正在保存数据...",
+        success: function (data) {
+            $.currentIframe().$("#gridTable").trigger("reloadGrid");
+        }
+  	});
+}
+</script>
+</body>
+</html>

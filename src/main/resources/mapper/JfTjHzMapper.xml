@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfTjHzMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfTjHz">
+    <id column="nd" jdbcType="INTEGER" property="nd" />
+    <id column="ryxh" jdbcType="VARCHAR" property="ryxh" />
+    <result column="jcxxjf" jdbcType="DECIMAL" property="jcxxjf" />
+    <result column="mzcpdf" jdbcType="DECIMAL" property="mzcpdf" />
+    <result column="gzjf" jdbcType="DECIMAL" property="gzjf" />
+    <result column="gljf" jdbcType="DECIMAL" property="gljf" />
+    <result column="qxjjf" jdbcType="DECIMAL" property="qxjjf" />
+    <result column="xxjf" jdbcType="DECIMAL" property="xxjf" />
+    <result column="ksjf" jdbcType="DECIMAL" property="ksjf" />
+    <result column="zjf" jdbcType="DECIMAL" property="zjf" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    nd, ryxh, jcxxjf, mzcpdf, gzjf, gljf, qxjjf, xxjf, ksjf, zjf
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.power.common.entity.JfTjHzKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_tj_hz
+    where nd = #{nd,jdbcType=INTEGER}
+      and ryxh = #{ryxh,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.power.common.entity.JfTjHzKey">
+    delete from jf_tj_hz
+    where nd = #{nd,jdbcType=INTEGER}
+      and ryxh = #{ryxh,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfTjHz">
+    insert into jf_tj_hz (nd, ryxh, jcxxjf, 
+      mzcpdf, gzjf, gljf, 
+      qxjjf, xxjf, ksjf, 
+      zjf)
+    values (#{nd,jdbcType=INTEGER}, #{ryxh,jdbcType=VARCHAR}, #{jcxxjf,jdbcType=DECIMAL}, 
+      #{mzcpdf,jdbcType=DECIMAL}, #{gzjf,jdbcType=DECIMAL}, #{gljf,jdbcType=DECIMAL}, 
+      #{qxjjf,jdbcType=DECIMAL}, #{xxjf,jdbcType=DECIMAL}, #{ksjf,jdbcType=DECIMAL}, 
+      #{zjf,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfTjHz">
+    insert into jf_tj_hz
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nd != null">
+        nd,
+      </if>
+      <if test="ryxh != null">
+        ryxh,
+      </if>
+      <if test="jcxxjf != null">
+        jcxxjf,
+      </if>
+      <if test="mzcpdf != null">
+        mzcpdf,
+      </if>
+      <if test="gzjf != null">
+        gzjf,
+      </if>
+      <if test="gljf != null">
+        gljf,
+      </if>
+      <if test="qxjjf != null">
+        qxjjf,
+      </if>
+      <if test="xxjf != null">
+        xxjf,
+      </if>
+      <if test="ksjf != null">
+        ksjf,
+      </if>
+      <if test="zjf != null">
+        zjf,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nd != null">
+        #{nd,jdbcType=INTEGER},
+      </if>
+      <if test="ryxh != null">
+        #{ryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="jcxxjf != null">
+        #{jcxxjf,jdbcType=DECIMAL},
+      </if>
+      <if test="mzcpdf != null">
+        #{mzcpdf,jdbcType=DECIMAL},
+      </if>
+      <if test="gzjf != null">
+        #{gzjf,jdbcType=DECIMAL},
+      </if>
+      <if test="gljf != null">
+        #{gljf,jdbcType=DECIMAL},
+      </if>
+      <if test="qxjjf != null">
+        #{qxjjf,jdbcType=DECIMAL},
+      </if>
+      <if test="xxjf != null">
+        #{xxjf,jdbcType=DECIMAL},
+      </if>
+      <if test="ksjf != null">
+        #{ksjf,jdbcType=DECIMAL},
+      </if>
+      <if test="zjf != null">
+        #{zjf,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfTjHz">
+    update jf_tj_hz
+    <set>
+      <if test="jcxxjf != null">
+        jcxxjf = #{jcxxjf,jdbcType=DECIMAL},
+      </if>
+      <if test="mzcpdf != null">
+        mzcpdf = #{mzcpdf,jdbcType=DECIMAL},
+      </if>
+      <if test="gzjf != null">
+        gzjf = #{gzjf,jdbcType=DECIMAL},
+      </if>
+      <if test="gljf != null">
+        gljf = #{gljf,jdbcType=DECIMAL},
+      </if>
+      <if test="qxjjf != null">
+        qxjjf = #{qxjjf,jdbcType=DECIMAL},
+      </if>
+      <if test="xxjf != null">
+        xxjf = #{xxjf,jdbcType=DECIMAL},
+      </if>
+      <if test="ksjf != null">
+        ksjf = #{ksjf,jdbcType=DECIMAL},
+      </if>
+      <if test="zjf != null">
+        zjf = #{zjf,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where nd = #{nd,jdbcType=INTEGER}
+      and ryxh = #{ryxh,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfTjHz">
+    update jf_tj_hz
+    set jcxxjf = #{jcxxjf,jdbcType=DECIMAL},
+      mzcpdf = #{mzcpdf,jdbcType=DECIMAL},
+      gzjf = #{gzjf,jdbcType=DECIMAL},
+      gljf = #{gljf,jdbcType=DECIMAL},
+      qxjjf = #{qxjjf,jdbcType=DECIMAL},
+      xxjf = #{xxjf,jdbcType=DECIMAL},
+      ksjf = #{ksjf,jdbcType=DECIMAL},
+      zjf = #{zjf,jdbcType=DECIMAL}
+    where nd = #{nd,jdbcType=INTEGER}
+      and ryxh = #{ryxh,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getJfTJ" parameterType="map" resultType="com.power.jfgl.entity.JfTjVO">
+  	SELECT u.userid ryxh ,d.departmentid as deptid,d.parentid as bmname, IFNULL(tt.mzcpdf,0.00) mzcpdf,IFNULL(tt.gzjf,0.00) gzjf,IFNULL(tt.gljf,0.00) gljf,IFNULL(tt.qxjjf,0.00) qxjjf,IFNULL(tt.xxjf,0.00) xxjf,IFNULL(tt.ksjf,0.00) ksjf,IFNULL(jc.jfhj,0) jcxxjf,(IFNULL(tt.zjf,0.00)+IFNULL(jc.jfhj,0.00)) zjf,
+u.realname uname
+	from sys_user u LEFT JOIN(
+	SELECT hz.ryxh,SUM(hz.zjf) zjf,SUM(hz.mzcpdf) mzcpdf,SUM(hz.gzjf) gzjf,SUM(hz.gljf) gljf,SUM(hz.qxjjf) qxjjf,SUM(hz.xxjf) xxjf,SUM(hz.ksjf) ksjf from jf_tj_hz hz
+	<where>
+	<if test="st==null and et==null">hz.nd =year(now())</if>
+	<if test="st!=null and et==null">and CONCAT(hz.nd,lpad(yue,2,'0'))&gt;=#{st}</if>
+   	<if test="et!=null and st==null">and CONCAT(hz.nd,lpad(yue,2,'0'))&lt;=#{et}</if>
+   	<if test="st!=null and et!=null">and CONCAT(hz.nd,lpad(yue,2,'0')) between #{st} and #{et}</if>
+   	</where>
+	GROUP BY ryxh) tt on tt.ryxh = u.userid
+	LEFT JOIN sys_department d on d.departmentid = u.departmentid 
+	LEFT JOIN  jf_tj_jcxx jc on jc.ryxh = u.userid
+WHERE d.parentid!='0'
+<if test="depts != null">and u.departmentid in (${depts})</if>
+<if test="uname != null">and u.realname like concat('%',#{uname},'%') </if>
+	ORDER BY d.parentid, d.departmentid,zjf desc
+  </select>
+    <select id="getJfTJExport" parameterType="map" resultType="com.power.jfgl.entity.JfTjVO">
+  	SELECT u.userid ryxh ,d.fullname as deptid,d2.fullname as bmname, IFNULL(tt.mzcpdf,0.00) mzcpdf,IFNULL(tt.gzjf,0.00) gzjf,IFNULL(tt.gljf,0.00) gljf,IFNULL(tt.qxjjf,0.00) qxjjf,IFNULL(tt.xxjf,0.00) xxjf,IFNULL(tt.ksjf,0.00) ksjf,IFNULL(jc.jfhj,0) jcxxjf,(IFNULL(tt.zjf,0.00)+IFNULL(jc.jfhj,0.00)) zjf,
+u.realname uname
+	from sys_user u LEFT JOIN(
+	SELECT hz.ryxh,SUM(hz.zjf) zjf,SUM(hz.mzcpdf) mzcpdf,SUM(hz.gzjf) gzjf,SUM(hz.gljf) gljf,SUM(hz.qxjjf) qxjjf,SUM(hz.xxjf) xxjf,SUM(hz.ksjf) ksjf from jf_tj_hz hz
+	<where>
+	<if test="st==null and et==null">hz.nd =year(now())</if>
+	<if test="st!=null and et==null">and CONCAT(hz.nd,lpad(yue,2,'0'))&gt;=#{st}</if>
+   	<if test="et!=null and st==null">and CONCAT(hz.nd,lpad(yue,2,'0'))&lt;=#{et}</if>
+   	<if test="st!=null and et!=null">and CONCAT(hz.nd,lpad(yue,2,'0')) between #{st} and #{et}</if>
+   	</where>
+	GROUP BY ryxh) tt on tt.ryxh = u.userid
+	LEFT JOIN sys_department d on d.departmentid = u.departmentid 
+	LEFT JOIN sys_department d2 on d2.departmentid = d.parentid 
+	LEFT JOIN  jf_tj_jcxx jc on jc.ryxh = u.userid
+WHERE d.parentid!='0'
+<if test="depts != null">and u.departmentid in (${depts})</if>
+<if test="uname != null">and u.realname like concat('%',#{uname},'%') </if>
+	ORDER BY d.parentid, d.departmentid,zjf desc
+  </select>
+
+    <select id="getMyJfTJ" parameterType="map" resultType="com.power.common.entity.JfTjHz">
+  SELECT u.userid ryxh ,u.departmentid deptid, IFNULL(tt.mzcpdf,0.00) mzcpdf,IFNULL(tt.gzjf,0.00) gzjf,IFNULL(tt.gljf,0.00) gljf,IFNULL(tt.qxjjf,0.00) qxjjf,IFNULL(tt.xxjf,0.00) xxjf,IFNULL(tt.ksjf,0.00) ksjf,IFNULL(jc.jfhj,0) jcxxjf,(IFNULL(tt.zjf,0.00)+IFNULL(jc.jfhj,0.00)) zjf
+	from sys_user u LEFT JOIN(
+	SELECT hz.ryxh,SUM(hz.zjf) zjf,SUM(hz.mzcpdf) mzcpdf,SUM(hz.gzjf) gzjf,SUM(hz.gljf) gljf,SUM(hz.qxjjf) qxjjf,SUM(hz.xxjf) xxjf,SUM(hz.ksjf) ksjf from jf_tj_hz hz
+	<where>
+	<if test="st==null and et==null">hz.nd =year(now())</if>
+	<if test="st!=null and et==null">and CONCAT(hz.nd,lpad(yue,2,'0'))&gt;=#{st}</if>
+   	<if test="et!=null and st==null">and CONCAT(hz.nd,lpad(yue,2,'0'))&lt;=#{et}</if>
+   	<if test="st!=null and et!=null">and CONCAT(hz.nd,lpad(yue,2,'0')) between #{st} and #{et}</if>
+   	</where> 
+	GROUP BY ryxh) tt on tt.ryxh = u.userid
+	LEFT JOIN  jf_tj_jcxx jc on jc.ryxh = u.userid
+	where u.userid=#{userid}
+  </select>
+  
+  <select id="getUserExport" parameterType="map" resultType="com.power.common.entity.SysUser">
+    select userid, o.fullname organizeid, dept.fullname departmentid, u.account, u.realname, u.nickname, 
+    u.headicon, u.quickquery, simplespelling, CASE WHEN gender='0' THEN '女' ELSE '男' END  gender, u.birthday, u.mobile, u.telephone, u.email, 
+    oicq, wechat, u.managerid, u.manager, roleid, dict.fullname dutyid, dutyname, postid, postname, workgroupid, 
+    u.modifyuserid, useronline, openid, question, answerquestion, checkonline, allowstarttime, 
+    allowendtime, lockstartdate, lockenddate, firstvisit, previousvisit, logoncount, 
+    u.createusername, securitylevel, u.modifyusername, u.sortcode, u.deletemark, u.enabledmark, 
+    u.description, u.createdate, u.createuserid, u.modifydate,dept2.fullname as password
+    from sys_user u left join sys_department dept on u.departmentid = dept.departmentid
+    LEFT JOIN sys_department dept2 on dept2.departmentid = dept.parentid
+	LEFT JOIN sys_organize o on  o.organizeid = u.organizeid
+	LEFT JOIN sys_dict dict on dict.dictid = u.dutyid
+    <where>
+      u.deletemark = 0
+      <if test="account != null">and account like concat('%',#{account,jdbcType=VARCHAR},'%')</if>
+      <if test="realname != null">and realname like concat('%',#{realname,jdbcType=VARCHAR},'%')</if>
+      <if test="mobile != null">and mobile like concat('%',#{mobile,jdbcType=VARCHAR},'%')</if>
+      <if test="depts != null">and u.departmentid in (${depts})</if>
+      <if test="orgs != null">and u.organizeid in (${orgs})</if>
+      <if test="loginname !='power'">and account!=#{loginname}</if>
+    </where>
+    order by dept.parentid,u.departmentid
+  </select>
+</mapper>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfShenbaoSpMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfShenbaoSp">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sbid" jdbcType="INTEGER" property="sbid" />
+    <result column="sprid" jdbcType="VARCHAR" property="sprid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="spjg" jdbcType="VARCHAR" property="spjg" />
+    <result column="spsj" jdbcType="TIMESTAMP" property="spsj" />
+    <result column="spbz" jdbcType="VARCHAR" property="spbz" />
+    <result column="szjd" jdbcType="INTEGER" property="szjd" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sbid, sprid, status, spjg, spsj, spbz, szjd
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_shenbao_sp
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jf_shenbao_sp
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfShenbaoSp">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shenbao_sp (sbid, sprid, status, 
+      spjg, spsj, spbz, 
+      szjd)
+    values (#{sbid,jdbcType=INTEGER}, #{sprid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{spjg,jdbcType=VARCHAR}, #{spsj,jdbcType=TIMESTAMP}, #{spbz,jdbcType=VARCHAR}, 
+      #{szjd,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfShenbaoSp">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shenbao_sp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sbid != null">
+        sbid,
+      </if>
+      <if test="sprid != null">
+        sprid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="spjg != null">
+        spjg,
+      </if>
+      <if test="spsj != null">
+        spsj,
+      </if>
+      <if test="spbz != null">
+        spbz,
+      </if>
+      <if test="szjd != null">
+        szjd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sbid != null">
+        #{sbid,jdbcType=INTEGER},
+      </if>
+      <if test="sprid != null">
+        #{sprid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="spjg != null">
+        #{spjg,jdbcType=VARCHAR},
+      </if>
+      <if test="spsj != null">
+        #{spsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="spbz != null">
+        #{spbz,jdbcType=VARCHAR},
+      </if>
+      <if test="szjd != null">
+        #{szjd,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfShenbaoSp">
+    update jf_shenbao_sp
+    <set>
+      <if test="sbid != null">
+        sbid = #{sbid,jdbcType=INTEGER},
+      </if>
+      <if test="sprid != null">
+        sprid = #{sprid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="spjg != null">
+        spjg = #{spjg,jdbcType=VARCHAR},
+      </if>
+      <if test="spsj != null">
+        spsj = #{spsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="spbz != null">
+        spbz = #{spbz,jdbcType=VARCHAR},
+      </if>
+      <if test="szjd != null">
+        szjd = #{szjd,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfShenbaoSp">
+    update jf_shenbao_sp
+    set sbid = #{sbid,jdbcType=INTEGER},
+      sprid = #{sprid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      spjg = #{spjg,jdbcType=VARCHAR},
+      spsj = #{spsj,jdbcType=TIMESTAMP},
+      spbz = #{spbz,jdbcType=VARCHAR},
+      szjd = #{szjd,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getJfSbSp" parameterType="java.lang.String" resultType="com.power.jfsb.entity.JfSbSpVO">
+    select sp.id,sp.sbid,sp.sprid,sp.status,sp.spjg,sp.spsj,
+	sb.sbrid,sb.sjmc,sb.fz,sb.sbsj,xm.jfxmc,u.realname as uname,d.fullname as deptname, di.fullname as zw
+	from jf_shenbao_sp  sp 
+	LEFT JOIN jf_shenbao sb on sp.sbid = sb.id
+	LEFT JOIN jf_shenbao_xm xm ON xm.id= sb.jflxid
+	Left join sys_user u on u.userid = sb.sbrid
+	LEFT JOIN sys_department d on u.departmentid = d.departmentid
+	LEFT JOIN sys_dict di on di.dictid = u.dutyid
+	where sprid = #{sprid,jdbcType=VARCHAR}
+  </select>
+    <delete id="deleteBySbid" parameterType="java.lang.Integer">
+    delete from jf_shenbao_sp
+    where sbid = #{sbid,jdbcType=INTEGER}
+  </delete>
+  <select id="getSbSpLc" parameterType="java.lang.Integer" resultType="com.power.common.entity.JfShenbaoSp">
+    select sb.*,u.realname as uname,d.fullname as deptname,di.fullname as zw 
+	from jf_shenbao_sp sb
+	LEFT JOIN sys_user u on u.userid = sb.sprid
+	LEFT JOIN sys_department d on d.departmentid = u.departmentid
+	LEFT JOIN sys_dict di on di.dictid = u.dutyid
+	where sb.sbid = #{sbid,jdbcType=INTEGER}
+	ORDER BY sb.szjd
+  </select>
+  <!-- getSbSpSl 申报审批待处理数据行 -->
+  <select id="getSbSpSl" parameterType="string" resultType="int">
+	SELECT count(*) from jf_shenbao_sp
+	where status =0 and sprid = #{userid}
+  </select>
+</mapper>

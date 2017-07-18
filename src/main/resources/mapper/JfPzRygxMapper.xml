@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfPzRygxMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfPzRygx">
+    <id column="ryxh" jdbcType="VARCHAR" property="ryxh" />
+    <result column="qjqbryxh" jdbcType="VARCHAR" property="qjqbryxh" />
+    <result column="qjsjgs" jdbcType="INTEGER" property="qjsjgs" />
+    <result column="qjcjgx" jdbcType="VARCHAR" property="qjcjgx" />
+    <result column="lssj" jdbcType="TIMESTAMP" property="lssj" />
+    <result column="lryxh" jdbcType="VARCHAR" property="lryxh" />
+    <result column="lrymc" jdbcType="VARCHAR" property="lrymc" />
+    <result column="qbryxh" jdbcType="VARCHAR" property="qbryxh" />
+    <result column="sjgs" jdbcType="INTEGER" property="sjgs" />
+    <result column="cjgx" jdbcType="VARCHAR" property="cjgx" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ryxh, qjqbryxh, qjsjgs, qjcjgx, lssj, lryxh, lrymc, qbryxh, sjgs, cjgx
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_pz_rygx
+    where ryxh = #{ryxh,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from jf_pz_rygx
+    where ryxh = #{ryxh,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfPzRygx">
+    insert into jf_pz_rygx (ryxh, qjqbryxh, qjsjgs, 
+      qjcjgx, lssj, lryxh, 
+      lrymc, qbryxh, sjgs, 
+      cjgx)
+    values (#{ryxh,jdbcType=VARCHAR}, #{qjqbryxh,jdbcType=VARCHAR}, #{qjsjgs,jdbcType=INTEGER}, 
+      #{qjcjgx,jdbcType=VARCHAR}, #{lssj,jdbcType=TIMESTAMP}, #{lryxh,jdbcType=VARCHAR}, 
+      #{lrymc,jdbcType=VARCHAR}, #{qbryxh,jdbcType=VARCHAR}, #{sjgs,jdbcType=INTEGER}, 
+      #{cjgx,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfPzRygx">
+    insert into jf_pz_rygx
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ryxh != null">
+        ryxh,
+      </if>
+      <if test="qjqbryxh != null">
+        qjqbryxh,
+      </if>
+      <if test="qjsjgs != null">
+        qjsjgs,
+      </if>
+      <if test="qjcjgx != null">
+        qjcjgx,
+      </if>
+      <if test="lssj != null">
+        lssj,
+      </if>
+      <if test="lryxh != null">
+        lryxh,
+      </if>
+      <if test="lrymc != null">
+        lrymc,
+      </if>
+      <if test="qbryxh != null">
+        qbryxh,
+      </if>
+      <if test="sjgs != null">
+        sjgs,
+      </if>
+      <if test="cjgx != null">
+        cjgx,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ryxh != null">
+        #{ryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="qjqbryxh != null">
+        #{qjqbryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="qjsjgs != null">
+        #{qjsjgs,jdbcType=INTEGER},
+      </if>
+      <if test="qjcjgx != null">
+        #{qjcjgx,jdbcType=VARCHAR},
+      </if>
+      <if test="lssj != null">
+        #{lssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lryxh != null">
+        #{lryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="lrymc != null">
+        #{lrymc,jdbcType=VARCHAR},
+      </if>
+      <if test="qbryxh != null">
+        #{qbryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="sjgs != null">
+        #{sjgs,jdbcType=INTEGER},
+      </if>
+      <if test="cjgx != null">
+        #{cjgx,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfPzRygx">
+    update jf_pz_rygx
+    <set>
+      <if test="qjqbryxh != null">
+        qjqbryxh = #{qjqbryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="qjsjgs != null">
+        qjsjgs = #{qjsjgs,jdbcType=INTEGER},
+      </if>
+      <if test="qjcjgx != null">
+        qjcjgx = #{qjcjgx,jdbcType=VARCHAR},
+      </if>
+      <if test="lssj != null">
+        lssj = #{lssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lryxh != null">
+        lryxh = #{lryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="lrymc != null">
+        lrymc = #{lrymc,jdbcType=VARCHAR},
+      </if>
+      <if test="qbryxh != null">
+        qbryxh = #{qbryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="sjgs != null">
+        sjgs = #{sjgs,jdbcType=INTEGER},
+      </if>
+      <if test="cjgx != null">
+        cjgx = #{cjgx,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ryxh = #{ryxh,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfPzRygx">
+    update jf_pz_rygx
+    set qjqbryxh = #{qjqbryxh,jdbcType=VARCHAR},
+      qjsjgs = #{qjsjgs,jdbcType=INTEGER},
+      qjcjgx = #{qjcjgx,jdbcType=VARCHAR},
+      lssj = #{lssj,jdbcType=TIMESTAMP},
+      lryxh = #{lryxh,jdbcType=VARCHAR},
+      lrymc = #{lrymc,jdbcType=VARCHAR},
+      qbryxh = #{qbryxh,jdbcType=VARCHAR},
+      sjgs = #{sjgs,jdbcType=INTEGER},
+      cjgx = #{cjgx,jdbcType=VARCHAR}
+    where ryxh = #{ryxh,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- getGxpzList  人员关系配置-->
+  <select id="getGxpzList" parameterType="map" resultType="com.power.jfgl.entity.RyGxpzVO">
+  	select mx.qjsjgs,mx.qjcjgx,mx.sjgs,mx.cjgx,
+    u.userid,u.realname,u.departmentid,u.wechat,u.dutyid ,u.gender
+    from sys_user u left join jf_pz_rygx mx on mx.ryxh = u.userid
+    where deletemark = 0 
+    <if test="account != null">and u.account like concat('%',#{account,jdbcType=VARCHAR},'%')</if>
+    <if test="realname != null">and u.realname like concat('%',#{realname,jdbcType=VARCHAR},'%')</if>
+    <if test="depts!=null">and u.departmentid in (${depts})</if>
+    order by u.departmentid,u.dutyid
+  </select>
+</mapper>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>明细-只读</title>
+	<link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="${ctx.contextPath}/res/jquery-easyui-1.4.4/themes/bootstrap/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="${ctx.contextPath}/res/jquery-easyui-1.4.4/themes/icon.css" />
+    <link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="${ctx.contextPath}/res/jquery-easyui-1.4.4/jquery.easyui.min.js"></script>
+	<script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	<style>
+    .datagrid-cell-group {
+        height: auto;
+    }
+</style>
+</head>
+<body style="overflow: hidden;">
+<script type="text/javascript">
+        var cpmxxh=request("cpmxxh");
+        var rybz=request("rybz");
+        var $obj = null;
+        $(function () {
+            $obj = $('#demoTable');
+            /****/
+            $obj.datagrid({
+            	url: "${ctx.contextPath}/mzcp/getCpJgMx?rybz="+rybz+"&cpmxxh="+cpmxxh,
+                method: 'post',
+                nowrap: false,
+                rownumbers:true,
+                singleSelect:true,
+                cache:false
+            });
+            $obj.datagrid('hideColumn', 'pjdf');
+            $obj.datagrid('hideColumn', 'xh');
+            $obj.datagrid('hideColumn', 'pjcxh');
+            $obj.datagrid('hideColumn', '_bz');
+            /**
+            var cells = $obj.datagrid('getPanel').find('div.datagrid-body td[field="pjbz"] div.datagrid-cell');
+	            cells.tooltip({    
+	                 content: function() {
+	                            //console.log(this);
+	                            var tp = $(this).html();
+	                            return tp;
+	                 }  
+	             });**/
+	        });
+            var EUIGrid = {
+                //设置列的值(适用于所有列)
+                setFieldValue: function (fieldName, value, index, grid) {
+                    if (grid == undefined || grid == '') {
+                        return;
+                    }
+                    var row = grid.datagrid('getRows')[index];
+                    if (row != null) {
+                        var editor = grid.datagrid('getEditor', { index: index, field: fieldName });
+                        if (editor != null) {
+                            this.setValueToEditor(editor, value);
+                        }
+                        else {
+                            var view = $('.datagrid-view');
+                            for (var i = 0; i < view.length; i++) {
+                                if ($(view[i]).children(grid.selector).length > 0) {
+                                    var view = $(view[i]).children('.datagrid-view2');
+                                    var td = $(view).find('.datagrid-body td[field="' + fieldName + '"]')[index]
+                                    var div = $(td).find('div')[0];
+                                    $(div).html(value);
+                                }
+                            }
+                            row[fieldName] = value;
+                        }
+                        grid.datagrid('clearSelections');
+                    }
+                },
+                //设置datagrid的编辑器的值
+                setValueToEditor: function (editor, value) {
+                    switch (editor.type) {
+                        case "combobox":
+                            editor.target.combobox("setValue", value);
+                            break;
+                        case "combotree":
+                            editor.target.combotree("setValue", value);
+                            break;
+                        case "textbox":
+                            editor.target.textbox("setValue", value);
+                            break;
+                        case "numberbox":
+                            editor.target.numberbox("setValue", value);
+                            break;
+                        case "datebox":
+                            editor.target.datebox("setValue", value);
+                            break;
+                        case "datetimebox":
+                            editor.target.datebox("setValue", value);
+                            break;
+                        default:
+                            editor.html = value;
+                            break;
+                    }
+                }
+            }
+            function _formatter(value, row, index) {
+            	var ok = "<img src='${ctx.contextPath}/res/jquery-easyui-1.4.4/themes/icons/ok.png'/>";
+                var field = null;
+                switch (value) {
+                    case 100: field = "da"; break;
+                    case 96: field = "db"; break;
+                    case 92: field = "dc"; break;
+                    case 90: field = "na"; break;
+                    case 85: field = "nb"; break;
+                    case 80: field = "nc"; break;
+                    case 75: field = "qa"; break;
+                    case 70: field = "qb"; break;
+                    case 65: field = "qc"; break;
+                    case 60: field = "ja"; break;
+                    case 55: field = "jb"; break;
+                    case 50: field = "jc"; break;
+                }
+                EUIGrid.setFieldValue(field, ok, index, $obj);
+            }
+
+            function getIndexAfterDel() {
+                var selected = $obj.datagrid('getSelected');
+                var index = $obj.datagrid('getRowIndex', selected);
+                return index;
+            }
+            //save
+            function nameFormatter(value, row, index) {
+                var userid = row.yhid;
+                var khnd = row.khnd;
+                return '<a target="_blank" style="color: rgb(51, 102, 255);" href="@Url.Action("UserTableDetail", "YearAssess")?userid=' + userid + '&khnd=' + khnd + '">' + row.xm + '</a>';
+            }
+            function _pjyj(value) {
+                if (!value || value.length < 1) { return ""; }
+                return suolve(value, 30);
+            }
+            function _zw(value) {
+                if (!value || value.length < 1) { return ""; }
+                return top.clientdataItem[104] == null ? "" : top.clientdataItem[104][value];
+            }
+            function suolve(str, sub_length) {//内容截断
+                //var sub_length = 60;
+                var temp1 = str.replace(/[^\x00-\xff]/g, "**");
+                var temp2 = temp1.substring(0, sub_length);
+                var x_length = temp2.split("\*").length - 1;
+                var hanzi_num = x_length / 2;
+                sub_length = sub_length - hanzi_num;
+                var res = str.substring(0, sub_length);
+                if (sub_length < str.length) {
+                    var end = res + "…";
+                } else {
+                    var end = res;
+                }
+                return end;
+            }
+            function styler(value) {
+                return 'background-color:#EFEFEF;';
+            }
+    </script>
+
+    <div class="tablebody">
+        <table id="demoTable" class="easyui-datagrid" toolbar="#tb" style="width: auto; height:460px">
+            <thead frozen="true">
+                <tr>
+                    <th data-options="field:'bpjrmc',width:60,align:'left'">姓名</th>
+                    <th data-options="formatter:_zw,field:'zw',width:80,align:'left'">职务</th>
+                    <th data-options="formatter:_formatter,field:'pjdf',width:0">pjdf</th>
+                    <th data-options="field:'xh',width:0">jgxh</th>
+                    <th data-options="field:'pjcxh',width:0">pjcxh</th>
+                    <th data-options="field:'_bz',width:0">_bz</th>
+                </tr>
+            </thead>
+            <thead>
+             <tr>
+                <th colspan="3">优</th>
+                <th colspan="3">良</th>
+                <th colspan="3">中</th>
+                <th colspan="3">差</th>
+                <th rowspan="2" data-options="formatter:_pjyj,field:'pjbz',width:220,align:'center'">说明</th>
+            </tr>
+            <tr>
+                <th data-options="field:'da',width:60,align:'center'">上(100分)</th>
+                <th data-options="field:'db',width:50,align:'center'">中(96分)</th>
+                <th data-options="field:'dc',width:50,align:'center'">下(92分)</th>
+
+                <th data-options="field:'na',width:50,align:'center'">上(90分)</th>
+                <th data-options="field:'nb',width:50,align:'center'">中(85分)</th>
+                <th data-options="field:'nc',width:50,align:'center'">下(80分)</th>
+
+                <th data-options="field:'qa',width:50,align:'center'">上(75分)</th>
+                <th data-options="field:'qb',width:50,align:'center'">中(70分)</th>
+                <th data-options="field:'qc',width:50,align:'center'">下(65分)</th>
+
+                <th styler="styler" data-options="field:'ja',width:50,align:'center'">上(60分)</th>
+                <th styler="styler" data-options="field:'jb',width:50,align:'center'">中(55分)</th>
+                <th styler="styler" data-options="field:'jc',width:90,align:'center'">下(50分及以下)</th>
+
+            </tr>
+            </thead>
+        </table>
+    
+
+</div>
+<div id="tb" style="padding:3px;height:auto">
+    <div>
+        <div style="float: right; color: red; padding-top: 5px">单击选择评价格次，（评价格次，不反馈给被评价人）</div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>测评开启</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.extension.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/datepicker/WdatePicker.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+</head>
+<body>
+    <form id="form1">
+<div style="margin-left: 10px; margin-right: 10px;">
+    <div class="tab-content" style="padding-top: 10px;">
+    <input id="xh" name="xh" type="hidden" value=""/>
+    <input id="dws" name="dws" type="hidden" value=""/>
+                  <table class="form">    
+                    <tr>
+                     <td class="formTitle">开始日期<font face="宋体">*</font></td>
+                    <td class="formValue" style="width: 120px">
+                       <input id="kssj" type="text" class="form-control input-wdatepicker" isvalid="yes" checkexpession="NotNull"/>
+                    </td>
+                     <td  class="formTitle">截至日期<font face="宋体">*</font></td>
+                    <td class="formValue" style="width: 120px">
+                       <input id="jzsj" type="text" class="form-control input-wdatepicker" isvalid="yes" checkexpession="NotNull"/>
+                    </td>
+                    </tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 4px;">测评主题<font face="宋体">*</font> </th>
+                    <td class="formValue" colspan="5">
+                        <textarea id="cpzt" class="form-control" style="height: 50px;" isvalid="yes" checkexpession="NotNull"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 4px;">测评单位<font face="宋体">*</font> </th>
+                    <td class="formValue" colspan="5">
+                        <textarea id="cpdw" class="form-control" style="height: 50px;" isvalid="yes" checkexpession="NotNull"></textarea>
+                    </td>
+                </tr>
+                   <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 4px;">备注 </th>
+                    <td class="formValue" colspan="5">
+                        <textarea id="bz" class="form-control" style="height: 50px;"></textarea>
+                    </td>
+                </tr>
+                   <tr>
+					<th class="formTitle" style="height: 37px;">选项</th>
+					<td class="formValue">
+					<div class="checkbox user-select">
+					<label>
+						<input id="zt"  checked="checked" type="checkbox">
+						启用
+						</label>
+						</div>
+					</td>
+				</tr>
+            </table>
+    </div>
+</div>
+    </form>
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+        $("#kssj").bind("click",function(){
+        	WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'jzsj\')}',onpicked:function(){jzsj.click();},autoPickDate:true});
+	    });
+	    $("#jzsj").bind("click",function(){
+	        WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'kssj\')}',autoPickDate:true});
+	    });
+    })
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "${ctx.contextPath}/mzcp/getMzcpForm",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    $("#kssj").val(formatDate(new Date(data.kssj), "yyyy-MM-dd"));
+                    $("#jzsj").val(formatDate(new Date(data.jzsj), "yyyy-MM-dd"));
+                }
+            });
+        }
+        //选择单位
+        $("#cpdw").attr('readonly', true).click(function(){
+        	dialogOpen({
+                id: "setCpdw",
+                title: '选择测评单位',
+                url: "${ctx.contextPath}/mzcp/setCpdw",
+                width: "850px",
+                height: "480px",
+                callBack: function (iframeId) {
+                	var datas = top.__setCpdw.getSelDwxh();
+                	top.__setCpdw.dialogClose();
+                	//
+                	$("#dws").val(datas.ids);
+                	$("#cpdw").val(datas.dws);
+                }
+            });
+        });
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({url: "${ctx.contextPath}/mzcp/newMzcpSubmit",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function (data) {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+      	});
+    }
+</script>
+</body>
+</html>

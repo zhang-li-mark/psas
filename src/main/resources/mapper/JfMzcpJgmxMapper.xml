@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfMzcpJgmxMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfMzcpJgmx">
+    <id column="xh" jdbcType="VARCHAR" property="xh" />
+    <result column="cpxh" jdbcType="INTEGER" property="cpxh" />
+    <result column="cpmxxh" jdbcType="INTEGER" property="cpmxxh" />
+    <result column="bpjrxh" jdbcType="VARCHAR" property="bpjrxh" />
+    <result column="pjrxh" jdbcType="VARCHAR" property="pjrxh" />
+    <result column="pjrmc" jdbcType="VARCHAR" property="pjrmc" />
+    <result column="pjsj" jdbcType="TIMESTAMP" property="pjsj" />
+    <result column="pjdf" jdbcType="DECIMAL" property="pjdf" />
+    <result column="pjcxh" jdbcType="VARCHAR" property="pjcxh" />
+    <result column="pjbz" jdbcType="VARCHAR" property="pjbz" />
+    <result column="rybz" jdbcType="INTEGER" property="rybz" />
+    <result column="czsj" jdbcType="TIMESTAMP" property="czsj" />
+    <result column="pjrqz" jdbcType="DECIMAL" property="pjrqz" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    xh, cpxh, cpmxxh, bpjrxh, pjrxh, pjrmc, pjsj, pjdf, pjcxh, pjbz, rybz, czsj, pjrqz
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_mzcp_jgmx
+    where xh = #{xh,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from jf_mzcp_jgmx
+    where xh = #{xh,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfMzcpJgmx">
+    insert into jf_mzcp_jgmx (xh, cpxh, cpmxxh, 
+      bpjrxh, pjrxh, pjrmc, 
+      pjsj, pjdf, pjcxh, 
+      pjbz, rybz, czsj, 
+      pjrqz)
+    values (#{xh,jdbcType=VARCHAR}, #{cpxh,jdbcType=INTEGER}, #{cpmxxh,jdbcType=INTEGER}, 
+      #{bpjrxh,jdbcType=VARCHAR}, #{pjrxh,jdbcType=VARCHAR}, #{pjrmc,jdbcType=VARCHAR}, 
+      #{pjsj,jdbcType=TIMESTAMP}, #{pjdf,jdbcType=DECIMAL}, #{pjcxh,jdbcType=VARCHAR}, 
+      #{pjbz,jdbcType=VARCHAR}, #{rybz,jdbcType=INTEGER}, #{czsj,jdbcType=TIMESTAMP}, 
+      #{pjrqz,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfMzcpJgmx">
+    insert into jf_mzcp_jgmx
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="xh != null">
+        xh,
+      </if>
+      <if test="cpxh != null">
+        cpxh,
+      </if>
+      <if test="cpmxxh != null">
+        cpmxxh,
+      </if>
+      <if test="bpjrxh != null">
+        bpjrxh,
+      </if>
+      <if test="pjrxh != null">
+        pjrxh,
+      </if>
+      <if test="pjrmc != null">
+        pjrmc,
+      </if>
+      <if test="pjsj != null">
+        pjsj,
+      </if>
+      <if test="pjdf != null">
+        pjdf,
+      </if>
+      <if test="pjcxh != null">
+        pjcxh,
+      </if>
+      <if test="pjbz != null">
+        pjbz,
+      </if>
+      <if test="rybz != null">
+        rybz,
+      </if>
+      <if test="czsj != null">
+        czsj,
+      </if>
+      <if test="pjrqz != null">
+        pjrqz,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="xh != null">
+        #{xh,jdbcType=VARCHAR},
+      </if>
+      <if test="cpxh != null">
+        #{cpxh,jdbcType=INTEGER},
+      </if>
+      <if test="cpmxxh != null">
+        #{cpmxxh,jdbcType=INTEGER},
+      </if>
+      <if test="bpjrxh != null">
+        #{bpjrxh,jdbcType=VARCHAR},
+      </if>
+      <if test="pjrxh != null">
+        #{pjrxh,jdbcType=VARCHAR},
+      </if>
+      <if test="pjrmc != null">
+        #{pjrmc,jdbcType=VARCHAR},
+      </if>
+      <if test="pjsj != null">
+        #{pjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pjdf != null">
+        #{pjdf,jdbcType=DECIMAL},
+      </if>
+      <if test="pjcxh != null">
+        #{pjcxh,jdbcType=VARCHAR},
+      </if>
+      <if test="pjbz != null">
+        #{pjbz,jdbcType=VARCHAR},
+      </if>
+      <if test="rybz != null">
+        #{rybz,jdbcType=INTEGER},
+      </if>
+      <if test="czsj != null">
+        #{czsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pjrqz != null">
+        #{pjrqz,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfMzcpJgmx">
+    update jf_mzcp_jgmx
+    <set>
+      <if test="cpxh != null">
+        cpxh = #{cpxh,jdbcType=INTEGER},
+      </if>
+      <if test="cpmxxh != null">
+        cpmxxh = #{cpmxxh,jdbcType=INTEGER},
+      </if>
+      <if test="bpjrxh != null">
+        bpjrxh = #{bpjrxh,jdbcType=VARCHAR},
+      </if>
+      <if test="pjrxh != null">
+        pjrxh = #{pjrxh,jdbcType=VARCHAR},
+      </if>
+      <if test="pjrmc != null">
+        pjrmc = #{pjrmc,jdbcType=VARCHAR},
+      </if>
+      <if test="pjsj != null">
+        pjsj = #{pjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pjdf != null">
+        pjdf = #{pjdf,jdbcType=DECIMAL},
+      </if>
+      <if test="pjcxh != null">
+        pjcxh = #{pjcxh,jdbcType=VARCHAR},
+      </if>
+      <if test="pjbz != null">
+        pjbz = #{pjbz,jdbcType=VARCHAR},
+      </if>
+      <if test="rybz != null">
+        rybz = #{rybz,jdbcType=INTEGER},
+      </if>
+      <if test="czsj != null">
+        czsj = #{czsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pjrqz != null">
+        pjrqz = #{pjrqz,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where xh = #{xh,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfMzcpJgmx">
+    update jf_mzcp_jgmx
+    set cpxh = #{cpxh,jdbcType=INTEGER},
+      cpmxxh = #{cpmxxh,jdbcType=INTEGER},
+      bpjrxh = #{bpjrxh,jdbcType=VARCHAR},
+      pjrxh = #{pjrxh,jdbcType=VARCHAR},
+      pjrmc = #{pjrmc,jdbcType=VARCHAR},
+      pjsj = #{pjsj,jdbcType=TIMESTAMP},
+      pjdf = #{pjdf,jdbcType=DECIMAL},
+      pjcxh = #{pjcxh,jdbcType=VARCHAR},
+      pjbz = #{pjbz,jdbcType=VARCHAR},
+      rybz = #{rybz,jdbcType=INTEGER},
+      czsj = #{czsj,jdbcType=TIMESTAMP},
+      pjrqz = #{pjrqz,jdbcType=DECIMAL}
+    where xh = #{xh,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- delQzcpByCpmxxh 删除群众/领导测评信息 -->
+  <delete id="delQzcpByCpmxxh" parameterType="map">
+  	 delete from jf_mzcp_jgmx where rybz = #{rybz} and cpmxxh = #{cpmxxh} and bpjrxh in (${pjrIds})
+  </delete>
+  
+  <!-- getMzcpJgmxList 领导测评人员权重列表-->
+  <select id="getMzcpJgmxList" parameterType="map" resultType="com.power.jfgl.entity.JfMzcpJgMxVO">
+    select mx.*,
+    u.departmentid as deptId,u.wechat as rzsj,u.dutyid zw,u.gender as xb
+    from jf_mzcp_jgmx mx left join sys_user u on mx.pjrxh = u.userid
+    <where>
+    	<if test="cpmxxh!=null">and cpmxxh = #{cpmxxh}</if>
+    	<if test="f!=null">and rybz = #{f}</if>
+    	<if test="bpjrxh!=null">and bpjrxh in (${bpjrxh})</if>
+    </where>
+    GROUP BY pjrxh,pjrmc
+    order by u.departmentid,u.dutyid
+  </select>
+   <!-- getCpJgMx -->
+  <select id="getCpJgMx" parameterType="map" resultType="com.power.jfgl.entity.JfMzcpJgMxVO">
+    select mx.*,
+    u.departmentid as deptId,u.wechat as rzsj,u.dutyid zw,u.gender as xb,u.realname as bpjrmc
+    from jf_mzcp_jgmx mx 
+	left join jf_mzcp_rymx ry ON mx.bpjrxh = ry.xh 
+	LEFT JOIN sys_user u on ry.ryxh = u.userid
+    <where>
+    	<if test="cpmxxh!=null">and mx.cpmxxh = #{cpmxxh}</if>
+    	<if test="f!=null">and mx.rybz = #{f}</if>
+    	<if test="pjrxh!=null">and mx.pjrxh = #{pjrxh}</if>
+    </where>
+    order by u.departmentid,u.dutyid
+  </select>
+  
+  <!-- 已完成/待办 测评流程信息 -->
+  <select id="getCpRwList" parameterType="map" resultType="com.power.jfgl.entity.JfCprwVO">
+  	SELECT cp.cpzt,cp.kssj,cp.jzsj,mx.dwmc,mx.mzcprs,mx.zt,tt.* FROM(
+	select cpxh,cpmxxh,pjrxh,rybz,count(1) as cprs,SUM(if(pjsj is null,0,1)) AS ywc from jf_mzcp_jgmx jg 
+	WHERE jg.pjrxh=#{pjrxh}
+	GROUP BY cpmxxh,pjrxh,rybz) tt 
+	LEFT JOIN jf_mzcp_mx mx ON tt.cpmxxh = mx.xh
+	LEFT JOIN jf_mzcp cp ON tt.cpxh = cp.xh
+	<where>
+		<if test="cpzt!=null">and cp.cpzt like concat('%',#{cpzt},'%')</if>
+	</where>
+	order by cp.xh desc
+  </select>
+  <!-- getMzcpRw 待处理数据行 -->
+  <select id="getMzcpRw" parameterType="string" resultType="int">
+	select count(DISTINCT cpmxxh,rybz) AS mzcp from jf_mzcp_jgmx jg 
+	WHERE jg.pjrxh=#{value}
+	and pjsj is null
+  </select>
+  
+  <!-- 计算积分 -->
+  <select id="sp_tjmzcpdf" parameterType="int" statementType="CALLABLE">
+  	{call sp_tjmzcpdf(#{value,mode=IN,jdbcType=INTEGER})}
+  </select>
+  
+  
+  <!-- 查看测评任务完成状态，本次测评，人员完成情况 -->
+  <select id="getCprwWczt" parameterType="int" resultType="com.power.jfgl.entity.JfMzcpJgMxVO">
+  	select mx.*,
+    u.departmentid as deptId,u.wechat as rzsj,u.dutyid zw,u.gender as xb
+    from jf_mzcp_jgmx mx left join sys_user u on mx.pjrxh = u.userid
+	WHERE  cpmxxh = #{value}
+    GROUP BY pjrxh,rybz
+    order by u.departmentid,u.dutyid,pjsj
+  </select>
+</mapper>

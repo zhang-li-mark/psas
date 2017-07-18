@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>明细</title>
+	<link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<style type="text/css">
+.orgchart {
+  background: #fff;
+}
+	</style>
+</head>
+<body style="overflow: hidden;">
+<div id="chart-container" style="height:450px;"></div>
+
+<link href="${ctx.contextPath}/res/orgchart/jquery.orgchart.css" rel="stylesheet"/>
+<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+<script src="${ctx.contextPath}/res/jquery/jquery-3.1.0.min.js"></script>
+<script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/res/orgchart/html2canvas.min.js"></script>
+<script type="text/javascript" src="${ctx.contextPath}/res/orgchart/jquery.orgchart.js"></script>
+<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+<script type="text/javascript">
+var f = request('f');//1请假，2积分申报
+  $(function() {
+	//获取上页面参数
+	var datascource = $.currentIframe().detailStr;
+	//
+    $('#chart-container').orgchart({
+      'data' : JSON.parse(datascource),
+      'nodeContent': 'zw'
+    });
+	//
+	$('.orgchart').width($(document).width()).height($(document).height());
+  });
+</script>
+</body>
+</html>

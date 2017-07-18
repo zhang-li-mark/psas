@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta name="viewport" content="width=device-width" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>工作积分配置管理</title>
+<link href="${ctx.contextPath}/res/fonts/font-awesome.min.css"
+	rel="stylesheet">
+<script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+<link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css"
+	rel="stylesheet">
+<script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+<link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet" />
+<script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+<link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css"
+	rel="stylesheet">
+<script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+<script src="${ctx.contextPath}/res/jquery/jquery.layout.js"></script>
+<link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+<link href="${ctx.contextPath}/res/wizard/wizard.css" rel="stylesheet" />
+<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+<script src="${ctx.contextPath}/res/wizard/wizard.js"></script>
+<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+
+
+
+<style>
+html,body {
+	height: 100%;
+	width: 100%;
+}
+</style>
+</head>
+<body>
+
+	<script>
+		var type = request('type');
+		var id,jfxmc,jfxms;
+		$(function() {
+			
+			InitialPage();
+			GetTree();
+			GetGrid();
+		});
+		//初始化页面
+		function InitialPage() {
+			//layout布局
+			$('#layout').layout({
+				applyDemoStyles : true,
+				onresize : function() {
+					$(window).resize()
+				}
+			});
+			//resize重设(表格、树形)宽高
+			$(window).resize(function(e) {
+				
+				e.stopPropagation();
+			});
+		}
+		//加载树
+		var _sm;
+		function GetTree() {
+			var item = {
+				height : $(window).height() - 52,
+				param : {},
+				url : "${ctx.contextPath}/jf/jfsb/jfxTree?type="+type,
+
+				onnodeclick : function(item) {
+					_sm = item.value;
+					id= item.id;
+					jfxmc= item.text;
+					jfxms= item.value;
+					$("#sjms").val(_sm);
+				}
+			};
+			//初始化
+			$("#itemTree").treeview(item);
+
+		}
+
+
+		function submit() {
+			if (id) {
+				var d = {
+					id : id,
+					jfxmc : jfxmc,
+					jfxms : jfxms
+				};
+				return d;
+			} else {
+				dialogMsg('请选择积分项！', 0);
+
+			}
+
+		}
+	</script>
+	<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+		<div class="ui-layout-west">
+			<div class="west-Panel" >
+				<div class="panel-Title">积分项</div>
+				<div id="itemTree"></div>
+			</div>
+		</div>
+		<div class="ui-layout-center">
+			<div class="center-Panel">
+			   <div class="panel-Title">积分项说明</div>
+				<div class="gridPanel">
+					<table class="form" style="table-layout: auto;">
+
+						<tr>
+							<td class="formValue" colspan="4"><textarea id="sjms"
+									class="form-control" rows="5" style="height:460px;"></textarea>
+							</td>
+						</tr>
+
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

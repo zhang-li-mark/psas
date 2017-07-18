@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html><head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>积分查询首页</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet"/>
+<script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	<script src="${ctx.contextPath}/res/datepicker/WdatePicker.js"></script>
+    <style>
+        body {
+            margin: 10px;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+    
+<script>
+    $(document).ready(function () {
+    	 $("#StartTime").bind("click",function(){
+   	        WdatePicker({isShowClear:false,dateFmt:'yyyy年MM月',autoPickDate:true,maxDate:'#F{$dp.$D(\'EndTime\')||\'%y年%M月\'}',onpicked:function(){EndTime.click();}});
+   	    });
+   	    $("#EndTime").bind("click",function(){
+   	        WdatePicker({isShowClear:false,minDate:'#F{$dp.$D(\'StartTime\')}',maxDate:'y年%M年',dateFmt:'yyyy年MM月',autoPickDate:true});
+   	    });
+        $("#deptId").ComboBoxTree({
+       		url: "${ctx.contextPath}/sys/dept/deptTree",
+             description: "==请选择==",
+             height: "180px",
+             click: function (item) {
+                 if (item.sort == 'org') {
+                     $("#orgId").val(item.id);
+                 }else{
+                 	$("#orgId").val("");
+                 }
+             }
+         });
+        initialPage();
+        GetGrid();
+        $("#btn_Reset").click(function () {
+       	 	$("#deptId").ComboBoxTreeSetValue("");
+       	 	$("#orgId").val("");
+       	 	$("#uname").val("");
+       	 	$("#StartTime").val("");
+       	 	$("#EndTime").val("");
+       });
+    });
+    //重设(表格)宽高
+    function initialPage() {
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 108.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGridEx({
+            url: "${ctx.contextPath}/jfcx/getJfTj",
+            datatype: "json",
+            mtype:"POST",
+            height: $(window).height() - 136.5,
+            autowidth: true,
+            colModel: [
+                { label: '用户主键', name: 'ryxh', hidden: true ,key:true},
+                { label: '姓名', name: 'uname', index: 'uname', width: 80, align: 'center' },
+                { label: '部门', name: 'bmname',  width: 150, align: 'center',
+                	formatter: function (cellvalue, options, rowObject) {
+                    	if(!cellvalue || cellvalue=='0') return "";
+                        return top.clientdepartmentData[cellvalue] == null ? "" : top.clientdepartmentData[cellvalue].name;
+                    }
+                },
+                { label: '处室', name: 'deptid', width: 130, align: 'center',
+                	formatter: function (cellvalue, options, rowObject) {
+                    	if(!cellvalue || cellvalue=='0') return "";
+                        return top.clientdepartmentData[cellvalue] == null ? "" : top.clientdepartmentData[cellvalue].name;
+                    }
+                },
+                { label: '基础信息', name: 'jcxxjf', index: 'jcxxjf', width: 80, align: 'center' },
+                { label: '民主测评', name: 'mzcpdf', index: 'mzcpdf', width: 80, align: 'center' },
+                { label: '业务积分', name: 'gzjf', index: 'gzjf', width: 80, align: 'center',
+                    formatter: function (cellvalue, options, rowObject) {
+            			var re ="";
+                        re="<a href='javascript:void(0);' >"+cellvalue+"</a>";
+                    	return re;
+                	}
+                },
+                { label: '管理积分', name: 'gljf', index: 'gljf', width: 80, align: 'center',
+                	formatter: function (cellvalue, options, rowObject) {
+            			var re ="";
+                        re="<a href='javascript:void(0);' >"+cellvalue+"</a>";
+                    	return re;
+                	}	
+                },
+                { label: '请休假', name: 'qxjjf', index: 'qxjjf', width: 80, align: 'center' },
+                { label: '学习积分', name: 'xxjf', index: 'xxjf', width: 80, align: 'center' },
+                { label: '考试积分', name: 'ksjf', index: 'ksjf', width: 80, align: 'center' },
+                { label: '总积分', name: 'zjf', index: 'zjf', width: 100, align: 'center' }
+            ],
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [20, 30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'createdate',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $("#" + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $("#" + this.id).setSelection(selectedRowIndex, false);
+                $("tr[id='${userid}']",$gridTable).css({"background":"#dadada"});
+            }
+        });
+        //查询条件设置
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+        	var queryJson = $("#filter-form").GetWebControls();
+            $gridTable.jqGrid('setGridParam', {
+                postData: {
+                	 uname:queryJson.uname,
+              		 st: queryJson.StartTime,
+              		 et: queryJson.EndTime,
+              		 deptId: queryJson.deptId,
+              		 orgId: queryJson.orgId,
+                }
+            }).trigger('reloadGrid');
+        });
+        //查询回车事件
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    }
+    
+    //导出
+    function btn_export() {
+       var queryJson = $("#filter-form").GetWebControls();
+       var keyword = $("#txt_Keyword").val();
+       location.href = "${ctx.contextPath}/jfcx/jfExport?uname="+queryJson.uname+"&st="+queryJson.StartTime+"&et="+queryJson.EndTime+"&deptId="+queryJson.deptId+"&orgId="+queryJson.orgId;
+    }
+    
+    function btn_sbDetail(rowId){
+    	var row = $("#gridTable").jqGrid('getRowData', rowId);
+    	dialogOpen({
+             id: "sblist",
+             title: row.uname+'的申报列表',
+             url: "${ctx.contextPath}/jf/jfsb/sbindex?userid="+row.ryxh+"&type=1",
+             width: "1000px",
+             height: "680px",
+             callBack: function (iframeId) {
+             }
+         });
+    	
+    }
+    function btn_sbglDetail(rowId){
+    	var row = $("#gridTable").jqGrid('getRowData', rowId);
+    	dialogOpen({
+             id: "sblist",
+             title: row.uname+'的申报列表',
+             url: "${ctx.contextPath}/jf/jfsb/sbindex?userid="+row.ryxh+"&type=2",
+             width: "1000px",
+             height: "680px",
+             callBack: function (iframeId) {
+             }
+         });
+    	
+    }
+    function btn_detail(){
+    	 var  keyValue = $("#gridTable").jqGridRowValue("ryxh");
+    	 var  name = $("#gridTable").jqGridRowValue("uname");
+    	 var queryJson = $("#filter-form").GetWebControls();
+         if (keyValue) {
+         	dialogOpen({
+                 id: "btn_splc",
+                 title: name+'的积分详情',
+                 url: "${ctx.contextPath}/jfcx/wdjfIndex?userid="+keyValue+"&st="+queryJson.StartTime+"&et="+queryJson.EndTime,
+                 width: "1000px",
+                 height: "680px",
+                 btn: ['确认'],
+                 callBack: function (iframeId) {
+                     top.frames[iframeId].dialogClose();
+                 }
+             });
+         } else {
+             dialogMsg('选择需要查看的数据项！', 0);
+         }
+    	
+    }
+   
+</script>
+
+<div class="titlePanel">
+         <div class="title-search">
+             <table id="filter-form">
+            <tr>
+            <td>姓名：</td>
+                <td><input id="uname" type="text" class="form-control" style="width:80px;"/></td>
+                <td> 时间：</td>
+                   <td class="formValue"><input id="StartTime" readonly type="text" value="" class="form-control input-wdatepicker" style="width:100px;"></td>
+                   <td>至</td>
+                   <td><input id="EndTime" readonly type="text" value="" class="form-control input-wdatepicker" style="width:100px;"></td>
+                   </td>
+                <td>部门：</td>
+                <td><div id="deptId" type="selectTree" class="ui-select" style="width:180px;"></div></td>
+                <td style="padding-left: 5px;">
+                	<input id="orgId" type="hidden" value=""/>
+                	<a id="btn_Reset" class="btn btn-default">&nbsp;重&nbsp;&nbsp;置</a>
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                </td>
+            </tr>
+        </table>
+        </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="b_ref" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+             <a id="lr-datacategory" class="btn btn-default" onclick="btn_detail()"><i class="fa fa-tags"></i>&nbsp;查看积分详情</a>
+             <a id="lr-more" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-reorder"></i>&nbsp;更多<span class="caret"></span>
+            </a>
+        	<ul class="dropdown-menu pull-right">
+                <li id="b-export"><a onclick="btn_export()"><i></i>&nbsp;导出Excel</a></li>
+            </ul>
+        </div>
+        <!-- <script>$('.toolbar').authorizeButton()</script> -->
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+</body></html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>测评管理</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+    <style>
+        body {
+            margin: 10px;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <div id="queryCondition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="code">测评名称</a></li>
+                            <li><a data-value="fullname">测评年度</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td style="padding-left: 2px;">
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+       <!--   <script>$('.toolbar').authorizeButton()</script>-->
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+<script>
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+    	$.jqGridEx
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGridEx({
+            url: "${ctx.contextPath}/mzcp/getMzcpList",
+            colModel: 
+            	[
+                { label: '主键', name: 'xh', hidden: true,key:true},
+                { label: '测评主题', name:'cpzt',width: 160, align: 'left',sortable:false},
+                {label: '开始时间', name: 'kssj', width: 100, align: 'center',sortable:false,
+                    formatter: function (cellvalue, options, rowObject) {
+                    	return cellvalue==null?"":formatDate(new Date(cellvalue), 'yyyy-MM-dd');
+                    }
+                },
+                {label: '截至时间', name: 'jzsj', width: 100, align: 'center',sortable:false,
+                    formatter: function (cellvalue, options, rowObject) {
+                    	return cellvalue==null?"":formatDate(new Date(cellvalue), 'yyyy-MM-dd');
+                    }
+                },
+                { label: '测评部门个数', name: 'cpdwgs', width: 100, align: 'center' },
+                { label: '测评部门', name: 'cpdw', width: 180, align: 'center' },
+                /**
+                {label: "状态", name: "enabledmark", index: "enabledmark", width: 80, align: "center",sortable:false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue == '1' ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },*/
+                { label: "描述", name: "bz", width: 200, align: "left",sortable:false}
+                
+            ],
+            sortname: 'createdate',
+            sortorder: 'desc'
+        });
+        //查询条件
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            $gridTable.jqGrid('setGridParam', {
+                postData: {
+                    condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                    keyword: $("#txt_Keyword").val()
+                }
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    }
+    
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: "mzcpForm",
+            title: '添加测评',
+            url: "${ctx.contextPath}/mzcp/newMzcp",
+            width: "550px",
+            height: "370px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    };
+    
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue("xh");
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: "mzcpForm",
+                title: '修改测评信息',
+                url: '${ctx.contextPath}/mzcp/newMzcp?keyValue=' + keyValue,
+                width: "550px",
+                height: "370px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue("xh");
+        if (keyValue) {
+            $.RemoveForm({
+                url: "${ctx.contextPath}/mzcp/delMzcp",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#gridTable").trigger("reloadGrid");
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的数据行！', 0);
+        }
+    }
+</script>
+</body>
+</html>

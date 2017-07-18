@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>添加表彰</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.extension.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/datepicker/WdatePicker.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+</head>
+<body>
+    <form id="form1">
+<div style="margin-left: 10px; margin-right: 10px;">
+    <div class="tab-content" style="padding-top: 10px;">
+    <input id="xh" name="xh" type="hidden" value=""/>
+    <input id="ryxh" name="ryxh" type="hidden" value=""/>
+    <input id="rymc" name="rymc" type="hidden" value=""/>
+                  <table class="form">    
+                    <tr>
+                     <td class="formTitle">表彰时间<font face="宋体">*</font></td>
+                    <td class="formValue" style="width: 120px">
+                       <input id="bzsj" type="text" class="form-control input-wdatepicker" isvalid="yes" checkexpession="NotNull"/>
+                    </td>
+                     <td  class="formTitle">表彰积分<font face="宋体">*</font></td>
+                    <td class="formValue" style="width: 120px">
+                       <input id="bzjf" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"/>
+                    </td>
+                    </tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 4px;">表彰说明<font face="宋体">*</font> </th>
+                    <td class="formValue" colspan="5">
+                        <textarea id="bzsm" class="form-control" style="height: 50px;" isvalid="yes" checkexpession="NotNull"></textarea>
+                    </td>
+                </tr>
+                   <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 4px;">备注 </th>
+                    <td class="formValue" colspan="5">
+                        <textarea id="bz" class="form-control" style="height: 50px;"></textarea>
+                    </td>
+                </tr>
+            </table>
+    </div>
+</div>
+    </form>
+<script>
+    var keyValue = request('keyValue');
+    var ryxh = request('ryxh');
+    var rymc = request('rymc');
+    $(function () {
+        initControl();
+        //控制输入数字，精度
+        $("#bzjf").checkNum({integerLength: 5,decimalLength:2});
+        //
+        $("#ryxh").val(ryxh);
+        $("#rymc").val(rymc);
+        //
+        $("#bzsj").bind("click",function(){
+        	WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd'});
+	    });
+    })
+    var dataJson = top.__Form.bzxxArr;
+    //人员序号，人员名称
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.each(dataJson, function (i) {
+                var row = dataJson[i];
+                if (row.xh == keyValue) {
+                    $("#form1").SetWebControls(row);
+                    $("#bzsj").val(formatDate(new Date(row.bzsj), "yyyy-MM-dd"));
+                }
+            });
+        } else {
+            $("#xh").val(-1*(dataJson.length+1));//初始化
+        }
+        /**if (!!keyValue) {
+            $.SetForm({
+                url: "${ctx.contextPath}/gxpz/getBzxxForm",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    $("#bzsj").val(formatDate(new Date(data.bzsj), "yyyy-MM-dd"));
+                }
+            });
+        }**/
+    }
+    //保存表单
+    function AcceptClick(callback) {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var data = $("#form1").GetWebControls(keyValue);
+        callback(data);
+        dialogClose();
+        /**
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({url: "${ctx.contextPath}/gxpz/newBzxxSubmit",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function (data) {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+      	});**/
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>添加积分申诉</title>
+    <!--框架必需start-->
+     <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/wizard/wizard.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/wizard/wizard.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	
+
+</head>
+<body>
+    <form id="form1" >
+
+<link href="${ctx.contextPath}/res/simditor/simditor.css" rel="stylesheet" />
+<script src="${ctx.contextPath}/res/ui/module.js"></script>
+<script src="${ctx.contextPath}/res/uploadify/ajaxfileupload.js"></script>
+<script src="${ctx.contextPath}/res/ui/uploader.js"></script>
+<script src="${ctx.contextPath}/res/ui/hotkeys.js"></script>
+<script src="${ctx.contextPath}/res/simditor/simditor.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var category = request('category');
+    var sjid;
+    var editor = null;
+    $(function () {
+        initControl();
+    })
+    //初始化控件
+    function initControl() {
+        //事件
+        $("#sjid").ComboBox({
+        	param: { },
+        	url: "${ctx.contextPath}/jf/jfss/jfsb",
+            description: "==请选择==",
+            id: "id",
+            text: "sjmc",
+            height: "230px"
+        });
+        $("#sprid").ComboBoxTree({
+        	url: "${ctx.contextPath}/sys/org/zrrTree",
+            description: "==请选择==",
+            height: "220px",
+            allowSearch: true
+        });
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "${ctx.contextPath}/jf/jfss/getFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                	sjid = data.sjid;
+                    $("#form1").SetWebControls(data);
+                    $("#sssj").val(formatDate(new Date(data.sssj),"yyyy-MM-dd hh:mm"));
+                    $("#uploadPreview").attr("src","${ctx.contextPath}/"+data.sspz);
+                    $("#uploadPreview2").attr("src","${ctx.contextPath}/"+data.sspz);
+                }
+            });
+        } else {
+            $("#sjid").ComboBoxTreeSetValue(category);
+        }
+        
+        $('#uploadFile').change(function () {
+            var f = document.getElementById('uploadFile').files[0]
+            var src = window.URL.createObjectURL(f);
+            document.getElementById('uploadPreview').src = src;
+            document.getElementById('uploadPreview2').src = src;
+            //上传应用图标
+            $.ajaxFileUpload({
+                url: "${ctx.contextPath}/fj/imFile",
+                secureuri: false,
+                fileElementId: 'uploadFile',
+                dataType: 'json',
+                success: function (data) {
+                    $("#fj").val(data.msg);
+                }
+            });
+        });
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        if(!sjid){
+        	dialogMsg('未选择关联事件！',-1);return;
+        }
+        var postData = {
+        	id: keyValue,
+        	fz: $("#fz").val(),
+        	sjid: sjid,
+        	sssj: $("#sssj").val(),
+        	ssyy: $("#ssyy").val(),
+        	sspz: $("#fj").val(),
+        	sprid: $("#sprid").attr('data-value')
+        }
+        $.SaveForm({
+            url: "${ctx.contextPath}/jf/jfss/saveForm",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+    
+   //选取关联事件
+    function SelectSj() {
+        dialogOpen({
+            id: "SelectSj",
+            title: '选择关联事件',
+            url: '${ctx.contextPath}/jf/jfss/selectSj',
+            width: "1000px",
+            height: "600px",
+            close:false,
+            btn: ['确认'],
+            callBack: function (iframeId) {
+                var result = top.frames[iframeId].submit();
+                if(result){
+					top.frames[iframeId].dialogClose();
+					sjid = result.id;
+                	$("#sjmc").val(result.sjmc);
+                }
+                
+            }
+        })
+    }
+    function btn_bigPic(){
+    	dialogContent({
+	        id: "_bDiv",
+	        title: '查看大图',
+	        width: "1100px",
+	        height: "800px",
+	        content:$("#content").html(),
+	        btn: ['确认']
+	       
+	    });
+    	
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form" style="table-layout: auto;">
+         <tr>
+            <td class="formTitle">申诉人</td>
+            <td class="formValue">
+                <input id="uname" type="text" class="form-control" value="${uname!}" />
+            </td>
+            <td class="formTitle">所在部门</td>
+            <td class="formValue">
+                <input id="deptname" type="text" class="form-control" value="${deptname!}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">关联事件<font face="宋体">*</font></td>
+            <td class="formValue">
+              <!--   <div id="sjid" type="select" class="ui-select"></div> -->
+               <input id="sjmc" type="text" class="form-control" />
+               <span class="input-button" onclick="SelectSj()" title="选取关联事件">...</span>
+            </td>
+            <td class="formTitle">申诉分值</td>
+            <td class="formValue">
+                <input id="fz" type="text" class="form-control" value="" />
+            </td>
+        </tr>
+          <tr>
+            <td class="formTitle">审核人<font face="宋体">*</font></td>
+            <td class="formValue">
+                 <div id="sprid" type="selectTree" class="ui-select"></div>
+            </td>
+            <td class="formTitle">申诉时间<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input id="sssj" type="text" class="form-control" value="${nowtime?string('yyyy-MM-dd HH:mm')}" />
+            </td>
+        </tr>
+        
+        <tr>
+            <th class="formTitle" valign="top" style="padding-top: 4px;">申诉原因</th>
+            <td class="formValue" colspan="3">
+                <textarea id="ssyy" class="form-control" rows="5" style="height:200px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">申诉凭证</td>
+            <td class="formValue">
+                 <div class="file" style="width: 100px; height: 100px;">
+                  <img id="uploadPreview" onclick="btn_bigPic()" style="width: 100px; height: 100px;" src="" />
+                  <input type="file" name="uploadFile" id="uploadFile">
+               </div>
+            </td>
+           
+        </tr>
+    </table>
+</div>
+<div id="content" style="display:none">
+    <img id="uploadPreview2"  src="" />  
+    </div>
+    <input type="hidden" name="fj" id="fj">
+
+       
+    </form>
+</body>
+</html>

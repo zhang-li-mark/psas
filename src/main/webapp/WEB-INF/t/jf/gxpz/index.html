@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>人员关系维护</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <script src="${ctx.contextPath}/res/jquery/jquery.layout.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel" style="margin: 0px; border-top: none; border-left: none; border-bottom: none;">
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="center-Panel">
+            <div class="titlePanel">
+                <div class="title-search">
+                    <table>
+                        <tr>
+                        <td>
+	                    <div id="queryCondition" class="btn-group">
+	                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+	                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+	                        <ul class="dropdown-menu">
+	                            <li><a data-value="account">账户</a></li>
+	                            <li><a data-value="realname">姓名</a></li>
+	                        </ul>
+	                    </div>
+	                </td>
+                            <td>
+                            <input id="orgId" type="hidden" class="form-control" value="">
+                            <input id="deptId" type="hidden" class="form-control" value="">
+                                <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                            </td>
+                            <td style="padding-left: 5px;">
+                                <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="toolbar">
+                    <div class="btn-group">
+                        <a id="b_ref" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+                        <a id="b_add" class="btn btn-default" onclick="btn_qjsz()"><i class="fa fa-plus"></i>&nbsp;批量设置请假审批关系</a>
+                        <a id="b_edit" class="btn btn-default" onclick="btn_sbsz()"><i class="fa fa-pencil-square-o"></i>&nbsp;批量设置申报关系</a>
+                    </div>
+                </div>
+            </div>
+            <div class="gridPanel">
+                <table id="gridTable"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        InitialPage();
+        GetTree();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            west__size: 220,
+            spacing_open: 0,
+            onresize: function () {
+                $(window).resize()
+            }
+        });
+        $(window).resize(function (e) {//resize重设(表格、树形)宽高
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 169.5);
+                $("#itemTree").setTreeHeight($(window).height() - 52);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            url: "${ctx.contextPath}/gxpz/getGxpzList",
+            datatype: "json",
+            mtype:"POST",
+            prmNames:{rows:"pS"},
+            jsonReader : {total: "pages",records: "total"},
+            height: $(window).height() - 136.5,
+            multiselect: true,
+            colModel: [
+                { label: '用户主键', name: 'userid', hidden: true },
+                { label: 'qj', name: 'qjcjgx', hidden: true },
+                { label: 'jf', name: 'cjgx', hidden: true },
+                { label: '姓名', name: 'realname', width: 100, align: 'left',sortable:false},
+                {
+                    label: '性别', name: 'gender', width: 45, align: 'center',sortable:false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue == 1 ? "男" : "女";
+                    }
+                },
+                {
+                    label: '部门', name: 'departmentid', width: 160, align: 'left',sortable:false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return top.clientdepartmentData[cellvalue] == null ? "" : top.clientdepartmentData[cellvalue].name;
+                    }
+                },
+                {
+                    label: '职务', name: 'dutyid', index: 'dutyid', width: 100, align: 'left',sortable:false,
+                	formatter: function (cellvalue, options, rowObject) {
+                		if(!cellvalue) return "";
+                        return top.clientdataItem[104] == null ? "" : top.clientdataItem[104][cellvalue];
+                    }	
+                },
+                { label: '请假审批关系', name: 'qjsjgs', width: 140, align: 'center' ,sortable:false,
+                	formatter: function (cellvalue, options, rowObject) {
+                		if(cellvalue>0){
+	                		return "<span onclick='btn_detail("+ options.rowId + ",1)' class='label label-success' style='cursor: pointer;'>【"+cellvalue+"级】查看审批关系</span>";
+                		}else{
+                			return cellvalue;
+                		}
+                    }},
+                { label: '积分申报审批关系', name: 'sjgs', width: 140, align: 'center' ,sortable:false,
+                	formatter: function (cellvalue, options, rowObject) {
+                		if(cellvalue>0){
+	                		return "<span onclick='btn_detail("+ options.rowId + ",2)' class='label label-success' style='cursor: pointer;'>【"+cellvalue+"级】查看审批关系</span>";
+                		}else{
+                			return cellvalue;
+                		}
+                    }}
+            ],
+            viewrecords: true,
+            rowNum: 15,
+            rowList: [15,30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'organizeid asc,createdate desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $("#" + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $("#" + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+        //查询条件
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+        	$gridTable.jqGrid('setGridParam', {
+                postData: {
+                    condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                    keyword: $("#txt_Keyword").val(),
+                    deptId: $("#deptId").val(),
+                	orgId: $("#orgId").val()
+                }
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    }
+    //加载树
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 1,
+            url: "${ctx.contextPath}/sys/dept/deptTree?showParent=0",
+            onnodeclick: function (item) {
+            	if (item.sort == 'org') {
+                    $("#orgId").val(item.id);
+                    $("#deptId").val("");
+                }else{
+                	$("#orgId").val("");
+	            	$("#deptId").val(item.id);
+                }
+            	$('#btn_Search').trigger("click");
+            }
+        };
+        //初始化
+        $("#itemTree").treeview(item);
+    }
+  	//请假设置
+    function btn_qjsz() {
+    	var xhs = $('#gridTable').jqGridRowValue("userid");
+    	if(xhs.length<1 || xhs==','){//
+    		dialogMsg('请选择需要设置请假审批关系的数据行！', 0);
+    		return;
+    	}
+    	dialogOpen({
+            id: "setQjsplc",
+            title: '设置请假审批流程',
+            url: "${ctx.contextPath}/gxpz/setQjsplc?f=1",//
+            width: "900px",
+            height: "500px",
+            callBack: function (iframeId) {
+            	var d = parent.__setQjsplc.getData();
+            	d.xhs=xhs;
+            	//console.log(d);            	return ;
+            	$.ConfirmAjax({
+            		msg:"设置请假审批关系，是否继续提交？",
+            		url: "${ctx.contextPath}/gxpz/setQjlcSubmit?f=1",
+                    param: d,
+                    close:false,
+                    loading: "正在保存审批关系...",
+                    success: function (data) {
+                    	parent.__setQjsplc.dialogClose();
+                        $("#gridTable").trigger("reloadGrid");
+                    }
+                });
+            	//
+            }
+        });
+    };
+  	//审批设置
+    function btn_sbsz() {
+    	var xhs = $('#gridTable').jqGridRowValue("userid");
+    	if(xhs.length<1 || xhs==','){//
+    		dialogMsg('请选择需要设置积分申报审批关系的数据行！', 0);
+    		return;
+    	}
+    	dialogOpen({
+            id: "setQjsplc",
+            title: '设置积分申报审批关系',
+            url: "${ctx.contextPath}/gxpz/setQjsplc?f=2",//
+            width: "900px",
+            height: "500px",
+            callBack: function (iframeId) {
+            	var d = parent.__setQjsplc.getData();
+            	d.xhs=xhs;
+            	//console.log(d);            	return ;
+            	$.ConfirmAjax({
+            		msg:"设置积分申报审批，是否继续提交？",
+            		url: "${ctx.contextPath}/gxpz/setQjlcSubmit?f=2",
+                    param: d,
+                    close:false,
+                    loading: "正在保存积分申报审批关系...",
+                    success: function (data) {
+                    	parent.__setQjsplc.dialogClose();
+                        $("#gridTable").trigger("reloadGrid");
+                    }
+                });
+            	//
+            }
+        });
+    };
+    var detailStr="";
+    btn_detail=function(rowId,f){//
+    	var row = $("#gridTable").jqGrid('getRowData', rowId);
+    	//处理数据
+    	var zj = {id:row.userid,name:row.realname,zw:row.dutyid};
+    	var data="";
+    	var tit="";
+    	if(f==1){
+    		data = row.qjcjgx;
+    		tit = "请假";
+    	}else if(f==2){
+    		data = row.cjgx;
+    		tit = "积分申报";
+    	}
+    	detailStr = data.replace("{}",JSON.stringify(zj));
+    	dialogOpen({
+            id: "gxpzMx",
+            title: "【"+row.realname+"】"+tit+"审批关系",
+            url: "${ctx.contextPath}/gxpz/gxpzMx",//查看明细
+            width: "800px",
+            height: "500px",
+            btn:null
+        });
+    }
+</script>
+</body>
+</html>

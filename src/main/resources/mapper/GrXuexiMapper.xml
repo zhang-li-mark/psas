@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.GrXuexiMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.GrXuexi">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="fbrid" jdbcType="VARCHAR" property="fbrid" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="fbsj" jdbcType="TIMESTAMP" property="fbsj" />
+    <result column="xxsm" jdbcType="VARCHAR" property="xxsm" />
+    <result column="zpbms" jdbcType="INTEGER" property="zpbms" />
+    <result column="zpbm" jdbcType="VARCHAR" property="zpbm" />
+    <result column="fz" jdbcType="DECIMAL" property="fz" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fbrid, content, fbsj, xxsm, zpbms, zpbm, fz
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gr_xuexi
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from gr_xuexi
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.GrXuexi">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_xuexi (fbrid, content, fbsj, 
+      xxsm, zpbms, zpbm, 
+      fz)
+    values (#{fbrid,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{fbsj,jdbcType=TIMESTAMP}, 
+      #{xxsm,jdbcType=VARCHAR}, #{zpbms,jdbcType=INTEGER}, #{zpbm,jdbcType=VARCHAR}, 
+      #{fz,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.GrXuexi">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_xuexi
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fbrid != null">
+        fbrid,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="fbsj != null">
+        fbsj,
+      </if>
+      <if test="xxsm != null">
+        xxsm,
+      </if>
+      <if test="zpbms != null">
+        zpbms,
+      </if>
+      <if test="zpbm != null">
+        zpbm,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fbrid != null">
+        #{fbrid,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="fbsj != null">
+        #{fbsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xxsm != null">
+        #{xxsm,jdbcType=VARCHAR},
+      </if>
+      <if test="zpbms != null">
+        #{zpbms,jdbcType=INTEGER},
+      </if>
+      <if test="zpbm != null">
+        #{zpbm,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.GrXuexi">
+    update gr_xuexi
+    <set>
+      <if test="fbrid != null">
+        fbrid = #{fbrid,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="fbsj != null">
+        fbsj = #{fbsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xxsm != null">
+        xxsm = #{xxsm,jdbcType=VARCHAR},
+      </if>
+      <if test="zpbms != null">
+        zpbms = #{zpbms,jdbcType=INTEGER},
+      </if>
+      <if test="zpbm != null">
+        zpbm = #{zpbm,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.GrXuexi">
+    update gr_xuexi
+    set fbrid = #{fbrid,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      fbsj = #{fbsj,jdbcType=TIMESTAMP},
+      xxsm = #{xxsm,jdbcType=VARCHAR},
+      zpbms = #{zpbms,jdbcType=INTEGER},
+      zpbm = #{zpbm,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getXueXi" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gr_xuexi
+    <where>
+      <if test="xxsm != null">
+      	 and xxsm  like concat('%',#{xxsm},'%')
+      </if>
+    </where>
+  </select>
+</mapper>

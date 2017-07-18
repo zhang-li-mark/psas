@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.GrQingjiaSpMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.GrQingjiaSp">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="qjid" jdbcType="INTEGER" property="qjid" />
+    <result column="sprid" jdbcType="VARCHAR" property="sprid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="spjg" jdbcType="VARCHAR" property="spjg" />
+    <result column="spsj" jdbcType="TIMESTAMP" property="spsj" />
+    <result column="spbz" jdbcType="VARCHAR" property="spbz" />
+    <result column="szjd" jdbcType="INTEGER" property="szjd" />
+    <result column="sflz" jdbcType="VARCHAR" property="sflz" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, qjid, sprid, status, spjg, spsj, spbz, szjd, sflz
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gr_qingjia_sp
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from gr_qingjia_sp
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.GrQingjiaSp">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_qingjia_sp (qjid, sprid, status, 
+      spjg, spsj, spbz, 
+      szjd, sflz)
+    values (#{qjid,jdbcType=INTEGER}, #{sprid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{spjg,jdbcType=VARCHAR}, #{spsj,jdbcType=TIMESTAMP}, #{spbz,jdbcType=VARCHAR}, 
+      #{szjd,jdbcType=INTEGER}, #{sflz,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.GrQingjiaSp">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_qingjia_sp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="qjid != null">
+        qjid,
+      </if>
+      <if test="sprid != null">
+        sprid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="spjg != null">
+        spjg,
+      </if>
+      <if test="spsj != null">
+        spsj,
+      </if>
+      <if test="spbz != null">
+        spbz,
+      </if>
+      <if test="szjd != null">
+        szjd,
+      </if>
+      <if test="sflz != null">
+        sflz,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="qjid != null">
+        #{qjid,jdbcType=INTEGER},
+      </if>
+      <if test="sprid != null">
+        #{sprid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="spjg != null">
+        #{spjg,jdbcType=VARCHAR},
+      </if>
+      <if test="spsj != null">
+        #{spsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="spbz != null">
+        #{spbz,jdbcType=VARCHAR},
+      </if>
+      <if test="szjd != null">
+        #{szjd,jdbcType=INTEGER},
+      </if>
+      <if test="sflz != null">
+        #{sflz,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.GrQingjiaSp">
+    update gr_qingjia_sp
+    <set>
+      <if test="qjid != null">
+        qjid = #{qjid,jdbcType=INTEGER},
+      </if>
+      <if test="sprid != null">
+        sprid = #{sprid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="spjg != null">
+        spjg = #{spjg,jdbcType=VARCHAR},
+      </if>
+      <if test="spsj != null">
+        spsj = #{spsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="spbz != null">
+        spbz = #{spbz,jdbcType=VARCHAR},
+      </if>
+      <if test="szjd != null">
+        szjd = #{szjd,jdbcType=INTEGER},
+      </if>
+      <if test="sflz != null">
+        sflz = #{sflz,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.GrQingjiaSp">
+    update gr_qingjia_sp
+    set qjid = #{qjid,jdbcType=INTEGER},
+      sprid = #{sprid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      spjg = #{spjg,jdbcType=VARCHAR},
+      spsj = #{spsj,jdbcType=TIMESTAMP},
+      spbz = #{spbz,jdbcType=VARCHAR},
+      szjd = #{szjd,jdbcType=INTEGER},
+      sflz = #{sflz,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="getQingJiaSp" parameterType="java.lang.String" resultType="com.power.qingjia.entity.QingJiaSpVO">
+    SELECT sp.*,qa.type,qa.tian,qa.jssj,qa.kssj,qa.qjyy,qa.tjsj,u.realname as uname,d.fullname as deptname 
+	from gr_qingjia_sp sp
+	LEFT JOIN gr_qingjia qa on sp.qjid = qa.id
+	LEFT JOIN sys_user u on qa.qjrid = u.userid
+	LEFT JOIN sys_department d on u.departmentid = d.departmentid
+	where sprid = #{sprid,jdbcType=VARCHAR} 
+  </select>
+  <select id="getQingJiaSpLc" parameterType="java.lang.Integer" resultType="com.power.common.entity.GrQingjiaSp">
+    select sp.*,u.realname as uname,d.fullname as deptname,di.fullname as zw 
+	from gr_qingjia_sp sp
+	LEFT JOIN sys_user u on u.userid = sp.sprid
+	LEFT JOIN sys_department d on d.departmentid = u.departmentid
+	LEFT JOIN sys_dict di on di.dictid = u.dutyid
+	where sp.qjid = #{qjid,jdbcType=INTEGER}
+	ORDER BY sp.szjd
+  </select>
+  <!-- getQaSpsl 请假审批待处理数据行 -->
+  <select id="getQaSpsl" parameterType="string" resultType="int">
+  	SELECT count(*) from gr_qingjia_sp
+	where status =0 and sprid = #{userid}
+  </select>
+  
+  <delete id="deleteByQjid" parameterType="java.lang.Integer">
+    delete from gr_qingjia_sp
+    where qjid = #{qjid,jdbcType=INTEGER}
+  </delete>
+</mapper>

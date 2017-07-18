@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfShenSuMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfShenSu">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="uname" jdbcType="VARCHAR" property="uname" />
+    <result column="deptid" jdbcType="VARCHAR" property="deptid" />
+    <result column="deptname" jdbcType="VARCHAR" property="deptname" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="sjid" jdbcType="INTEGER" property="sjid" />
+    <result column="fz" jdbcType="DECIMAL" property="fz" />
+    <result column="ssyy" jdbcType="VARCHAR" property="ssyy" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="sspz" jdbcType="VARCHAR" property="sspz" />
+    <result column="sssj" jdbcType="TIMESTAMP" property="sssj" />
+    <result column="sprid" jdbcType="VARCHAR" property="sprid" />
+    <result column="spjg" jdbcType="VARCHAR" property="spjg" />
+    <result column="spbz" jdbcType="VARCHAR" property="spbz" />
+    <result column="spsj" jdbcType="TIMESTAMP" property="spsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, uname, deptid, deptname, type, sjid, fz, ssyy, status, sspz, sssj, sprid, 
+    spjg, spbz, spsj
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_shensu
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jf_shensu
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfShenSu">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shensu (userid, uname, deptid, 
+      deptname, type, sjid, 
+      fz, ssyy, status, sspz, 
+      sssj, sprid, spjg, 
+      spbz, spsj)
+    values (#{userid,jdbcType=VARCHAR}, #{uname,jdbcType=VARCHAR}, #{deptid,jdbcType=VARCHAR}, 
+      #{deptname,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{sjid,jdbcType=INTEGER}, 
+      #{fz,jdbcType=DECIMAL}, #{ssyy,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{sspz,jdbcType=VARCHAR}, 
+      #{sssj,jdbcType=TIMESTAMP}, #{sprid,jdbcType=VARCHAR}, #{spjg,jdbcType=VARCHAR}, 
+      #{spbz,jdbcType=VARCHAR}, #{spsj,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfShenSu">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shensu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="uname != null">
+        uname,
+      </if>
+      <if test="deptid != null">
+        deptid,
+      </if>
+      <if test="deptname != null">
+        deptname,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="sjid != null">
+        sjid,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="ssyy != null">
+        ssyy,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="sspz != null">
+        sspz,
+      </if>
+      <if test="sssj != null">
+        sssj,
+      </if>
+      <if test="sprid != null">
+        sprid,
+      </if>
+      <if test="spjg != null">
+        spjg,
+      </if>
+      <if test="spbz != null">
+        spbz,
+      </if>
+      <if test="spsj != null">
+        spsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="uname != null">
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="deptid != null">
+        #{deptid,jdbcType=VARCHAR},
+      </if>
+      <if test="deptname != null">
+        #{deptname,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sjid != null">
+        #{sjid,jdbcType=INTEGER},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="ssyy != null">
+        #{ssyy,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="sspz != null">
+        #{sspz,jdbcType=VARCHAR},
+      </if>
+      <if test="sssj != null">
+        #{sssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sprid != null">
+        #{sprid,jdbcType=VARCHAR},
+      </if>
+      <if test="spjg != null">
+        #{spjg,jdbcType=VARCHAR},
+      </if>
+      <if test="spbz != null">
+        #{spbz,jdbcType=VARCHAR},
+      </if>
+      <if test="spsj != null">
+        #{spsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfShenSu">
+    update jf_shensu
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="uname != null">
+        uname = #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="deptid != null">
+        deptid = #{deptid,jdbcType=VARCHAR},
+      </if>
+      <if test="deptname != null">
+        deptname = #{deptname,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sjid != null">
+        sjid = #{sjid,jdbcType=INTEGER},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="ssyy != null">
+        ssyy = #{ssyy,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="sspz != null">
+        sspz = #{sspz,jdbcType=VARCHAR},
+      </if>
+      <if test="sssj != null">
+        sssj = #{sssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sprid != null">
+        sprid = #{sprid,jdbcType=VARCHAR},
+      </if>
+      <if test="spjg != null">
+        spjg = #{spjg,jdbcType=VARCHAR},
+      </if>
+      <if test="spbz != null">
+        spbz = #{spbz,jdbcType=VARCHAR},
+      </if>
+      <if test="spsj != null">
+        spsj = #{spsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfShenSu">
+    update jf_shensu
+    set userid = #{userid,jdbcType=VARCHAR},
+      uname = #{uname,jdbcType=VARCHAR},
+      deptid = #{deptid,jdbcType=VARCHAR},
+      deptname = #{deptname,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      sjid = #{sjid,jdbcType=INTEGER},
+      fz = #{fz,jdbcType=DECIMAL},
+      ssyy = #{ssyy,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      sspz = #{sspz,jdbcType=VARCHAR},
+      sssj = #{sssj,jdbcType=TIMESTAMP},
+      sprid = #{sprid,jdbcType=VARCHAR},
+      spjg = #{spjg,jdbcType=VARCHAR},
+      spbz = #{spbz,jdbcType=VARCHAR},
+      spsj = #{spsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="showJfss" parameterType="java.lang.String" resultType="com.power.jfss.entity.JfssVO">
+    select 
+    ss.id, userid, uname, deptid, deptname, ss.type, sjid, ss.fz, ssyy, ss.status, sspz, sssj, sprid, 
+    spjg, spbz, spsj,sb.sjmc
+    from jf_shensu ss left join jf_shenbao sb on ss.sjid = sb.id
+     <where>
+       <if test="ssr != null">
+      	and userid = #{ssr}
+      </if>
+   	<if test="sjmc != null">
+      	and sjmc  like concat('%',#{sjmc},'%')
+      </if>
+    </where>
+  </select>
+    <select id="getSsSpByUID" parameterType="java.lang.String" resultType="com.power.jfss.entity.JfssVO">
+   SELECT su.id,su.uname,su.deptname,su.fz,su.ssyy,su.status,su.sssj,su.spjg,su.spbz,spsj,sb.sjmc 
+	from jf_shensu su
+	LEFT JOIN jf_shenbao sb on su.sjid = sb.id
+	where sprid = #{sprid,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getUserJfSsTotal" parameterType="java.lang.String" resultType="com.power.jfss.entity.JfTotal">
+    SELECT userid, SUM(fz) as zonfen from jf_shensu
+	where userid = #{userid} and status = 3
+	<if test="kssj!=null and jssj==null">and substring(sssj,1,length(#{kssj}))&gt;=#{kssj}</if>
+	<if test="jssj!=null and kssj==null">and substring(sssj,1,length(#{jssj}))&lt;=#{jssj}</if>
+    <if test="kssj!=null and jssj!=null">and substring(sssj,1,length(#{kssj})) between #{kssj} and #{jssj}</if>
+  </select>
+  
+  <!-- getSuSpSl 申诉审批待处理数据行 -->
+  <select id="getSuSpSl" parameterType="string" resultType="int">
+  	SELECT count(*) from jf_shensu
+	where spsj is null and sprid = #{userid}
+  </select>
+</mapper>

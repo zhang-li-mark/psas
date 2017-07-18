@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfShenbaoMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfShenbao">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sbrid" jdbcType="VARCHAR" property="sbrid" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="sjmc" jdbcType="VARCHAR" property="sjmc" />
+    <result column="jflxid" jdbcType="INTEGER" property="jflxid" />
+    <result column="fz" jdbcType="DECIMAL" property="fz" />
+    <result column="sjms" jdbcType="VARCHAR" property="sjms" />
+    <result column="fj" jdbcType="VARCHAR" property="fj" />
+    <result column="sbsj" jdbcType="TIMESTAMP" property="sbsj" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="jdms" jdbcType="VARCHAR" property="jdms" />
+    <result column="dqjd" jdbcType="INTEGER" property="dqjd" />
+    <result column="spjlid" jdbcType="INTEGER" property="spjlid" />
+    <result column="dqjdsj" jdbcType="TIMESTAMP" property="dqjdsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sbrid, type, sjmc, jflxid, fz, sjms, fj, sbsj, status, jdms, dqjd, spjlid, dqjdsj
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_shenbao
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jf_shenbao
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfShenbao">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shenbao (sbrid, type, sjmc, jflxid, 
+      fz, sjms, fj, sbsj, 
+      status,jdms,dqjd,spjlid,dqjdsj)
+    values (#{sbrid,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR}, #{sjmc,jdbcType=VARCHAR}, #{jflxid,jdbcType=INTEGER}, 
+      #{fz,jdbcType=DECIMAL}, #{sjms,jdbcType=VARCHAR}, #{fj,jdbcType=VARCHAR}, #{sbsj,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR},#{jdms,jdbcType=VARCHAR}, #{dqjd,jdbcType=INTEGER}, #{spjlid,jdbcType=INTEGER}
+      , #{dqjdsj,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfShenbao">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shenbao
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sbrid != null">
+        sbrid,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="sjmc != null">
+        sjmc,
+      </if>
+      <if test="jflxid != null">
+        jflxid,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="sjms != null">
+        sjms,
+      </if>
+      <if test="fj != null">
+        fj,
+      </if>
+      <if test="sbsj != null">
+        sbsj,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+       <if test="jdms != null">
+        jdms,
+      </if>
+      <if test="dqjd != null">
+        dqjd,
+      </if>
+      <if test="spjlid != null">
+        spjlid,
+      </if>
+      <if test="dqjdsj != null">
+        dqjdsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sbrid != null">
+        #{sbrid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sjmc != null">
+        #{sjmc,jdbcType=VARCHAR},
+      </if>
+      <if test="jflxid != null">
+        #{jflxid,jdbcType=INTEGER},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="sjms != null">
+        #{sjms,jdbcType=VARCHAR},
+      </if>
+      <if test="fj != null">
+        #{fj,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsj != null">
+        #{sbsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="jdms != null">
+        #{jdms,jdbcType=VARCHAR},
+      </if>
+      <if test="dqjd != null">
+        #{dqjd,jdbcType=INTEGER},
+      </if>
+      <if test="spjlid != null">
+        #{spjlid,jdbcType=INTEGER},
+      </if>
+      <if test="dqjdsj != null">
+        #{dqjdsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfShenbao">
+    update jf_shenbao
+    <set>
+      <if test="sbrid != null">
+        sbrid = #{sbrid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sjmc != null">
+        sjmc = #{sjmc,jdbcType=VARCHAR},
+      </if>
+      <if test="jflxid != null">
+        jflxid = #{jflxid,jdbcType=INTEGER},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="sjms != null">
+        sjms = #{sjms,jdbcType=VARCHAR},
+      </if>
+      <if test="fj != null">
+        fj = #{fj,jdbcType=VARCHAR},
+      </if>
+      <if test="sbsj != null">
+        sbsj = #{sbsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+  	  <if test="jdms != null">
+        jdms = #{jdms,jdbcType=VARCHAR},
+      </if>
+      <if test="dqjd != null">
+        dqjd = #{dqjd,jdbcType=INTEGER},
+      </if>
+      <if test="spjlid != null">
+        spjlid = #{spjlid,jdbcType=INTEGER},
+      </if>
+      <if test="dqjdsj != null">
+        dqjdsj = #{dqjdsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfShenbao">
+    update jf_shenbao
+    set sbrid = #{sbrid,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      sjmc = #{sjmc,jdbcType=VARCHAR},
+      jflxid = #{jflxid,jdbcType=INTEGER},
+      fz = #{fz,jdbcType=DECIMAL},
+      sjms = #{sjms,jdbcType=VARCHAR},
+      fj = #{fj,jdbcType=VARCHAR},
+      sbsj = #{sbsj,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      jdms = #{jdms,jdbcType=VARCHAR}，
+      dqjd = #{dqjd,jdbcType=INTEGER},
+      spjlid = #{spjlid,jdbcType=INTEGER},
+      dqjdsj = #{dqjdsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+    <select id="showJfsb" parameterType="java.lang.String" resultType="com.power.jfsb.entity.JfsbVO">
+    select 
+     sb.id,sbrid, type, sjmc, jflxid, sb.fz, sjms, fj, sbsj, status ,xm.jfxmc
+    from jf_shenbao sb left join jf_shenbao_xm xm on xm.id = sb.jflxid
+    <where>
+      <if test="sbr != null">
+      		and sbrid = #{sbr}
+      </if>
+      <if test="sjmc != null">
+      		and sjmc  like concat('%',#{sjmc},'%')
+      </if>
+   	  <if test="jfxmc != null">
+      		and jfxmc  like concat('%',#{jfxmc},'%')
+      </if>
+    </where>
+   
+  </select>
+   <select id="getJfsbByUid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+     id,sbrid, type, sjmc, jflxid, fz, sjms, fj, sbsj, status
+    from jf_shenbao where sbrid = #{sbrid,jdbcType=VARCHAR}
+   
+  </select>
+  <select id="getUserInfoByUID" parameterType="java.lang.String" resultType="com.power.jfsb.entity.UserInfoVO">
+  select u.userid,u.realname as uname,u.departmentid as dname,u.dutyid as zw from sys_user u
+	where u.userid = #{userid,jdbcType=VARCHAR}
+   
+  </select>
+</mapper>

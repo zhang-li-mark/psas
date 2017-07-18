@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>基础信息积分设置</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <script src="${ctx.contextPath}/res/jquery/jquery.layout.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<script>
+    $(function () {
+        InitialPage();
+        initJcxx();
+        initZs();
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                $(window).resize()
+            }
+        });
+        $('.profile-nav').height($(window).height() - 20);
+        $('.profile-content').height($(window).height() - 20);
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('.profile-nav').height($(window).height() - 20);
+                $('.profile-content').height($(window).height() - 20);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //提交基础信息、联系方式
+    function save(flag){
+    	var dictArr = [];
+    	$("."+flag).each(function(){
+    		var v = $(this).val();
+    		dictArr.push({dictid:$(this).attr("dictid"),code:(v&&v.length>0)?v:0});
+    	});
+        $.SaveForm({
+            url: "${ctx.contextPath}/gxpz/editJfszSubmit",
+            param: { dictArr: JSON.stringify(dictArr)},
+            loading: "正在保存积分设置...",
+            close:false,
+            success: function (data) {
+            }
+        })
+    }
+    //侧面切换显示/隐藏
+    function profileSwitch(id) {
+        $(".profile-content").find('.flag').hide()
+        $(".profile-content").find("#" + id).show();
+    }
+    initJcxx=function(){
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=103",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#tab103").append("<tr><td class='formTitle' style='text-align: right;'>"+xl.fullname+"</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='"+xl.dictid+"' type='text' class='form-control input-profile xl' value='"+xl.code+"'/>分</td></tr>");
+    		});
+    		$("#tab103").append("<tr><td class='formTitle'></td><td class='formValue'><br /><a class='btn btn-primary' onclick='save(\"xl\")'><i class='fa fa-save'></i>&nbsp;保存学历积分设置</a></td></tr>");
+    	});
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=104",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#tab104").append("<tr><td class='formTitle' style='text-align: right;width:200px;'>"+xl.fullname+"</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='"+xl.dictid+"' type='text' class='form-control input-profile zzmm' value='"+xl.code+"'/>分</td></tr>");
+    		});
+    		$("#tab104").append("<tr><td class='formTitle' style='text-align: right;width:200px;'>${zwlj.fullname}</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='${zwlj.dictid}' type='text' class='form-control input-profile zw' value='${zwlj.code}'/>分</td></tr>");
+    		$("#tab104").append("<tr><td class='formTitle'></td><td class='formValue'><br /><a class='btn btn-primary' onclick='save(\"zw\")'><i class='fa fa-save'></i>&nbsp;保存职务积分设置</a></td></tr>");
+    	});
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=105",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#tab105").append("<tr><td class='formTitle' style='text-align: right;'>"+xl.fullname+"</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='"+xl.dictid+"' type='text' class='form-control input-profile zw' value='"+xl.code+"'/>分</td></tr>");
+    		});
+	   		$("#tab105").append("<tr><td class='formTitle'></td><td class='formValue'><br /><a class='btn btn-primary' onclick='save(\"zzmm\")'><i class='fa fa-save'></i>&nbsp;保存政治面貌积分设置</a></td></tr>");
+    	});
+    	
+    }
+    initZs=function(){
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=106",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#zs106").append("<td class='formTitle' style='text-align: right;'>"+xl.fullname+"</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='"+xl.dictid+"' type='text' class='form-control input-profile zgzs' value='"+xl.code+"'/>分</td>");
+    		});
+    	});
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=107",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#zs107").append("<td class='formTitle' style='text-align: right;'>"+xl.fullname+"</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='"+xl.dictid+"' type='text' class='form-control input-profile zgzs' value='"+xl.code+"'/>分</td>");
+    		});
+    	});
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=108",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#zs108").append("<td class='formTitle' style='text-align: right;'>"+xl.fullname+"</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='"+xl.dictid+"' type='text' class='form-control input-profile zgzs' value='"+xl.code+"'/>分</td>");
+    		});
+    	});
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=109",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#zs109").append("<td class='formTitle' style='text-align: right;'>"+xl.fullname+"</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='"+xl.dictid+"' type='text' class='form-control input-profile zgzs' value='"+xl.code+"'/>分</td>");
+    		});
+    	});
+    	$.get("${ctx.contextPath}/sys/dict/getDictItem?classId=111",function(re){
+    		$.each(re,function(i,xl){
+	    		$("#zs111").append("<td class='formTitle' style='text-align: right;'>"+xl.fullname+"</td><td class='formValue'><input style='width:60px;float:left;text-align: right;' dictid='"+xl.dictid+"' type='text' class='form-control input-profile zgzs' value='"+xl.code+"'/>分</td>");
+    		});
+    	});
+    }
+</script>
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel">
+            <div class="profile-nav">
+                <ul style="padding-top: 20px;">
+                    <li class="active" onclick="profileSwitch('BaseInfo')">学历积分</li>
+                    <li onclick="profileSwitch('ContactInfo')">政治面貌积分</li>
+                    <li onclick="profileSwitch('MyheadIcon')">职务积分</li>
+                    <li onclick="profileSwitch('RevisePassword')">专业技术资格积分</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="center-Panel">
+            <div class="profile-content" style="background: #fff;">
+                <div id="BaseInfo" class="flag">
+                    <div class="title">学历积分</div>
+                    <table class="form" style="margin-top: 20px;" id="tab103">
+
+                    </table>
+                </div>
+                <div id="ContactInfo" class="flag" style="display: none;">
+                    <div class="title">政治面貌积分
+                    </div>
+                    <table class="form" style="margin-top: 20px;" id="tab105">
+                    </table>
+                </div>
+                <div id="MyheadIcon" class="flag" style="display: none;">
+                    <div class="title">职务积分
+                    </div>
+                    <table class="form" style="margin-top: 20px;" id="tab104">
+</table>
+                </div>
+                <div id="RevisePassword" class="flag" style="display: none;">
+                    <div class="title">专业技术资格积分
+                    </div>
+<table class="form" style="margin-top: 20px;">
+<tr><td colspan="6">执法资格证书：</td></tr>
+<tr id="zs106">
+</tr>
+<tr><td colspan="6">刑事科学技术和技术侦察队伍专业技术资格证书：</td></tr>
+<tr id="zs107">
+</tr>
+<tr><td colspan="6">心理咨询师资格证书：</td></tr>
+<tr id="zs108">
+</tr>
+<tr><td colspan="6">审计师资格证书：</td></tr>
+<tr id="zs109">
+</tr>
+<tr><td colspan="6">测试证书：</td></tr>
+<tr id="zs111">
+</tr>
+<tr>
+    <td class="formTitle"></td>
+    <td class="formValue">
+        <br />
+        <a class="btn btn-primary" onclick="save('zgzs')"><i class="fa fa-save"></i>&nbsp;保存证书积分设置</a>
+    </td>
+</tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

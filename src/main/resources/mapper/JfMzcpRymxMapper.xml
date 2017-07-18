@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfMzcpRymxMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfMzcpRymx">
+    <id column="xh" jdbcType="VARCHAR" property="xh" />
+    <result column="cpxh" jdbcType="INTEGER" property="cpxh" />
+    <result column="cpmxxh" jdbcType="INTEGER" property="cpmxxh" />
+    <result column="ryxh" jdbcType="VARCHAR" property="ryxh" />
+    <result column="rymc" jdbcType="VARCHAR" property="rymc" />
+    <result column="lrsj" jdbcType="TIMESTAMP" property="lrsj" />
+    <result column="qzcprs" jdbcType="INTEGER" property="qzcprs" />
+    <result column="qzdfrs" jdbcType="INTEGER" property="qzdfrs" />
+    <result column="qzcpdf" jdbcType="DECIMAL" property="qzcpdf" />
+    <result column="ldcprs" jdbcType="INTEGER" property="ldcprs" />
+    <result column="ldpjrs" jdbcType="INTEGER" property="ldpjrs" />
+    <result column="ldpjdf" jdbcType="DECIMAL" property="ldpjdf" />
+    <result column="cpzt" jdbcType="INTEGER" property="cpzt" />
+    <result column="zpnr" jdbcType="VARCHAR" property="zpnr" />
+    <result column="zpsj" jdbcType="TIMESTAMP" property="zpsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    xh, cpxh, cpmxxh, ryxh, rymc, lrsj, qzcprs, qzdfrs, qzcpdf, ldcprs, ldpjrs, ldpjdf, 
+    cpzt, zpnr, zpsj
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_mzcp_rymx
+    where xh = #{xh,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from jf_mzcp_rymx
+    where xh = #{xh,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfMzcpRymx">
+    insert into jf_mzcp_rymx (xh, cpxh, cpmxxh, 
+      ryxh, rymc, lrsj, 
+      qzcprs, qzdfrs, qzcpdf, 
+      ldcprs, ldpjrs, ldpjdf, 
+      cpzt, zpnr, zpsj)
+    values (#{xh,jdbcType=VARCHAR}, #{cpxh,jdbcType=INTEGER}, #{cpmxxh,jdbcType=INTEGER}, 
+      #{ryxh,jdbcType=VARCHAR}, #{rymc,jdbcType=VARCHAR}, #{lrsj,jdbcType=TIMESTAMP}, 
+      #{qzcprs,jdbcType=INTEGER}, #{qzdfrs,jdbcType=INTEGER}, #{qzcpdf,jdbcType=DECIMAL}, 
+      #{ldcprs,jdbcType=INTEGER}, #{ldpjrs,jdbcType=INTEGER}, #{ldpjdf,jdbcType=DECIMAL}, 
+      #{cpzt,jdbcType=INTEGER}, #{zpnr,jdbcType=VARCHAR}, #{zpsj,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfMzcpRymx">
+    insert into jf_mzcp_rymx
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="xh != null">
+        xh,
+      </if>
+      <if test="cpxh != null">
+        cpxh,
+      </if>
+      <if test="cpmxxh != null">
+        cpmxxh,
+      </if>
+      <if test="ryxh != null">
+        ryxh,
+      </if>
+      <if test="rymc != null">
+        rymc,
+      </if>
+      <if test="lrsj != null">
+        lrsj,
+      </if>
+      <if test="qzcprs != null">
+        qzcprs,
+      </if>
+      <if test="qzdfrs != null">
+        qzdfrs,
+      </if>
+      <if test="qzcpdf != null">
+        qzcpdf,
+      </if>
+      <if test="ldcprs != null">
+        ldcprs,
+      </if>
+      <if test="ldpjrs != null">
+        ldpjrs,
+      </if>
+      <if test="ldpjdf != null">
+        ldpjdf,
+      </if>
+      <if test="cpzt != null">
+        cpzt,
+      </if>
+      <if test="zpnr != null">
+        zpnr,
+      </if>
+      <if test="zpsj != null">
+        zpsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="xh != null">
+        #{xh,jdbcType=VARCHAR},
+      </if>
+      <if test="cpxh != null">
+        #{cpxh,jdbcType=INTEGER},
+      </if>
+      <if test="cpmxxh != null">
+        #{cpmxxh,jdbcType=INTEGER},
+      </if>
+      <if test="ryxh != null">
+        #{ryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="rymc != null">
+        #{rymc,jdbcType=VARCHAR},
+      </if>
+      <if test="lrsj != null">
+        #{lrsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qzcprs != null">
+        #{qzcprs,jdbcType=INTEGER},
+      </if>
+      <if test="qzdfrs != null">
+        #{qzdfrs,jdbcType=INTEGER},
+      </if>
+      <if test="qzcpdf != null">
+        #{qzcpdf,jdbcType=DECIMAL},
+      </if>
+      <if test="ldcprs != null">
+        #{ldcprs,jdbcType=INTEGER},
+      </if>
+      <if test="ldpjrs != null">
+        #{ldpjrs,jdbcType=INTEGER},
+      </if>
+      <if test="ldpjdf != null">
+        #{ldpjdf,jdbcType=DECIMAL},
+      </if>
+      <if test="cpzt != null">
+        #{cpzt,jdbcType=INTEGER},
+      </if>
+      <if test="zpnr != null">
+        #{zpnr,jdbcType=VARCHAR},
+      </if>
+      <if test="zpsj != null">
+        #{zpsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfMzcpRymx">
+    update jf_mzcp_rymx
+    <set>
+      <if test="cpxh != null">
+        cpxh = #{cpxh,jdbcType=INTEGER},
+      </if>
+      <if test="cpmxxh != null">
+        cpmxxh = #{cpmxxh,jdbcType=INTEGER},
+      </if>
+      <if test="ryxh != null">
+        ryxh = #{ryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="rymc != null">
+        rymc = #{rymc,jdbcType=VARCHAR},
+      </if>
+      <if test="lrsj != null">
+        lrsj = #{lrsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qzcprs != null">
+        qzcprs = #{qzcprs,jdbcType=INTEGER},
+      </if>
+      <if test="qzdfrs != null">
+        qzdfrs = #{qzdfrs,jdbcType=INTEGER},
+      </if>
+      <if test="qzcpdf != null">
+        qzcpdf = #{qzcpdf,jdbcType=DECIMAL},
+      </if>
+      <if test="ldcprs != null">
+        ldcprs = #{ldcprs,jdbcType=INTEGER},
+      </if>
+      <if test="ldpjrs != null">
+        ldpjrs = #{ldpjrs,jdbcType=INTEGER},
+      </if>
+      <if test="ldpjdf != null">
+        ldpjdf = #{ldpjdf,jdbcType=DECIMAL},
+      </if>
+      <if test="cpzt != null">
+        cpzt = #{cpzt,jdbcType=INTEGER},
+      </if>
+      <if test="zpnr != null">
+        zpnr = #{zpnr,jdbcType=VARCHAR},
+      </if>
+      <if test="zpsj != null">
+        zpsj = #{zpsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where xh = #{xh,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfMzcpRymx">
+    update jf_mzcp_rymx
+    set cpxh = #{cpxh,jdbcType=INTEGER},
+      cpmxxh = #{cpmxxh,jdbcType=INTEGER},
+      ryxh = #{ryxh,jdbcType=VARCHAR},
+      rymc = #{rymc,jdbcType=VARCHAR},
+      lrsj = #{lrsj,jdbcType=TIMESTAMP},
+      qzcprs = #{qzcprs,jdbcType=INTEGER},
+      qzdfrs = #{qzdfrs,jdbcType=INTEGER},
+      qzcpdf = #{qzcpdf,jdbcType=DECIMAL},
+      ldcprs = #{ldcprs,jdbcType=INTEGER},
+      ldpjrs = #{ldpjrs,jdbcType=INTEGER},
+      ldpjdf = #{ldpjdf,jdbcType=DECIMAL},
+      cpzt = #{cpzt,jdbcType=INTEGER},
+      zpnr = #{zpnr,jdbcType=VARCHAR},
+      zpsj = #{zpsj,jdbcType=TIMESTAMP}
+    where xh = #{xh,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- getMzcpDwRyList -->
+  <select id="getMzcpDwRyList" parameterType="map" resultType="com.power.jfgl.entity.JfMzcpRyMxVO">
+    select mx.xh, mx.cpxh, mx.cpmxxh, mx.ryxh, mx.rymc, mx.lrsj, mx.qzdfrs, mx.qzcpdf, mx.ldpjrs, mx.ldpjdf, mx.cpzt,mx.qzcprs,mx.ldcprs,
+    u.departmentid as deptId,u.wechat as rzsj,u.dutyid zw,u.gender as xb
+    from jf_mzcp_rymx mx left join sys_user u on mx.ryxh = u.userid
+    <where>
+    	<if test="cpmxxh!=null">cpmxxh = #{cpmxxh}</if>
+    </where>
+    order by u.departmentid,u.dutyid
+  </select>
+  <delete id="delRymxByCpmxxh" parameterType="int">
+  		delete from jf_mzcp_jgmx where cpmxxh = #{value};
+   		delete from jf_mzcp_rymx where cpmxxh = #{value};
+  </delete>
+  <!-- 获取人员信息 -->
+  <!-- <select id="getRyList" parameterType="map" resultType="com.power.base.sys.entity.KeyValue">
+  	<if test="f==0">
+  	select ryxh as id,rymc as name from jf_mzcp_rymx where cpmxxh = #{cpmxxh}
+  	</if>
+  	<if test="f==1">
+  	select pjrxh as id,pjrmc as name,0 as pid from jf_mzcp_jgmx 
+  	where cpmxxh = #{cpmxxh}
+  	and rybz=#{f}
+  	group by pjrxh,pjrmc
+  	UNION
+  	SELECT 0 as id,'' as name ,ryxh as pid FROM jf_mzcp_rymx
+	WHERE cpmxxh = #{cpmxxh} 
+	</if>
+  	<if test="f==2">
+  	select pjrxh as id,pjrmc as name,0 as pid from jf_mzcp_jgmx 
+  	where cpmxxh = #{cpmxxh}
+  	and rybz=#{f}
+  	group by pjrxh,pjrmc
+  	UNION
+  	SELECT 0 as id,'' as name ,ryxh as pid FROM jf_mzcp_rymx
+	WHERE cpmxxh = #{cpmxxh}
+  	</if>
+  </select> -->
+  <select id="getRyList" parameterType="map" resultType="com.power.base.sys.entity.KeyValue">
+  	<if test="f==0">
+  	select ryxh as id,rymc as name from jf_mzcp_rymx where cpmxxh = #{cpmxxh}
+  	</if>
+  	<if test="f==1">
+  	select pjrxh as id,pjrmc as name,0 as pid from jf_mzcp_jgmx 
+  	where cpmxxh = #{cpmxxh}
+  	and rybz=#{f}
+  	<if test="bpjrxh!=null">and bpjrxh in (${bpjrxh})</if>
+  	group by pjrxh,pjrmc
+	</if>
+  	<if test="f==2">
+  	select pjrxh as id,pjrmc as name,0 as pid from jf_mzcp_jgmx 
+  	where cpmxxh = #{cpmxxh}
+  	and rybz=#{f}
+  	<if test="bpjrxh!=null">and bpjrxh in (${bpjrxh})</if>
+  	group by pjrxh,pjrmc
+  	</if>
+  </select>
+  
+  <!-- 民主测评得分 -->
+  <select id="getMzcpDf" parameterType="map" resultType="decimal">
+  	SELECT qzcpdf+ldpjdf FROM jf_mzcp_rymx 
+	WHERE cpzt=1 
+	AND ryxh =#{userid}
+	<if test="kssj!=null and jssj==null">and substring(lrsj,1,length(#{kssj}))&gt;=#{kssj}</if>
+	<if test="jssj!=null and kssj==null">and substring(lrsj,1,length(#{jssj}))&lt;=#{jssj}</if>
+    <if test="kssj!=null and jssj!=null">and substring(lrsj,1,length(#{kssj})) between #{kssj} and #{jssj}</if>
+  </select>
+  
+</mapper>

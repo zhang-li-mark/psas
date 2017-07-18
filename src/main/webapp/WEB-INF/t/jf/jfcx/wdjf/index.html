@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的积分明细</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+	<link href="${ctx.contextPath}/res/wizard/wizard.css" rel="stylesheet"/>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet"/>
+	<link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/wizard/wizard.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+<style type="text/css">
+.zdytab table td{
+font-size: 16px;
+}
+.zdytab table td span{
+font-size: 16px;
+}
+.zdytab table strong{
+font-size: 16px;
+}
+</style>
+</head>
+<body>
+<div style="margin-left: 10px; margin-right: 10px;">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#zjfDiv" data-toggle="tab">总积分</a></li>
+        <li><a href="#jcxxjfDiv" data-toggle="tab">基础信息积分</a></li>
+        <li><a href="#gzdljfDiv" data-toggle="tab">业务积分</a></li>
+        <li><a href="#gldljfDiv" data-toggle="tab">管理积分</a></li>
+        <li><a href="#xxDiv" data-toggle="tab">学习积分</a></li>
+        <li><a href="#ksDiv" data-toggle="tab">考试积分</a></li>
+        <li><a href="#qjDiv" data-toggle="tab">请休假</a></li>
+    </ul>
+    <div class="tab-content" style="padding-top: 15px;">
+        <div id="zjfDiv" class="tab-pane active zdytab">
+        <center>
+<table border="1">
+  <tr height="50">
+    <td width="220" style="text-align: center;"><strong>民主测评分</strong></td>
+    <td width="230" style="padding-left: 10px;">民主测评得分：<span id="_mzcpdf">${hz.mzcpdf}</span></td>
+    <td width="100"style="text-align: right;padding-right:10px;">${hz.mzcpdf}</td>
+  </tr>
+  <tr height="50">
+    <td style="text-align: center;"><strong>工作定量积分</strong></td>
+    <td style="padding-left: 10px;">申报积分：<span id="_gzdljf" class="_gzdljf">${hz.gzjf}</span></td>
+    <td style="text-align: right;padding-right:10px;"><span class="_gzdljf">${hz.gzjf}</span></td>
+  </tr>
+  <tr height="50">
+    <td rowspan="2" style="text-align: center;"><strong>管理定量积分</strong></td>
+    <td style="padding-left: 10px;">基础信息积分：${jcxx.jfhj}</td>
+    <td rowspan="2" style="text-align: right;padding-right:10px;"><span id="_gldljf" class="_gldljf">${(jcxx.jfhj+hz.gljf)}</span></td>
+  </tr>
+  <tr height="50"><td style="padding-left: 10px;">申报积分：<span id="_gldljf" class="_gldljf">${hz.gljf}</span></td></tr>
+  <tr height="50"><td colspan="3" style="text-align: right;padding-right:10px;">总积分：<span id="_zjf">${hz.zjf}</span></td></tr>
+</table>
+</center>
+
+        </div>
+        <div id="jcxxjfDiv" class="tab-pane zdytab" style="">
+                <center>
+<table border="1">
+  <tr height="50">
+    <td width="220" style="text-align: center;"><strong>学历积分</strong></td>
+    <td width="230" style="padding-left: 10px;"><#if jcxx.xl?? && jcxx.xl?length&gt;0><script type="text/javascript">
+    	var re = top.clientdataItem[103] == null ? "" : top.clientdataItem[103][${jcxx.xl}];
+    	document.write(re);
+    	</script></#if></td>
+    <td width="100"style="text-align: right;padding-right:10px;">${jcxx.xljf}</td>
+  </tr>
+  <tr height="50">
+    <td style="text-align: center;"><strong>职务积分</strong></td>
+    <td style="padding-left: 10px;"><#if jcxx.zw?? && jcxx.zw?length&gt;0><script type="text/javascript">
+    	var re = top.clientdataItem[104] == null ? "" : top.clientdataItem[104][${jcxx.zw}];
+    	document.write(re);
+    	</script></#if></td>
+    <td style="text-align: right;padding-right:10px;">${jcxx.zwjf}</td>
+  </tr>
+  <tr height="50">
+    <td style="text-align: center;"><strong>职务累计积分</strong></td>
+    <td style="padding-left: 10px;"></td>
+    <td style="text-align: right;padding-right:10px;">${jcxx.zwljjf}</td>
+  </tr>
+  <tr height="50">
+    <td style="text-align: center;"><strong>政治面貌积分</strong></td>
+    <td style="padding-left: 10px;"><#if jcxx.zzmm?? && jcxx.zzmm?length&gt;0><script type="text/javascript">
+    	var re = top.clientdataItem[105] == null ? "" : top.clientdataItem[105][${jcxx.zzmm}];
+    	document.write(re);
+    	</script></#if></td>
+    <td style="text-align: right;padding-right:10px;">${jcxx.zzmmjf}</td>
+  </tr>
+  <#if jcxx.zsmc??>
+  <#list jcxx.zsmc?split(',') as zs>
+  <tr height="50">
+    <td style="text-align: center;"><strong>资格证书积分</strong></td>
+    <td style="padding-left: 10px;">${zs}</td>
+    <td style="text-align: right;padding-right:10px;">${jcxx.zsjfs?split(',')[zs_index]}</td>
+  </tr>
+  </#list>
+  <#else>
+  <tr height="50">
+    <td style="text-align: center;"><strong>资格证书积分</strong></td>
+    <td style="padding-left: 10px;"></td>
+    <td style="text-align: right;padding-right:10px;">0</td>
+  </tr>
+  </#if>
+  <tr height="50">
+    <td style="text-align: center;"><strong>个人表彰积分</strong></td>
+    <td style="padding-left: 10px;"></td>
+    <td style="text-align: right;padding-right:10px;">${jcxx.bzjf}</td>
+  </tr>
+  
+  <tr height="50"><td colspan="3" style="text-align: right;padding-right:10px;">总积分：${jcxx.jfhj}</td></tr>
+</table>
+</center>
+        </div>
+        <div id="gzdljfDiv" class="tab-pane" style="">
+    		<table id="gzdljfTable"></table>
+        </div>
+        <div id="gldljfDiv" class="tab-pane" style="">
+    		<table id="gldljfTable"></table>
+        </div>
+        <div id="xxDiv" class="tab-pane" style="">
+    		<table id="xxTable"></table>
+        </div>
+         <div id="ksDiv" class="tab-pane" style="">
+    		<table id="ksTable"></table>
+        </div>
+         <div id="qjDiv" class="tab-pane" style="">
+    		<table id="qjTable"></table>
+        </div>
+    </div>
+</div>
+<script>
+//加载2个表格
+$(function () {
+	gzdljfGrid();
+	gldljfGrid();
+	gzxxjfGrid();
+	gzQaGrid();
+	gzKsGrid();
+	_jfhj();
+});
+//加载表格
+function gzdljfGrid() {
+    var selectedRowIndex = 0;
+    var $gridTable = $('#gzdljfTable');
+    $gridTable.jqGridEx({
+    	height: $(window).height() - 108.5,
+    	width:$(window).width()-25,
+    	autowidth:false,
+        url: "${ctx.contextPath}/jfcx/getDljfList?jflx=1&userid=${userid!}&st=${st!}&et=${et!}",
+        colModel:[
+            {label: '姓名', name: 'uname', width: 80, align: 'center',sortable:false},
+            { label: '事件名称', name: 'sjmc', width: 400, align: 'left',sortable:false},
+            { label: '积分', name: 'fz', width: 80, align: 'center',sortable:false},
+            { label: '积分审核时间', name: 'spsj', width: 150, align: 'center',sortable:false,
+           		formatter: function (cellvalue, options, rowObject) {
+                	return cellvalue==null?"":formatDate(new Date(cellvalue), 'yyyy-MM-dd hh:mm');
+                }
+           	}
+        ],
+        pager: false,
+        loadComplete: function() {
+            $("tr.jqgrow:odd").addClass('rowOdd');
+        },
+        gridComplete: function () {
+        	_gridGzHj();
+        }
+    });
+}
+_gridGzHj=function(){
+	var $gridTable = $('#gzdljfTable');
+	//判断是否空行
+	if($gridTable.getGridParam("reccount")<1){return;}
+	
+    var ckhj = $gridTable.getCol("fz", false, "sum");
+    var json = {
+            "sjmc": "合计：",
+            "fz": ckhj
+        };
+ 	$gridTable.jqGrid("addRowData",0,json,"last","",true);// addRowData
+ 	//
+ 	$("tr[id='0']",$gridTable).css({"background":"#dadada"});
+ 	//
+ 	//$("._gzdljf").text(ckhj);
+ 	_jfhj();
+}
+//加载表格
+function gldljfGrid() {
+    var selectedRowIndex = 0;
+    var $gridTable = $('#gldljfTable');
+    $gridTable.jqGridEx({
+    	height: $(window).height() - 108.5,
+    	width:$(window).width()-25,
+    	autowidth:false,
+        url: "${ctx.contextPath}/jfcx/getDljfList?jflx=2&userid=${userid!}&st=${st!}&et=${et!}",
+        colModel:[
+            {label: '姓名', name: 'uname', width: 80, align: 'center',sortable:false},
+            { label: '事件名称', name: 'sjmc', width: 400, align: 'left',sortable:false},
+            { label: '积分', name: 'fz', width: 80, align: 'center',sortable:false},
+            { label: '积分审核时间', name: 'spsj', width: 150, align: 'center',sortable:false,
+           		formatter: function (cellvalue, options, rowObject) {
+                	return cellvalue==null?"":formatDate(new Date(cellvalue), 'yyyy-MM-dd hh:mm');
+                }
+           	}
+        ],
+        pager: false,
+        loadComplete: function() {
+            $("tr.jqgrow:odd").addClass('rowOdd');
+        },
+        gridComplete: function () {
+        	_gridGlHj();
+        }
+    });
+}
+_gridGlHj=function(){
+	var $gridTable = $('#gldljfTable');
+	//判断是否空行
+	if($gridTable.getGridParam("reccount")<1){return;}
+	
+    var ckhj = $gridTable.getCol("fz", false, "sum");
+    var json = {
+            "sjmc": "合计：",
+            "fz": ckhj
+        };
+ 	$gridTable.jqGrid("addRowData",0,json,"last","",true);// addRowData
+ 	//
+ 	$("tr[id='0']",$gridTable).css({"background":"#dadada"});
+ 	//
+ 	//$("._gldljf").text(ckhj);
+ 	_jfhj();
+}
+_jfhj=function(){
+	/**
+	var _mzcpdf = $("#_mzcpdf").text();
+	var _gzdljf = $("#_gzdljf").text();
+	var _gldljf = $("#_gldljf").text();
+	var _zjf = Calc.Add(_mzcpdf,_gzdljf);
+	_zjf = Calc.Add(_zjf,_gldljf);
+	$("#_zjf").text(parseFloat(_zjf).toFixed(1));
+	**/
+}
+//加载表格
+function gzxxjfGrid() {
+    var selectedRowIndex = 0;
+    var $gridTable = $('#xxTable');
+    $gridTable.jqGridEx({
+    	height: $(window).height() - 108.5,
+    	width:$(window).width()-25,
+    	autowidth:false,
+        url: "${ctx.contextPath}/jfcx/getxxjfList?userid=${userid!}&st=${st!}&et=${et!}",
+        colModel:[
+            {label: '姓名', name: 'uname', width: 80, align: 'center',sortable:false},
+            { label: '学习主题', name: 'xxzt', width: 400, align: 'left',sortable:false},
+            { label: '积分', name: 'fz', width: 80, align: 'center',sortable:false},
+            { label: '学习时间', name: 'wcsj', width: 150, align: 'center',sortable:false,
+           		formatter: function (cellvalue, options, rowObject) {
+                	return cellvalue==null?"":formatDate(new Date(cellvalue), 'yyyy-MM-dd hh:mm');
+                }
+           	}
+        ],
+        pager: false,
+        loadComplete: function() {
+            $("tr.jqgrow:odd").addClass('rowOdd');
+        },
+        gridComplete: function () {
+        	_gridxxHj();
+        }
+    });
+}
+_gridxxHj=function(){
+	var $gridTable = $('#xxTable');
+	//判断是否空行
+	if($gridTable.getGridParam("reccount")<1){return;}
+	
+    var ckhj = $gridTable.getCol("fz", false, "sum");
+    var json = {
+            "xxzt": "合计：",
+            "fz": ckhj
+        };
+ 	$gridTable.jqGrid("addRowData",0,json,"last","",true);// addRowData
+ 	//
+ 	$("tr[id='0']",$gridTable).css({"background":"#dadada"});
+ 	//
+ 	//$("._gldljf").text(ckhj);
+ 	_jfhj();
+}
+//加载表格
+function gzQaGrid() {
+    var selectedRowIndex = 0;
+    var $gridTable = $('#qjTable');
+    $gridTable.jqGridEx({
+    	height: $(window).height() - 108.5,
+    	width:$(window).width()-25,
+    	autowidth:false,
+        url: "${ctx.contextPath}/jfcx/getQaList?userid=${userid!}&st=${st!}&et=${et!}",
+        colModel:[
+            {label: '姓名', name: 'uname', width: 80, align: 'center',sortable:false},
+            { label: '类型', name: 'typeStr', width: 80, align: 'center',sortable:false},
+            { label: '天数', name: 'tian', width: 80, align: 'center',sortable:false},
+            { label: '开始时间', name: 'kssj', width: 150, align: 'center',sortable:false,
+           		formatter: function (cellvalue, options, rowObject) {
+                	return cellvalue==null?"":formatDate(new Date(cellvalue), 'yyyy-MM-dd hh:mm');
+                }
+           	},
+            { label: '结束时间', name: 'jssj', width: 150, align: 'center',sortable:false,
+           		formatter: function (cellvalue, options, rowObject) {
+                	return cellvalue==null?"":formatDate(new Date(cellvalue), 'yyyy-MM-dd hh:mm');
+                }
+           	}
+        ],
+        pager: false,
+        loadComplete: function() {
+            $("tr.jqgrow:odd").addClass('rowOdd');
+        },
+        gridComplete: function () {
+        	
+        }
+    });
+}
+function gzKsGrid() {
+    var selectedRowIndex = 0;
+    var $gridTable = $('#ksTable');
+    $gridTable.jqGridEx({
+    	height: $(window).height() - 108.5,
+    	width:$(window).width()-25,
+    	autowidth:false,
+        url: "${ctx.contextPath}/jfcx/getKsList?userid=${userid!}&st=${st!}&et=${et!}",
+        colModel:[
+            {label: '姓名', name: 'uname', width: 80, align: 'center',sortable:false},
+            { label: '考试名称', name: 'sjmc', width: 200, align: 'center',sortable:false},
+            { label: '考试得分', name: 'ksdf', width: 80, align: 'center',sortable:false},
+            { label: '所得积分', name: 'zzjf', width: 80, align: 'center',sortable:false}
+        ],
+        pager: false,
+        loadComplete: function() {
+            $("tr.jqgrow:odd").addClass('rowOdd');
+        },
+        gridComplete: function () {
+        	_gridksHj();
+        }
+    });
+}
+_gridksHj=function(){
+	var $gridTable = $('#ksTable');
+	//判断是否空行
+	if($gridTable.getGridParam("reccount")<1){return;}
+	
+    var ckhj = $gridTable.getCol("zzjf", false, "sum");
+    var json = {
+            "sjmc": "合计：",
+            "zzjf": ckhj
+        };
+ 	$gridTable.jqGrid("addRowData",0,json,"last","",true);// addRowData
+ 	//
+ 	$("tr[id='0']",$gridTable).css({"background":"#dadada"});
+ 	//
+ 	//$("._gldljf").text(ckhj);
+ 	_jfhj();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>home</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/ui/windows/index.css" rel="stylesheet"/>
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+<style type="text/css">
+/** 仿 iOS 系统通知数字样式 **/  
+span.num{  
+    background-color: #f00;  
+    background-image: -webkit-linear-gradient(top, #f00, #600); /* Chrome 10+, Saf5.1+, iOS 5+ */  
+    background-image:    -moz-linear-gradient(top, #f00, #600); /* FF3.6+ */  
+    background-image:     -ms-linear-gradient(top, #f00, #600); /* IE10 */  
+    background-image:      -o-linear-gradient(top, #f00, #600); /* Opera 11.10+ */    
+    color:#fff;  
+    font-family:Verdana;  
+    font-weight:normal;  
+    font-size:16px;
+    padding:2px 5px;  
+    border:2px solid #fff;  
+    border-radius:15px;  
+    position:absolute;
+    margin-top:-16px;  
+    margin-left:70px;  
+    box-shadow: 0 2px 3px 0px rgba(0,0,0,1);  
+    text-shadow: -1px -1px 0 #000;  
+}
+.slidebox ul>li{
+margin-bottom: 10px;
+}
+.slidebox ul>li .icon-text{
+width:100px;
+}
+.slidebox ul>li .icon-text span{
+width:100px;
+}
+</style>
+</head>
+<body style="overflow: hidden;">
+    <div class="slidebox-slider">
+        <ul>
+            <li><i class="fa fa-reorder"></i></li>
+        </ul>
+    </div>
+    <div class="slidebox">
+        <ul>
+        </ul>
+    </div>
+<script>
+var w = $(document).width();
+var h = $(document).height()-50;
+    loadDesktop=function() {
+		var col = Math.round(w / 190);
+		var row = Math.round(h / 138);
+		var _page = col*row;
+		if ($(".slidebox").length > 0) {
+			var u = top.authorizeMenuData, o = ["2e99d4", "fe8977 ", "9dd6d7  ", "b5adab",
+					"8ebdd4", "edd46e", "64cfa7", "FFA300", "708FE3",
+					"D972E3", "56BD4E", "1ABC9C", "2e99d4"];
+			var r;//随机颜色
+			for(var i=0;i<u.length;i++){
+				var menu = u[i], t = "";
+				if(menu.target=='iframe'){
+					r = Math.round(Math.random() * 9 + 1);
+					t += '<li class="menuItem" data-id="'+ menu.moduleid+ '" href="'+ menu.urladdress + '">', 
+					t += '    <div class="icon" style="background: #'+ o[r] + ';">',
+					t += '        <span class="num">0</span><i class="fa '+ menu.icon + '"><\/i>', 
+					t += "     <\/div>", 
+					t += '     <div class="icon-text">', 
+					t += "         <span>"+ menu.fullname + "<\/a>", 
+					t += "     <\/div>",
+					t += "<\/li>"
+					r++;
+					$(".slidebox ul").append(t);
+				}
+			}
+			var ul = $(".slidebox > ul");
+			ul.children("li").each(function(n, t) {
+				if(n % _page == 0 && n>0){
+					ul.after("<ul>");
+					$(".slidebox-slider ul").prepend('<li><i class="fa fa-circle"><\/i><\/li>');
+				}
+				$(".slidebox > ul").last().append(t);
+			})
+			$(".slidebox-slider ul").prepend('<li><i class="fa fa-circle"><\/i><\/li>');
+			$(".slidebox-slider ul li:first").addClass("active");
+			$(".slidebox-slider ul li").click(function() {
+				$(".slidebox-slider ul li").removeClass("active");
+				$(this).addClass("active");
+				var t = $(this).index();
+				$(".slidebox").animate({left : -$(".slidebox>ul").width() * t}, 1e3)
+			});
+			$(".slidebox>ul").width($(".slidebox").width());
+			$(".slidebox").width($(".slidebox").width() * $(".slidebox>ul").length)
+		}
+	}
+openWin=function(){
+	var id = $(this).attr("data-id");
+	var url = $(this).attr("href"),_schemename = $.trim($(this).text().replace(/[0-9]/g,''));
+    top.dialogOpen({
+        id: "__win_"+id,
+        title: '【' + _schemename + '】',
+        url: url,
+        width: "1100px",
+        height: "700px",
+        btn: null,
+        callBack: function (iframeId) {
+        }
+    });
+}
+        $(function () {
+        	loadDesktop();
+        	$(".num").hide();
+            //$(".menuItem").on("click", top.$.learuntab.addTab);
+            $(".menuItem").on("click", openWin);//修改成弹窗
+            $(".slidebox-slider ul").css('left', ($(window).width() - $(".slidebox-slider ul").width()) / 2);
+            window.setTimeout(function () {
+            	poll();
+            }, 1000);
+            
+        });
+        function poll(){
+        	$.ajax({dataType:"json",url:"poll?t="+Math.random(),timeout:90000,
+        	success:function(re){
+        		var data = re.msg;
+            	if(data.mzcp && data.mzcp>0){//民主测评,待处理事件行
+            		var obj = $(".slidebox .menuItem[href='/mzcp/cprwIndex']");
+            		$(".num",obj).text(data.mzcp).show();
+            	 }else{
+            		var obj = $(".slidebox .menuItem[href='/mzcp/cprwIndex']");
+             		$(".num",obj).hide();
+            	 }
+            	if(data.xuexi && data.xuexi>0){//学习,待处理事件行
+            		var obj = $(".slidebox .menuItem[href='/gr/xuexi/glindex']");
+            		$(".num",obj).text(data.xuexi).show();
+            	 }else{
+            		var obj = $(".slidebox .menuItem[href='/gr/xuexi/glindex']");
+             		$(".num",obj).hide();
+            	 }
+            	if(data.sbsp && data.sbsp>0){//申报审批,待处理事件行
+            		var obj = $(".slidebox .menuItem[href='/jf/jfsb/spindex']");
+            		$(".num",obj).text(data.sbsp).show();
+            	 }else{
+            		var obj = $(".slidebox .menuItem[href='/jf/jfsb/spindex']");
+             		$(".num",obj).hide();
+            	 }
+            	if(data.sssp && data.sssp>0){//申诉审批,待处理事件行
+            		var obj = $(".slidebox .menuItem[href='/jf/jfss/spindex']");
+            		$(".num",obj).text(data.sssp).show();
+            	 }else{
+            		var obj = $(".slidebox .menuItem[href='/jf/jfss/spindex']");
+             		$(".num",obj).hide();
+            	 }
+            	if(data.qjsp && data.qjsp>0){//请假审批,待处理事件行
+            		var obj = $(".slidebox .menuItem[href='/gr/qingjia/spindex']");
+            		$(".num",obj).text(data.qjsp).show();
+            	 }else{
+            		var obj = $(".slidebox .menuItem[href='/gr/qingjia/spindex']");
+             		$(".num",obj).hide();
+            	 }
+            	if(data.ks && data.ks>0){//考试,待处理事件行
+            		var obj = $(".slidebox .menuItem[href='/gr/kaoshi/rwgl']");
+            		$(".num",obj).text(data.ks).show();
+            	 }else{
+            		var obj = $(".slidebox .menuItem[href='/gr/kaoshi/rwgl']");
+             		$(".num",obj).hide();
+            	 }
+            	
+              refresh();
+            },
+         	error:function(XMLHttpRequest,textStatus,errorThrown){window.location.href="${ctx.contextPath}/logout";}
+        });}
+        refresh = function(sleep) {var sleep = sleep?sleep:90000;setTimeout('poll()', sleep);}
+    </script>
+</body>
+</html>

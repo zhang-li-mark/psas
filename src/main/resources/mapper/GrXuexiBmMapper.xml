@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.GrXuexiBmMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.GrXuexiBm">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="xxid" jdbcType="INTEGER" property="xxid" />
+    <result column="bmbh" jdbcType="VARCHAR" property="bmbh" />
+    <result column="dxxrs" jdbcType="INTEGER" property="dxxrs" />
+    <result column="wcrs" jdbcType="INTEGER" property="wcrs" />
+    <result column="tjsj" jdbcType="TIMESTAMP" property="tjsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, xxid, bmbh, dxxrs, wcrs, tjsj
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gr_xuexi_bm
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from gr_xuexi_bm
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.GrXuexiBm">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_xuexi_bm (xxid, bmbh, dxxrs, 
+      wcrs, tjsj)
+    values (#{xxid,jdbcType=INTEGER}, #{bmbh,jdbcType=VARCHAR}, #{dxxrs,jdbcType=INTEGER}, 
+      #{wcrs,jdbcType=INTEGER}, #{tjsj,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.GrXuexiBm">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_xuexi_bm
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="xxid != null">
+        xxid,
+      </if>
+      <if test="bmbh != null">
+        bmbh,
+      </if>
+      <if test="dxxrs != null">
+        dxxrs,
+      </if>
+      <if test="wcrs != null">
+        wcrs,
+      </if>
+      <if test="tjsj != null">
+        tjsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="xxid != null">
+        #{xxid,jdbcType=INTEGER},
+      </if>
+      <if test="bmbh != null">
+        #{bmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="dxxrs != null">
+        #{dxxrs,jdbcType=INTEGER},
+      </if>
+      <if test="wcrs != null">
+        #{wcrs,jdbcType=INTEGER},
+      </if>
+      <if test="tjsj != null">
+        #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.GrXuexiBm">
+    update gr_xuexi_bm
+    <set>
+      <if test="xxid != null">
+        xxid = #{xxid,jdbcType=INTEGER},
+      </if>
+      <if test="bmbh != null">
+        bmbh = #{bmbh,jdbcType=VARCHAR},
+      </if>
+      <if test="dxxrs != null">
+        dxxrs = #{dxxrs,jdbcType=INTEGER},
+      </if>
+      <if test="wcrs != null">
+        wcrs = #{wcrs,jdbcType=INTEGER},
+      </if>
+      <if test="tjsj != null">
+        tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.GrXuexiBm">
+    update gr_xuexi_bm
+    set xxid = #{xxid,jdbcType=INTEGER},
+      bmbh = #{bmbh,jdbcType=VARCHAR},
+      dxxrs = #{dxxrs,jdbcType=INTEGER},
+      wcrs = #{wcrs,jdbcType=INTEGER},
+      tjsj = #{tjsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getUsersByDeptID" parameterType="java.lang.String" resultType="com.power.xuexi.entity.UserVO">
+    SELECT userid as uid,realname as uname FROM sys_user 
+	where departmentid = #{deptId,jdbcType=VARCHAR}
+  </select>
+  <!-- 根据学习主键删除学习任务部门关系表记录 -->
+   <delete id="deleteXxBmByXXID" parameterType="java.lang.Integer">
+    delete from gr_xuexi_bm
+    where xxid = #{xxid,jdbcType=INTEGER}
+  </delete>
+    <!-- 根据学习主键删除学习任务部门关系表记录 -->
+   <delete id="deleteXxRyByXXID" parameterType="java.lang.Integer">
+    delete from gr_xuexi_ry
+    where xxid = #{xxid,jdbcType=INTEGER}
+  </delete>
+</mapper>

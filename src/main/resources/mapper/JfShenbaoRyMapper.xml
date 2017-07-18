@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfShenbaoRyMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfShenbaoRy">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sbid" jdbcType="INTEGER" property="sbid" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="fz" jdbcType="DECIMAL" property="fz" />
+    <result column="uname" jdbcType="VARCHAR" property="uname" />
+    <result column="tjsj" jdbcType="TIMESTAMP" property="tjsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sbid, userid, fz, uname, tjsj
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_shenbao_ry
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jf_shenbao_ry
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfShenbaoRy">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shenbao_ry (sbid, userid, fz, 
+      uname, tjsj)
+    values (#{sbid,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{fz,jdbcType=DECIMAL}, 
+      #{uname,jdbcType=VARCHAR}, #{tjsj,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfShenbaoRy">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_shenbao_ry
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sbid != null">
+        sbid,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="uname != null">
+        uname,
+      </if>
+      <if test="tjsj != null">
+        tjsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sbid != null">
+        #{sbid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="uname != null">
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="tjsj != null">
+        #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfShenbaoRy">
+    update jf_shenbao_ry
+    <set>
+      <if test="sbid != null">
+        sbid = #{sbid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="uname != null">
+        uname = #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="tjsj != null">
+        tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfShenbaoRy">
+    update jf_shenbao_ry
+    set sbid = #{sbid,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=VARCHAR},
+      fz = #{fz,jdbcType=DECIMAL},
+      uname = #{uname,jdbcType=VARCHAR},
+      tjsj = #{tjsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="getSbRyBySbID" parameterType="java.lang.Integer" resultType="com.power.jfsb.entity.SbRyVO">
+     select 
+    id,ry.userid as pjrxh, fz, tjsj,u.realname as pjrmc,d.departmentid as deptId,di.dictid as zw
+    from jf_shenbao_ry ry left join sys_user u on u.userid = ry.userid
+	LEFT JOIN sys_department d on u.departmentid = d.departmentid
+	LEFT JOIN sys_dict di on di.dictid = u.dutyid
+    where sbid = #{sbid,jdbcType=INTEGER}
+  </select>
+  
+   <delete id="deleteBySbid" parameterType="java.lang.Integer">
+    delete from jf_shenbao_ry
+    where sbid = #{sbid,jdbcType=INTEGER}
+  </delete>
+  <select id="getSbSjByUserID" parameterType="java.lang.String" resultType="com.power.jfss.entity.JfSelectSjVO">
+   select ry.sbid,ry.fz,sb.sjmc,sb.sjms,sb.sbrid,sb.sbsj,u.realname as uname,d.fullname as deptname,
+	di.fullname as zw,sb.status ,ry.userid ,sb.fz as zongfen
+	from jf_shenbao_ry  ry
+	LEFT JOIN jf_shenbao sb on ry.sbid = sb.id
+	LEFT JOIN sys_user u on u.userid = sb.sbrid
+	LEFT JOIN sys_department d on u.departmentid = d.departmentid
+	LEFT JOIN sys_dict di on di.dictid = u.dutyid
+	where sb.status in('3','4') and ry.userid = #{userid}
+	<if test="sjmc != null">
+      	and sb.sjmc  like concat('%',#{sjmc},'%')
+    </if>
+    <if test="sbname != null">
+      	and  u.realname  like concat('%',#{sbname},'%')
+    </if>
+  </select>
+   <select id="getUserJfSbTotal" parameterType="java.lang.String" resultType="com.power.jfss.entity.JfTotal">
+	select  ry.userid,SUM(ry.fz) as zongfen from jf_shenbao_ry ry
+	LEFT JOIN jf_shenbao sb on ry.sbid = sb.id
+	where sb.status = 3 and userid = #{userid}
+	<if test="kssj!=null and jssj==null">and substring(tjsj,1,length(#{kssj}))&gt;=#{kssj}</if>
+	<if test="jssj!=null and kssj==null">and substring(tjsj,1,length(#{jssj}))&lt;=#{jssj}</if>
+    <if test="kssj!=null and jssj!=null">and substring(tjsj,1,length(#{kssj})) between #{kssj} and #{jssj}</if>
+  </select>
+   <select id="getUserJfSbList" parameterType="map" resultType="com.power.jfsb.entity.JFSbTotalList">
+	SELECT u.realname as uname,sb.sjmc,ry.tjsj as sqsj,sp.spsj,ry.fz,xm.jflx  from jf_shenbao_ry  ry
+	left join jf_shenbao sb ON ry.sbid = sb.id
+	LEFT JOIN sys_user u on u.userid = ry.userid
+	LEFT JOIN jf_shenbao_xm xm on sb.jflxid= xm.id
+	LEFT JOIN jf_shenbao_sp sp on sp.id = sb.spjlid
+	where sb.status = 3 and ry.userid = #{userid} and ry.fz != 0
+	<if test="jflx!=null"> and xm.jflx like concat('%', #{jflx},'%') </if>
+	<if test="kssj!=null and jssj==null">and substring(ry.tjsj,1,length(#{kssj}))&gt;=#{kssj}</if>
+	<if test="jssj!=null and kssj==null">and substring(ry.tjsj,1,length(#{jssj}))&lt;=#{jssj}</if>
+    <if test="kssj!=null and jssj!=null">and substring(ry.tjsj,1,length(#{kssj})) between #{kssj} and #{jssj}</if>
+    ORDER BY ry.tjsj 
+  </select>
+  
+  <select id="getSbNewsInfo" parameterType="java.lang.Integer" resultType="com.power.jfsb.entity.JbNewsVO">
+	select ry.fz,u.realname as ryname,u2.realname as sbrname ,sb.fz as zongfen,d.fullname as deptname,d.departmentid as deptid
+	from jf_shenbao_ry ry
+	left JOIN jf_shenbao sb on ry.sbid = sb.id
+	left join sys_user u on u.userid = ry.userid
+	left join sys_user u2 on u2.userid = sb.sbrid
+	left JOIN sys_department d on u.departmentid = d.departmentid
+	where sb.id = #{sbid,jdbcType=INTEGER}
+  </select>
+  <select id="getSbList" parameterType="java.lang.String" resultType="com.power.jfsb.entity.JfSbListVO">
+	SELECT ry.id,ry.sbid,ry.fz,ry.tjsj,sb.sbrid,sb.sjmc,sb.fz as zf,xm.jfxmc,u.realname as uname,u2.realname as sbname,xm.jflx
+	from jf_shenbao_ry ry
+	LEFT JOIN jf_shenbao sb on ry.sbid = sb.id
+	LEFT JOIN jf_shenbao_xm xm on sb.jflxid = xm.id
+	LEFT JOIN sys_user u on u.userid = ry.userid
+	LEFT JOIN sys_user u2 on  u2.userid =  sb.sbrid
+	where sb.status = 3  and ry.fz != 0 and xm.jflx=#{jflx}
+	and ry.userid = #{userid}
+  </select>
+</mapper>

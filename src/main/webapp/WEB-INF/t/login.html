@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>平顶山市公安局人才积分培养管理系统-登录</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/ui/index/css/login.css" rel="stylesheet" />
+</head>
+<body>
+<div class="login-bg"></div>
+<div class="login-box">
+  <div class="login-content">
+    <div class="login-title">平顶山市公安局人才积分培养管理系统</div>
+    <div class="login-body">
+      <div class="login-logo"><img src="${ctx.contextPath}/res/ui/index/login-img/logo.png"></div>
+      <div class="login-form">
+        <form>
+          <ul>
+            <li>
+              <input id="username" placeholder="账户或手机号" class="text" type="text">
+              <span id="login_name"></span> </li>
+            <li>
+              <input id="password" placeholder="请输入密码" class="text" type="password">
+              <span id="login_password"></span> </li>
+            <li style="margin-bottom:0;"> <a id="btnlogin" class="btn current">登&nbsp;&nbsp;录</a>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <script src="${ctx.contextPath}/res/layui/lay/modules/layer.js"></script>
+    <script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+    <script src="${ctx.contextPath}/res/jquery/validator.js"></script>
+    <script>
+    var isIE = function(ver){
+        var b = document.createElement('b')
+        b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
+        return b.getElementsByTagName('i').length === 1;
+    }
+        if (isIE(6)||isIE(7)||isIE(8)||isIE(9)) {
+            window.location.href = "/res/error/no_support.html";
+        }
+        if(window.self != window.top){window.top.location=window.self.location;}
+        //回车键
+        document.onkeydown = function (e) {
+            if (!e) e = window.event;
+            if ((e.keyCode || e.which) == 13) {
+                var btlogin = document.getElementById("btnlogin");
+                btnlogin.click();
+            }
+        }
+        //初始化
+        $(function () {
+            $("#username").focus();
+            $("#btnlogin").click(function () {
+                var $username = $("#username");
+                var $password = $("#password");
+                if ($username.val() == "") {
+                    $username.focus();
+                    dialogAlert('请输入账户或手机号。', 0);
+                    formMessage();
+                    return false;
+                } else if ($password.val() == "") {
+                    $password.focus();
+                    dialogAlert('请输入密码。', 0);
+                    return false;
+                } else {
+                    CheckLogin(0);
+                }
+            })
+        })
+        //登录验证
+        function CheckLogin(rememberMe) {
+            $("#btnlogin").removeClass('current').attr('disabled', 'disabled');
+
+            var username = $.trim($("#username").val());
+            var password = $.trim($("#password").val());
+            $.ajax({
+                url: "/login",
+                data: { username: $.trim(username), password: $.trim(password), rememberMe: rememberMe },
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        window.location.href = data.msg;
+                    } else {
+                    	dialogAlert(data.msg, 0);
+                        $("#btnlogin").addClass('current').removeAttr('disabled');
+                    }
+                }
+            });
+        }
+    </script>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>添加学习任务</title>
+<link href="${ctx.contextPath}/res/fonts/font-awesome.min.css"
+	rel="stylesheet">
+<script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+<link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css"
+	rel="stylesheet" />
+<script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+<link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css"
+	rel="stylesheet" />
+<link href="${ctx.contextPath}/res/bootstrap/bootstrap.extension.css"
+	rel="stylesheet" />
+<script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet" />
+<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+<script src="${ctx.contextPath}/res/datepicker/WdatePicker.js"></script>
+<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+</head>
+<body>
+	<form id="form1">
+		<div style="margin-left: 10px; margin-right: 10px;">
+			<div class="tab-content" style="padding-top: 10px;">
+				<input id="id" name="id" type="hidden" value="" /> <input id="dws"
+					name="dws" type="hidden" value="" />
+				<table class="form">
+					<tr>
+						<th class="formTitle">题目标题<font face="宋体">*</font>
+						</th>
+						<td class="formValue" colspan="3"><input id="bt" type="text"
+							class="form-control" placeholder="请输入题目名称" isvalid="yes"
+							checkexpession="NotNull" /></td>
+					</tr>
+					<tr>
+						<th class="formTitle">题目类型<font face="宋体">*</font></th>
+						<td class="formValue"><select id="tmlx" style="width:100px;">
+								<option value="1">单选</option>
+								<option value="2">多选</option>
+								<option value="3">判断</option>
+						</select></td>
+						<th class="formTitle">考题分值<font face="宋体">*</font></th>
+						<td class="formValue"><input id="tmfs" type="text"
+							class="form-control" placeholder="请输入题目分数" isvalid="yes"
+							checkexpession="NotNull" /></td>
+					</tr>
+				 <tr>
+            		<td class="formTitle">题目选项<font face="宋体">*</font></td>
+            		<td class="formValue" colspan="3">
+                  		<textarea id="xx"
+								class="form-control" placeholder="请输入题目选项，多个题目以#隔开" rows="5" isvalid="yes"
+							checkexpession="NotNull"></textarea>
+            		</td>
+            
+       			 </tr>
+       			<tr>
+            		<td class="formTitle">正确答案<font face="宋体">*</font></td>
+            		<td class="formValue" colspan="3">
+                  		<textarea id="zqda"
+								class="form-control" placeholder="请输入正确答案，多个答案以,隔开" rows="5" isvalid="yes"
+							checkexpession="NotNull"></textarea>
+            		</td>
+            
+       			 </tr>
+					<tr>
+						<th class="formTitle">答案解析</th>
+						<td class="formValue" colspan="3"><textarea id="dajx"
+								class="form-control" rows="5"></textarea></td>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</form>
+	<script>
+		var keyValue = request('keyValue');
+		$(function() {
+			initControl();
+			$("#tmfs").checkNum({integerLength: 5,decimalLength:2});
+		})
+		//初始化控件
+		function initControl() {
+			//获取表单
+			if (!!keyValue) {
+				$.SetForm({
+					url : "${ctx.contextPath}/gr/kaoshi/getkstmByID",
+					param : {
+						keyValue : keyValue
+					},
+					success : function(data) {
+						$("#form1").SetWebControls(data);
+					}
+				});
+			}
+		}
+		//保存表单
+		function AcceptClick() {
+			if (!$('#form1').Validform()) {
+				return false;
+			}
+			var postData = $("#form1").GetWebControls(keyValue);
+			$.SaveForm({
+				url : "${ctx.contextPath}/gr/kaoshi/saveTmForm",
+				param : postData,
+				loading : "正在保存数据...",
+				success : function(data) {
+					//top.__kstmfForm..$("#gridTable2").trigger("reloadGrid");
+					$.currentIframe().$("#gridTable2").trigger("reloadGrid");
+				}
+			});
+		}
+
+	</script>
+</body>
+</html>

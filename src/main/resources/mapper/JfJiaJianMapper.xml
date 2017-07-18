@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfJiaJianMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfJiaJian">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="dyrid" jdbcType="VARCHAR" property="dyrid" />
+    <result column="sjid" jdbcType="INTEGER" property="sjid" />
+    <result column="fz" jdbcType="DECIMAL" property="fz" />
+    <result column="yy" jdbcType="VARCHAR" property="yy" />
+    <result column="sqrid" jdbcType="VARCHAR" property="sqrid" />
+    <result column="sqsj" jdbcType="TIMESTAMP" property="sqsj" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="shrid" jdbcType="INTEGER" property="shrid" />
+    <result column="shzt" jdbcType="VARCHAR" property="shzt" />
+    <result column="shsj" jdbcType="VARCHAR" property="shsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, dyrid, sjid, fz, yy, sqrid, sqsj, status, shrid, shzt, shsj
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_jiajian
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jf_jiajian
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfJiaJian">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_jiajian (type, dyrid, sjid, 
+      fz, yy, sqrid, sqsj, 
+      status, shrid, shzt, 
+      shsj)
+    values (#{type,jdbcType=VARCHAR}, #{dyrid,jdbcType=VARCHAR}, #{sjid,jdbcType=INTEGER}, 
+      #{fz,jdbcType=DECIMAL}, #{yy,jdbcType=VARCHAR}, #{sqrid,jdbcType=VARCHAR}, #{sqsj,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR}, #{shrid,jdbcType=INTEGER}, #{shzt,jdbcType=VARCHAR}, 
+      #{shsj,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfJiaJian">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jf_jiajian
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        type,
+      </if>
+      <if test="dyrid != null">
+        dyrid,
+      </if>
+      <if test="sjid != null">
+        sjid,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+      <if test="yy != null">
+        yy,
+      </if>
+      <if test="sqrid != null">
+        sqrid,
+      </if>
+      <if test="sqsj != null">
+        sqsj,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="shrid != null">
+        shrid,
+      </if>
+      <if test="shzt != null">
+        shzt,
+      </if>
+      <if test="shsj != null">
+        shsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="dyrid != null">
+        #{dyrid,jdbcType=VARCHAR},
+      </if>
+      <if test="sjid != null">
+        #{sjid,jdbcType=INTEGER},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="yy != null">
+        #{yy,jdbcType=VARCHAR},
+      </if>
+      <if test="sqrid != null">
+        #{sqrid,jdbcType=VARCHAR},
+      </if>
+      <if test="sqsj != null">
+        #{sqsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="shrid != null">
+        #{shrid,jdbcType=INTEGER},
+      </if>
+      <if test="shzt != null">
+        #{shzt,jdbcType=VARCHAR},
+      </if>
+      <if test="shsj != null">
+        #{shsj,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfJiaJian">
+    update jf_jiajian
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="dyrid != null">
+        dyrid = #{dyrid,jdbcType=VARCHAR},
+      </if>
+      <if test="sjid != null">
+        sjid = #{sjid,jdbcType=INTEGER},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=DECIMAL},
+      </if>
+      <if test="yy != null">
+        yy = #{yy,jdbcType=VARCHAR},
+      </if>
+      <if test="sqrid != null">
+        sqrid = #{sqrid,jdbcType=VARCHAR},
+      </if>
+      <if test="sqsj != null">
+        sqsj = #{sqsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="shrid != null">
+        shrid = #{shrid,jdbcType=INTEGER},
+      </if>
+      <if test="shzt != null">
+        shzt = #{shzt,jdbcType=VARCHAR},
+      </if>
+      <if test="shsj != null">
+        shsj = #{shsj,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfJiaJian">
+    update jf_jiajian
+    set type = #{type,jdbcType=VARCHAR},
+      dyrid = #{dyrid,jdbcType=VARCHAR},
+      sjid = #{sjid,jdbcType=INTEGER},
+      fz = #{fz,jdbcType=DECIMAL},
+      yy = #{yy,jdbcType=VARCHAR},
+      sqrid = #{sqrid,jdbcType=VARCHAR},
+      sqsj = #{sqsj,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      shrid = #{shrid,jdbcType=INTEGER},
+      shzt = #{shzt,jdbcType=VARCHAR},
+      shsj = #{shsj,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

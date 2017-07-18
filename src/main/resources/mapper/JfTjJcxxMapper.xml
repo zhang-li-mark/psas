@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.JfTjJcxxMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.JfTjJcxx">
+    <id column="ryxh" jdbcType="VARCHAR" property="ryxh" />
+    <result column="xljf" jdbcType="DECIMAL" property="xljf" />
+    <result column="zwjf" jdbcType="DECIMAL" property="zwjf" />
+    <result column="zzmmjf" jdbcType="DECIMAL" property="zzmmjf" />
+    <result column="zsjf" jdbcType="DECIMAL" property="zsjf" />
+    <result column="gljf" jdbcType="DECIMAL" property="gljf" />
+    <result column="zwljjf" jdbcType="DECIMAL" property="zwljjf" />
+    <result column="jfhj" jdbcType="DECIMAL" property="jfhj" />
+    <result column="gxsj" jdbcType="TIMESTAMP" property="gxsj" />
+    <result column="zsjfs" jdbcType="VARCHAR" property="zsjfs" />
+    <result column="bzjf" jdbcType="DECIMAL" property="bzjf" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ryxh, xljf, zwjf, zzmmjf, zsjf, gljf, zwljjf, jfhj, gxsj, zsjfs, bzjf
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jf_tj_jcxx
+    where ryxh = #{ryxh,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from jf_tj_jcxx
+    where ryxh = #{ryxh,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.JfTjJcxx">
+    insert into jf_tj_jcxx (ryxh, xljf, zwjf, 
+      zzmmjf, zsjf, gljf, 
+      zwljjf, jfhj, gxsj, 
+      zsjfs, bzjf)
+    values (#{ryxh,jdbcType=VARCHAR}, #{xljf,jdbcType=DECIMAL}, #{zwjf,jdbcType=DECIMAL}, 
+      #{zzmmjf,jdbcType=DECIMAL}, #{zsjf,jdbcType=DECIMAL}, #{gljf,jdbcType=DECIMAL}, 
+      #{zwljjf,jdbcType=DECIMAL}, #{jfhj,jdbcType=DECIMAL}, #{gxsj,jdbcType=TIMESTAMP}, 
+      #{zsjfs,jdbcType=VARCHAR}, #{bzjf,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.JfTjJcxx">
+    insert into jf_tj_jcxx
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ryxh != null">
+        ryxh,
+      </if>
+      <if test="xljf != null">
+        xljf,
+      </if>
+      <if test="zwjf != null">
+        zwjf,
+      </if>
+      <if test="zzmmjf != null">
+        zzmmjf,
+      </if>
+      <if test="zsjf != null">
+        zsjf,
+      </if>
+      <if test="gljf != null">
+        gljf,
+      </if>
+      <if test="zwljjf != null">
+        zwljjf,
+      </if>
+      <if test="jfhj != null">
+        jfhj,
+      </if>
+      <if test="gxsj != null">
+        gxsj,
+      </if>
+      <if test="zsjfs != null">
+        zsjfs,
+      </if>
+      <if test="bzjf != null">
+        bzjf,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ryxh != null">
+        #{ryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="xljf != null">
+        #{xljf,jdbcType=DECIMAL},
+      </if>
+      <if test="zwjf != null">
+        #{zwjf,jdbcType=DECIMAL},
+      </if>
+      <if test="zzmmjf != null">
+        #{zzmmjf,jdbcType=DECIMAL},
+      </if>
+      <if test="zsjf != null">
+        #{zsjf,jdbcType=DECIMAL},
+      </if>
+      <if test="gljf != null">
+        #{gljf,jdbcType=DECIMAL},
+      </if>
+      <if test="zwljjf != null">
+        #{zwljjf,jdbcType=DECIMAL},
+      </if>
+      <if test="jfhj != null">
+        #{jfhj,jdbcType=DECIMAL},
+      </if>
+      <if test="gxsj != null">
+        #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zsjfs != null">
+        #{zsjfs,jdbcType=VARCHAR},
+      </if>
+      <if test="bzjf != null">
+        #{bzjf,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.JfTjJcxx">
+    update jf_tj_jcxx
+    <set>
+      <if test="xljf != null">
+        xljf = #{xljf,jdbcType=DECIMAL},
+      </if>
+      <if test="zwjf != null">
+        zwjf = #{zwjf,jdbcType=DECIMAL},
+      </if>
+      <if test="zzmmjf != null">
+        zzmmjf = #{zzmmjf,jdbcType=DECIMAL},
+      </if>
+      <if test="zsjf != null">
+        zsjf = #{zsjf,jdbcType=DECIMAL},
+      </if>
+      <if test="gljf != null">
+        gljf = #{gljf,jdbcType=DECIMAL},
+      </if>
+      <if test="zwljjf != null">
+        zwljjf = #{zwljjf,jdbcType=DECIMAL},
+      </if>
+      <if test="jfhj != null">
+        jfhj = #{jfhj,jdbcType=DECIMAL},
+      </if>
+      <if test="gxsj != null">
+        gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zsjfs != null">
+        zsjfs = #{zsjfs,jdbcType=VARCHAR},
+      </if>
+      <if test="bzjf != null">
+        bzjf = #{bzjf,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ryxh = #{ryxh,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.JfTjJcxx">
+    update jf_tj_jcxx
+    set xljf = #{xljf,jdbcType=DECIMAL},
+      zwjf = #{zwjf,jdbcType=DECIMAL},
+      zzmmjf = #{zzmmjf,jdbcType=DECIMAL},
+      zsjf = #{zsjf,jdbcType=DECIMAL},
+      gljf = #{gljf,jdbcType=DECIMAL},
+      zwljjf = #{zwljjf,jdbcType=DECIMAL},
+      jfhj = #{jfhj,jdbcType=DECIMAL},
+      gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      zsjfs = #{zsjfs,jdbcType=VARCHAR},
+      bzjf = #{bzjf,jdbcType=DECIMAL}
+    where ryxh = #{ryxh,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 计算基础信息积分积分 -->
+  <select id="sp_tj_jcxxjf" parameterType="string" statementType="CALLABLE">
+  	{call sp_tj_jcxxjf(#{value,mode=IN,jdbcType=VARCHAR})}
+  </select>
+  
+  <!-- getJfJcxxMx -->
+  <select id="getJfJcxxMx" parameterType="string" resultType="com.power.jfgl.entity.JfJcxxMxVO">
+  SELECT jf.*,u.email xl,u.dutyid zw,u.postid zzmm,u.question zsmc,u.answerquestion zs FROM jf_tj_jcxx jf,sys_user u
+	WHERE jf.ryxh = u.userid
+	and jf.ryxh = #{value}
+  </select>
+  <!-- 计算 积分申报审批通过后   (积分申报序号) -->
+  <select id="sp_tj_jfsb" parameterType="map" statementType="CALLABLE">
+  	{call sp_tj_jfsb(#{sbid,mode=IN},#{sblx,mode=IN},#{ssid,mode=IN})}
+  </select>
+  <!-- 计算 请假/学习/考试   (主键/积分类型) -->
+  <select id="sp_tj_qjxxks" parameterType="map" statementType="CALLABLE">
+  	{call sp_tj_qjxxks(#{id,mode=IN},#{jflx,mode=IN})}
+  </select>
+  
+</mapper>

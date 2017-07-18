@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>添加积分项</title>
+    <!--框架必需start-->
+     <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/wizard/wizard.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/wizard/wizard.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	
+
+</head>
+<body>
+    <form id="form1" >
+
+<link href="${ctx.contextPath}/res/simditor/simditor.css" rel="stylesheet" />
+<script src="${ctx.contextPath}/res/ui/module.js"></script>
+<script src="${ctx.contextPath}/res/ui/uploader.js"></script>
+<script src="${ctx.contextPath}/res/ui/hotkeys.js"></script>
+<script src="${ctx.contextPath}/res/simditor/simditor.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var category = request('category');
+    var editor = null;
+    $(function () {
+      
+        initControl();
+    })
+    //初始化控件
+    function initControl() {
+        //栏目
+        $("#gwid").ComboBox({
+        	param: {},
+        	url: "${ctx.contextPath}/pz/gzjfpz/gwTree",
+            description: "==请选择==",
+            id: "id",
+            text: "text",
+            height: "230px"
+        });
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "${ctx.contextPath}/pz/gzjfpz/getFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    $("#tjsj").val(formatDate(new Date(data.tjsj),"yyyy-MM-dd hh:mm"));
+                }
+            });
+        } else {
+            $("#gwid").ComboBoxTreeSetValue(category);
+        }
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = {
+        	id: keyValue,
+        	jfxmc: $("#jfxmc").val(),
+            gwid: $("#gwid").attr('data-value'),
+            jfxms: $("#jfxms").val(),
+            jflx: $("#jflx").val(),
+            jfjb: $("#jfjb").val()
+        }
+        $.SaveForm({
+            url: "${ctx.contextPath}/pz/gzjfpz/saveForm",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form" style="table-layout: auto;">
+        <tr>
+            <td class="formTitle">标题<font face="宋体">*</font></td>
+            <td class="formValue" colspan="3">
+                <input id="jfxmc" type="text" class="form-control" placeholder="请输入积分项名称" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">岗位<font face="宋体">*</font></td>
+            <td class="formValue">
+                <div id="gwid" type="select" class="ui-select"></div>
+            </td>
+            <td class="formTitle">积分类型<font face="宋体">*</font></td>
+            <td class="formValue">
+                <select id="jflx" >
+                    <option value="">--请选择--</option>
+                	<option value="业务积分">业务积分</option>
+                	<option value="管理积分">管理积分</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+        <td class="formTitle">积分级别<font face="宋体">*</font></td>
+            <td class="formValue">
+                <select id="jfjb" >
+                    <option value="">--请选择--</option>
+                	<option value="一级">一级</option>
+                	<option value="二级">二级</option>
+                	<option value="三级">三级</option>
+                </select>
+            </td>
+        </tr>
+       
+        <tr>
+            <th class="formTitle" valign="top" style="padding-top: 4px;">描述</th>
+            <td class="formValue" colspan="3">
+                <textarea id="jfxms" placeholder="请输入积分项描述" class="form-control" rows="5" style="height:260px;"></textarea>
+            </td>
+        </tr>
+    </table>
+</div>
+
+       
+    </form>
+</body>
+</html>

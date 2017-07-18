@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.GrXuexiRyMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.GrXuexiRy">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="xxid" jdbcType="INTEGER" property="xxid" />
+    <result column="xxrid" jdbcType="VARCHAR" property="xxrid" />
+    <result column="xxbmid" jdbcType="INTEGER" property="xxbmid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="tjsj" jdbcType="TIMESTAMP" property="tjsj" />
+    <result column="gxsj" jdbcType="TIMESTAMP" property="gxsj" />
+    <result column="fz" jdbcType="DECIMAL" property="fz" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, xxid, xxrid, xxbmid, status, tjsj, gxsj, fz
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gr_xuexi_ry
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from gr_xuexi_ry
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.GrXuexiRy">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_xuexi_ry (xxid, xxrid, xxbmid, 
+      status, tjsj, gxsj, 
+      fz)
+    values (#{xxid,jdbcType=INTEGER}, #{xxrid,jdbcType=VARCHAR}, #{xxbmid,jdbcType=INTEGER}, 
+      #{status,jdbcType=VARCHAR}, #{tjsj,jdbcType=TIMESTAMP}, #{gxsj,jdbcType=TIMESTAMP}, 
+      #{fz,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.GrXuexiRy">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_xuexi_ry
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="xxid != null">
+        xxid,
+      </if>
+      <if test="xxrid != null">
+        xxrid,
+      </if>
+      <if test="xxbmid != null">
+        xxbmid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="tjsj != null">
+        tjsj,
+      </if>
+      <if test="gxsj != null">
+        gxsj,
+      </if>
+      <if test="fz != null">
+        fz,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="xxid != null">
+        #{xxid,jdbcType=INTEGER},
+      </if>
+      <if test="xxrid != null">
+        #{xxrid,jdbcType=VARCHAR},
+      </if>
+      <if test="xxbmid != null">
+        #{xxbmid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tjsj != null">
+        #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gxsj != null">
+        #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fz != null">
+        #{fz,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.GrXuexiRy">
+    update gr_xuexi_ry
+    <set>
+      <if test="xxid != null">
+        xxid = #{xxid,jdbcType=INTEGER},
+      </if>
+      <if test="xxrid != null">
+        xxrid = #{xxrid,jdbcType=VARCHAR},
+      </if>
+      <if test="xxbmid != null">
+        xxbmid = #{xxbmid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tjsj != null">
+        tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gxsj != null">
+        gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fz != null">
+        fz = #{fz,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.GrXuexiRy">
+    update gr_xuexi_ry
+    set xxid = #{xxid,jdbcType=INTEGER},
+      xxrid = #{xxrid,jdbcType=VARCHAR},
+      xxbmid = #{xxbmid,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
+      tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      gxsj = #{gxsj,jdbcType=TIMESTAMP},
+      fz = #{fz,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 根据学习表xxid 修改对应的分值 -->
+  <update id="updateFzByXXID" parameterType="com.power.common.entity.GrXuexiRy">
+    update gr_xuexi_ry
+    set 
+      fz = #{fz,jdbcType=DECIMAL}
+    where xxid = #{xxid,jdbcType=INTEGER}
+  </update>
+  <!-- 获取个人考试记录信息 -->
+  <select id="getXxInfoByUID" parameterType="java.lang.Integer" resultType="com.power.xuexi.entity.XxRyVO">
+   SELECT ry.*,xx.content,xx.xxsm,xx.fbsj from gr_xuexi_ry ry
+	LEFT JOIN gr_xuexi xx on xx.id= ry.xxid
+	where xxrid = #{xxrid,jdbcType=VARCHAR}
+	<if test="xxsm != null">
+      	 and xx.xxsm  like concat('%',#{xxsm},'%')
+      </if>
+  </select>
+   <select id="getUserXxTotal" parameterType="java.lang.String" resultType="com.power.jfss.entity.JfTotal">
+	select  xxrid,SUM(fz) as zongfen from gr_xuexi_ry 
+	where status = 1 and xxrid = #{userid}
+	<if test="kssj!=null and jssj==null">and substring(gxsj,1,length(#{kssj}))&gt;=#{kssj}</if>
+	<if test="jssj!=null and kssj==null">and substring(gxsj,1,length(#{jssj}))&lt;=#{jssj}</if>
+    <if test="kssj!=null and jssj!=null">and substring(gxsj,1,length(#{kssj})) between #{kssj} and #{jssj}</if>
+  </select>
+  
+  <select id="getUserXxTotalList" parameterType="java.lang.String" resultType="com.power.xuexi.entity.XxTotalList">
+	select u.realname as uname,xx.xxsm as xxzt,xx.content as content,xx.fbsj,ry.gxsj as wcsj,ry.fz  from gr_xuexi_ry ry
+	LEFT JOIN gr_xuexi xx ON ry.xxid = xx.id
+	LEFT JOIN sys_user u on u.userid = ry.xxrid
+	where ry.status = 1 and xxrid = #{userid}
+	<if test="kssj!=null and jssj==null">and substring(gxsj,1,length(#{kssj}))&gt;=#{kssj}</if>
+	<if test="jssj!=null and kssj==null">and substring(gxsj,1,length(#{jssj}))&lt;=#{jssj}</if>
+    <if test="kssj!=null and jssj!=null">and substring(gxsj,1,length(#{kssj})) between #{kssj} and #{jssj}</if>
+    ORDER BY ry.gxsj
+  </select>
+  <!-- getXxDcl 待处理数据行 -->
+  <select id="getXxDcl" parameterType="string" resultType="int">
+	SELECT count(*) FROM gr_xuexi_ry 
+	where status =0 and xxrid = #{userid}
+  </select>
+</mapper>

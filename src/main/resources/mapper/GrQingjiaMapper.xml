@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.GrQingjiaMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.GrQingjia">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="tian" jdbcType="DECIMAL" property="tian" />
+    <result column="kssj" jdbcType="TIMESTAMP" property="kssj" />
+    <result column="jssj" jdbcType="TIMESTAMP" property="jssj" />
+    <result column="qjyy" jdbcType="VARCHAR" property="qjyy" />
+    <result column="qjrid" jdbcType="VARCHAR" property="qjrid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="tjsj" jdbcType="TIMESTAMP" property="tjsj" />
+    <result column="pz" jdbcType="VARCHAR" property="pz" />
+    <result column="dqjd" jdbcType="INTEGER" property="dqjd" />
+    <result column="dqjdid" jdbcType="INTEGER" property="dqjdid" />
+    <result column="dqjdsj" jdbcType="TIMESTAMP" property="dqjdsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type, tian, kssj, jssj, qjyy, qjrid, status, tjsj, pz, dqjd, dqjdid, dqjdsj
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gr_qingjia
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from gr_qingjia
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.GrQingjia">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_qingjia (type, tian, kssj, 
+      jssj, qjyy, qjrid, 
+      status, tjsj, pz, 
+      dqjd, dqjdid, dqjdsj)
+    values (#{type,jdbcType=VARCHAR}, #{tian,jdbcType=DECIMAL}, #{kssj,jdbcType=TIMESTAMP}, 
+      #{jssj,jdbcType=TIMESTAMP}, #{qjyy,jdbcType=VARCHAR}, #{qjrid,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{tjsj,jdbcType=TIMESTAMP}, #{pz,jdbcType=VARCHAR}, 
+      #{dqjd,jdbcType=INTEGER}, #{dqjdid,jdbcType=INTEGER},
+      #{dqjdsj,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.GrQingjia">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gr_qingjia
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        type,
+      </if>
+      <if test="tian != null">
+        tian,
+      </if>
+      <if test="kssj != null">
+        kssj,
+      </if>
+      <if test="jssj != null">
+        jssj,
+      </if>
+      <if test="qjyy != null">
+        qjyy,
+      </if>
+      <if test="qjrid != null">
+        qjrid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="tjsj != null">
+        tjsj,
+      </if>
+      <if test="pz != null">
+        pz,
+      </if>
+      <if test="dqjd != null">
+        dqjd,
+      </if>
+      <if test="dqjdid != null">
+        dqjdid,
+      </if>
+      <if test="dqjdsj != null">
+        dqjdsj,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="tian != null">
+        #{tian,jdbcType=DECIMAL},
+      </if>
+      <if test="kssj != null">
+        #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qjyy != null">
+        #{qjyy,jdbcType=VARCHAR},
+      </if>
+      <if test="qjrid != null">
+        #{qjrid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tjsj != null">
+        #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pz != null">
+        #{pz,jdbcType=VARCHAR},
+      </if>
+      <if test="dqjd != null">
+        #{dqjd,jdbcType=INTEGER},
+      </if>
+      <if test="dqjdid != null">
+        #{dqjdid,jdbcType=INTEGER},
+      </if>
+      <if test="dqjdsj != null">
+        #{dqjdsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.GrQingjia">
+    update gr_qingjia
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="tian != null">
+        tian = #{tian,jdbcType=DECIMAL},
+      </if>
+      <if test="kssj != null">
+        kssj = #{kssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jssj != null">
+        jssj = #{jssj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qjyy != null">
+        qjyy = #{qjyy,jdbcType=VARCHAR},
+      </if>
+      <if test="qjrid != null">
+        qjrid = #{qjrid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tjsj != null">
+        tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pz != null">
+        pz = #{pz,jdbcType=VARCHAR},
+      </if>
+      <if test="dqjd != null">
+        dqjd = #{dqjd,jdbcType=INTEGER},
+      </if>
+      <if test="dqjdid != null">
+        dqjdid = #{dqjdid,jdbcType=INTEGER},
+      </if>
+      <if test="dqjdsj != null">
+        dqjdsj = #{dqjdsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.GrQingjia">
+    update gr_qingjia
+    set type = #{type,jdbcType=VARCHAR},
+      tian = #{tian,jdbcType=DECIMAL},
+      kssj = #{kssj,jdbcType=TIMESTAMP},
+      jssj = #{jssj,jdbcType=TIMESTAMP},
+      qjyy = #{qjyy,jdbcType=VARCHAR},
+      qjrid = #{qjrid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      pz = #{pz,jdbcType=VARCHAR},
+      dqjd = #{dqjd,jdbcType=INTEGER},
+      dqjdid = #{dqjdid,jdbcType=INTEGER},
+      dqjdsj = #{dqjdsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getQingJia" parameterType="java.lang.Integer" resultType="com.power.common.entity.GrQingjia">
+    SELECT qa.* ,u.realname as uname,d.fullname as deptname from gr_qingjia qa
+	LEFT JOIN sys_user u on qa.qjrid = u.userid
+	LEFT JOIN sys_department d on u.departmentid = d.departmentid
+	where qa.qjrid = #{qjrid,jdbcType=INTEGER}
+	<if test="qjyy != null">
+      	and qa.qjyy = #{qjyy}
+    </if>
+  </select>
+   <select id="getQingJiaNews" parameterType="java.lang.Integer" resultType="com.power.qingjia.entity.QjNewsVO">
+   SELECT q.type,q.jssj,q.kssj,q.tian,u.realname as uname,d.departmentid as deptid,d.fullname as deptname from gr_qingjia q
+	LEFT JOIN sys_user u on q.qjrid = u.userid
+	LEFT JOIN sys_department d on d.departmentid = u.departmentid
+	where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getUserQaTotalList" parameterType="java.lang.String" resultType="com.power.qingjia.entity.QaTotalList">
+	SELECT qa.type,qa.tian,qa.kssj,qa.jssj,qa.tjsj,u.realname as uname from gr_qingjia qa
+	LEFT JOIN sys_user u on qa.qjrid= u.userid
+	where qa.status = 3 and qa.qjrid = #{userid}
+	<if test="kssj!=null and jssj==null">and substring(tjsj,1,length(#{kssj}))&gt;=#{kssj}</if>
+	<if test="jssj!=null and kssj==null">and substring(tjsj,1,length(#{jssj}))&lt;=#{jssj}</if>
+    <if test="kssj!=null and jssj!=null">and substring(tjsj,1,length(#{kssj})) between #{kssj} and #{jssj}</if>
+    ORDER BY qa.tjsj
+  </select>
+</mapper>

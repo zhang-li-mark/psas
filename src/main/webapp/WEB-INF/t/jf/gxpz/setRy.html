@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>成员</title>
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+	<link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/jquery/jquery.layout.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet"/>
+    <script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+	<script src="${ctx.contextPath}/res/jquery/validator.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel" style="margin: 0px; border-top: none; border-left: none; border-bottom: none;">
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="treesearch">
+            <input id="txt_TreeKeyword" type="text" class="form-control" style="border-top: none;" placeholder="请输入要查询关键字" />
+            <span id="btn_TreeSearch" class="input-query" title="Search"><i class="fa fa-search"></i></span>
+        </div>
+        <div class="center-Panel" style="margin: 0px; border-right: none; border-left: none; border-bottom: none; background-color: #fff; overflow: auto; padding-bottom: 10px;">
+            <div class="gridPanel">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        InitialPage();
+        GetMember();
+        GetTree();
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            west__size: 220,
+            spacing_open: 0,
+            onresize: function () {
+                $(window).resize()
+            }
+        });
+        $(".center-Panel").height($(window).height() - 40)
+    }
+    //加载树
+    var departmentid = "card-box";
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 1,
+            url: "${ctx.contextPath}/sys/dept/deptTree?showParent=1",
+            onnodeclick: function (item) {
+                Loading(true);
+                window.setTimeout(function () {
+                    if (item.sort == "org") {
+                        $(".card-box").show();
+                        departmentid = "card-box";
+                    } else {
+                    	$(".card-box").hide();
+                    	departmentid = item.id;
+                    	if(item.hasChildren){
+                    		$.get("${ctx.contextPath}/mzcp/getAllDeptChildren?deptId="+departmentid,function(data){
+                    			//console.log(data);
+                    			var arr = data.msg.split(",");
+                    			$.each(arr,function(i,dept){
+                    				$('.' + dept).show();
+                    			})
+                    		});
+                    	}else{
+                            $('.' + item.id).show();
+                    	}
+                    }
+                    Loading(false);
+                }, 200);
+            }
+        };
+        //初始化
+        $("#itemTree").treeview(item);
+    }
+    //加载成员
+    function GetMember() {
+        $.ajax({
+            url: "${ctx.contextPath}/mzcp/getAllUser",
+            type: "get",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                var _html = "";
+                $.each(data, function (i) {
+                    var row = data[i];
+                        var imgName = "UserCard01.png";
+                        if (row.gender == "1") {
+                            imgName = "UserCard02.png";
+                        }
+                        var active = "";
+                        var deptid = row.departmentid;
+                        var deptName = top.clientdepartmentData[deptid] == null ? "" : top.clientdepartmentData[deptid].name;
+                        var postName = top.clientdataItem[104][row.dutyid];
+                        postName =  postName == null ? "" :postName ;
+                        _html += '<div class="card-box ' + deptid + ' ' + active + '">';
+                        _html += '    <div class="card-box-img">';
+                        _html += '        <img src="' + top.contentPath + '/res/ui/img/' + imgName + '" />';
+                        _html += '    </div>';
+                        _html += '    <div id="' + row.userid + '" class="card-box-content" name="' + row.realname + '" dName="' + deptid + '" zw="' + postName + '">';
+                        _html += '        <p>姓名：' + row.realname + '</p>';
+                        _html += '        <p>职务：<span style="color:blue;">' +postName+'</span></p>';
+                        _html += '        <p>部门：' + deptName + '</p>';
+                        _html += '    </div><i></i>';
+                        _html += '</div>';
+                    //}
+                });
+                $(".gridPanel").html(_html);
+                $(".card-box").click(function () {//单选
+                	//$(".card-box").removeClass("active");
+                    if (!$(this).hasClass("active")) {
+                    	//替换位置
+                    	var tmp = $(this).addClass("active").clone(true);
+                    	$(".gridPanel").prepend(tmp);
+                    	$(this).remove();
+                    } else {
+                        var tmp = $(this).removeClass("active").clone(true);
+                    	$(".gridPanel").append(tmp);
+                    	$(this).remove();
+                    }
+                })
+                Loading(false);
+            }, beforeSend: function () {
+                Loading(true);
+            }
+        });
+        //模糊查询用户（注：这个方法是理由jquery查询）
+        $("#txt_TreeKeyword").keyup(function () {
+            var value = $(this).val();
+            if (value != "") {
+                window.setTimeout(function () {
+                    $("." + departmentid)
+                     .hide()
+                     .filter(":contains('" + (value) + "')")
+                     .show();
+                }, 200);
+            } else {
+                $("." + departmentid).show();
+            }
+        }).keyup();
+    }
+    getFormData=function(){
+    	var dataArr = [];
+        $('.gridPanel .active .card-box-content').each(function () {
+   			var d= {userid:$(this).attr('id'),realname:$(this).attr('name'),zw:$(this).attr('zw')};
+   			dataArr.push(d);
+     	});
+        return dataArr;
+    }
+</script>
+</body>
+</html>

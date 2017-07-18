@@ -1,0 +1,134 @@
+/*Powered by yyh*/
+body {
+	font-size:14px;
+	color: #4c4c4c;
+	font-family: Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
+}
+.clearfix:before, .clearfix:after {
+	display: table;
+	line-height: 0;
+	content: ""
+}
+.clearfix:after {
+	clear: both
+}
+.clear {
+	clear: both;
+}
+img {
+	border: 0;
+}
+ol, ul, li, p, h1, h5, h2, h3, h4, h6 {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+i, em {
+	font-style: normal;
+}
+form {
+	margin: 0px;
+	padding: 0px;
+}
+button {
+	border: none;
+	border-width: 0;
+	cursor: pointer;
+}
+.login-bg {
+	position:fixed;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	background:url("../login-img/login-bg.jpg") no-repeat center center;
+	background-size:cover;  
+	}
+.login-box {
+	position:absolute;
+	padding:5px;
+	width:400px;
+	height:220px;
+	left:50%;
+	margin-left:-180px;
+	top:50%;
+	margin-top:-110px;
+	background:rgba(255,255,255,.2);
+	border-radius:5px;
+	border:1px solid #fff;
+	}
+.login-content {
+	width:100%;
+	height:100%;
+	padding:20px;
+	box-sizing:border-box;
+	border-radius:3px;
+	background: #000000;
+    background: -moz-linear-gradient(top,  #1d8fde 0%, #005794 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1d8fde), color-stop(100%,#005794));
+    background: -webkit-linear-gradient(top,  #1d8fde 0%,#005794 100%);
+    background: -o-linear-gradient(top,  #1d8fde 0%,#005794 100%);
+    background: -ms-linear-gradient(top,  #1d8fde 0%,#005794 100%);
+    background: linear-gradient(to bottom,  #1d8fde 0%,#005794 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1d8fde', endColorstr='#005794',GradientType=0 );
+	}
+.login-content .login-title {font-size:21px; line-height:25px; color:#fff; text-align:center; font-weight:bold;margin-bottom:20px;}
+.login-content .login-body {width:100%; display:table; margin:0 auto; height:135px;}
+.login-content .login-logo {display:table-cell; vertical-align:middle; text-align:center;width:120px;}
+.login-content .login-form {display:table-cell; width:180px;padding:0 10px}
+.login-form ul {
+	clear: both;
+}
+.login-form ul li {
+	position: relative;
+	margin-bottom:15px;
+	clear: both;
+}
+.login-form ul li .text {
+	width: 100%;
+	height:35px;
+	border-radius: 3px;
+	line-height:35px;
+	text-indent:30px;
+	border:none;
+	font-size:14px;
+}
+#login_name {
+	width: 18px;
+	height: 18px;
+	background: url("../login-img/user.png") no-repeat;
+	position: absolute;
+	top:8px;
+	left:10px;
+}
+#login_password {
+	width: 18px;
+	height: 22px;
+	background: url("../login-img/password.png") no-repeat;
+	position: absolute;
+	top:7px;
+	left:10px;
+}
+.login-form ul li .btn {
+	display: block;
+	height:35px;
+	line-height:35px;
+	text-align: center;
+	color: #fff;
+	font-weight:bold;
+	font-size: 16px;
+	background: #ccc;
+	border-radius:3px;
+	cursor:not-allowed;
+}
+.login-form ul li .btn:hover {
+	color: #fff;
+}
+.login-form ul li .btn.current {
+	background: #ff9b30;
+	cursor:pointer;
+}
+.login-form ul li .btn.current:hover {
+	background:#fc8f1a;
+}
+

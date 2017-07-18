@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>添加积分申报</title>
+    <!--框架必需start-->
+     <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/wizard/wizard.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/wizard/wizard.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	
+<style>
+.edit-cell input {
+	color:#000;
+}
+</style>
+</head>
+<body>
+    <form id="form1" >
+
+<link href="${ctx.contextPath}/res/simditor/simditor.css" rel="stylesheet" />
+<script src="${ctx.contextPath}/res/ui/module.js"></script>
+<script src="${ctx.contextPath}/res/uploadify/ajaxfileupload.js"></script>
+<script src="${ctx.contextPath}/res/ui/uploader.js"></script>
+<script src="${ctx.contextPath}/res/ui/hotkeys.js"></script>
+<script src="${ctx.contextPath}/res/simditor/simditor.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var category = request('category');
+    var cpmxxh,cpxh ;
+    var editor = null;
+    var ryArr = [];
+    var jfxid;
+    var user = {pjrxh:'${user.userid!}',pjrmc:'${user.uname!}',deptId:'${user.dname!}',zw:'${user.zw!}'};
+    var users = [];
+    
+    $(function () {
+    	InitialPage();
+        GetGrid();
+        initControl();
+    })
+    //初始化页面
+    function InitialPage() {
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth((800));
+                $("#gridTable").setGridHeight(40);
+            }, 200);
+            e.stopPropagation();
+        });
+        
+        $('#uploadFile').change(function () {
+            var f = document.getElementById('uploadFile').files[0]
+            var src = window.URL.createObjectURL(f);
+            document.getElementById('uploadPreview').src = src;
+            document.getElementById('uploadPreview2').src = src;
+            //上传应用图标
+            $.ajaxFileUpload({
+                url: "${ctx.contextPath}/fj/imFile",
+                secureuri: false,
+                fileElementId: 'uploadFile',
+                dataType: 'json',
+                success: function (data) {
+                    $("#fj").val(data.msg);
+                }
+            });
+        });
+    }
+    
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGridEx({
+        	datatype: "jsonstring",
+        	height: 120,
+            datastr: [],//组合使用，初始化显示空数据
+            //url: "${ctx.contextPath}/mzcp/getMzcpDwRyList?f=2&cpxh="+cpxh+"&cpmxxh="+cpmxxh,
+            colModel:[{ label: '主键', name: 'xh', hidden: true,key:true},
+                { label: '主键', name: 'pjrxh', hidden: true},
+                {label: '姓名', name: 'pjrmc', width: 100, align: 'center',sortable:false},
+                { label: '部门名称', name: 'deptId', width: 180, align: 'center',sortable:false,
+                	formatter: function (cellvalue, options, rowObject) {
+                    return top.clientdepartmentData[cellvalue] == null ? "" : top.clientdepartmentData[cellvalue].name;
+                }},
+                { label: '职务', name: 'zw', width: 120, align: 'center',sortable:false,
+                	formatter: function (cellvalue, options, rowObject) {
+                		if(!cellvalue) return "";
+                        return top.clientdataItem[104] == null ? "" : top.clientdataItem[104][cellvalue];
+                    }
+               	},
+                { label: '分值', name: 'fz', width: 100, align: 'center',sortable:false,editable:true, autowidth: false,formatter: "number",
+               		formatoptions: {
+               			decimalPlaces:2
+               		}
+               	}
+            ],
+            unwritten: false,//不提示是否找到数据
+            cellEdit: true,
+            cellsubmit: "clientArray",
+            
+            afterSaveCell:function(){
+            	var zf = 0;
+            	var ryCount = $gridTable.getGridParam("reccount");
+             	for(var i=1;i<=ryCount;i++){
+         	        var row = $('#gridTable').jqGrid('getRowData', i);
+         	        zf=zf + parseFloat(row.fz);
+             	}
+             	$("#fz").val(zf);
+            },
+            
+            pager: false
+        });
+        users.push(user);
+        if(!keyValue){
+            $('#gridTable')[0].addJSONData({rows:users});
+        }
+        
+       
+    }
+    //初始化控件
+    function initControl() {
+        //栏目
+       /*  $("#jflxid").ComboBox({
+        	param: { },
+        	url: "${ctx.contextPath}/jf/jfsb/jfx",
+            description: "==请选择==",
+            id: "id",
+            text: "jfxmc",
+            tle:"jfxms",
+            height: "230px"
+        }); */
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "${ctx.contextPath}/jf/jfsb/getFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    $("#uploadPreview").attr("src","${ctx.contextPath}/"+data.fj);
+                    $("#uploadPreview2").attr("src","${ctx.contextPath}/"+data.fj);
+                }
+            });
+            
+            $.ajax({
+	            url: "${ctx.contextPath}/jf/jfsb/getSbRys",
+	            type: "post",
+	            data:{keyValue: keyValue },
+	            dataType: "json",
+	            success: function (data) {
+	            	
+	            	$('#gridTable')[0].addJSONData({rows:data});
+	            },
+	        });
+        } else {
+            $("#jflxid").ComboBoxTreeSetValue(category);
+        }
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        
+        if(!jfxid && !keyValue){
+        	dialogMsg('未选择积分项！',-1);return;
+        }
+        
+        var $gridTable = $('#gridTable');
+    	//取消编辑框
+    	$(".edit-cell").parents("tr").trigger("click");
+    	//TODO 验证分值
+    	var ldArr =[],ldMc=[],fzs=[];
+    	//判断是否空行
+    	var ryCount = $gridTable.getGridParam("reccount");
+    	if(ryCount<1){dialogMsg('未添加申报人员！',-1);return;}
+    	var zf = 0;
+    	for(var i=1;i<=ryCount;i++){
+	        var row = $('#gridTable').jqGrid('getRowData', i);
+    		ldArr.push(row.pjrxh);
+    		fzs.push(row.fz);
+    		 zf=zf + parseFloat(row.fz);
+    	}
+    	$("#fz").val(zf);
+    	
+    	
+        var postData = {
+        	id: keyValue,
+        	sjmc: $("#sjmc").val(),
+        	jflxid:jfxid,
+        	fz: $("#fz").val(),
+        	fj: $("#fj").val(),
+            sjms: $("#sjms").val(),
+            rys:ldArr.join(","),
+            fzs:fzs.join(","),
+        }
+        $.SaveForm({
+            url: "${ctx.contextPath}/jf/jfsb/saveForm",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+    
+    function btn_add(){
+    	dialogOpen({
+            id: "setLdCpry",
+            title: '选择申报人员',
+            url: "${ctx.contextPath}/mzcp/setCpry?f=0",//
+            width: "900px",
+            height: "500px",
+            callBack: function (iframeId) {
+            	top.frames[iframeId].ldcpList(function (data) {
+            		listToGrid(data);
+                });
+            }
+        });
+    	
+    }
+    
+    function btn_bigPic(){
+    	dialogContent({
+	        id: "_bDiv",
+	        title: '查看大图',
+	        width: "1100px",
+	        height: "800px",
+	        content:$("#content").html(),
+	        btn: ['确认']
+	       
+	    });
+    	
+    }
+    
+    //选取积分项
+    function SelectJfx() {
+    	var type;
+    	if($("#jflx").val() == '业务积分'){
+    		type = 1;
+    	}else{
+    		type = 2;
+    	}
+        dialogOpen({
+            id: "SelectJfx",
+            title: '选取积分项',
+            url: '${ctx.contextPath}/jf/jfsb/selectJfx?type='+type,
+            width: "1000px",
+            height: "600px",
+            close:false,
+            btn: ['确认'],
+            callBack: function (iframeId) {
+                var result = top.frames[iframeId].submit();
+                if(result){
+					top.frames[iframeId].dialogClose();
+					jfxid = result.id;
+                	$("#jfxmc").val(result.jfxmc);
+                	$("#jfxms").val(result.jfxms);
+                	$("#jfxms").val(result.jfxms);
+                }
+                
+            }
+        })
+    }
+    function selectChange(param){
+    	// alert($(param).attr("data-title")); 
+    }
+    function listToGrid(ryList) {//人员详细信息
+    
+    	$('#gridTable').clearGridData();
+    	$("#fz").val("0");
+    	var c = users.concat(ryList);
+    	
+    	
+    	$('#gridTable')[0].addJSONData({rows:c});
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form" style="table-layout: auto;">
+        <tr>
+            <td class="formTitle">事件名称<font face="宋体">*</font></td>
+            <td class="formValue" colspan="3">
+                <input id="sjmc" type="text" class="form-control" placeholder="请输入事件名称" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+          	<td class="formTitle">积分类型<font face="宋体">*</font></td>
+            <td class="formValue">
+                <select id="jflx" style="width:200px;"> 
+                	<option value="业务积分">业务积分</option>
+                	<option value="管理积分">管理积分</option>
+                </select>
+            </td>
+       		<td class="formTitle">积分项<font face="宋体">*</font></td>
+            <td class="formValue">
+                <!-- <div id="jflxid" onChange="selectChange(this)" type="select" class="ui-select"></div> -->
+                <input id="jfxmc" type="text" class="form-control" />
+                <span class="input-button" onclick="SelectJfx()" title="选取积分项">...</span>
+            </td>
+        </tr>
+        <tr>
+            <th class="formTitle" valign="top" style="padding-top: 8px;">积分说明</th>
+            <td class="formValue" colspan="3">
+                <textarea id="jfxms" class="form-control" rows="5" style="height:100px;" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">申报分值<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input id="fz" type="text" class="form-control" placeholder="申报分值" isvalid="yes" checkexpession="NotNull" disabled="disabled"/>
+            </td>
+            
+        </tr>
+        <tr>
+            <td class="formTitle">申报人员<font face="宋体">*</font></td>
+            <td class="formValue">
+                  <a id="b_add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;申报人员</a>
+            </td>
+            
+        </tr>
+        <tr>
+          <td class="formTitle"></td>
+            <td class="formValue" colspan="3">
+                  <div class="gridPanel" >
+    				<table id="gridTable"></table>
+				  </div>
+            </td>
+            
+        </tr>
+        <tr>
+            <th class="formTitle" valign="top" style="padding-top: 8px;">事件描述</th>
+            <td class="formValue" colspan="3">
+                <textarea id="sjms" class="form-control" rows="5" style="height:100px;"></textarea>
+            </td>
+        </tr>
+         <tr>
+            <th class="formTitle" valign="top" style="padding-top: 8px;">申报附件</th>
+            <td class="formValue" colspan="3">
+               <div class="file" style="width: 100px; height: 100px;">
+                  <img id="uploadPreview" onclick="btn_bigPic()" style="width: 100px; height: 100px;" src="" />
+                  <input type="file" name="uploadFile" id="uploadFile">
+               </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+<div id="content" style="display:none">
+    <img id="uploadPreview2"  src="" />  
+    </div>
+    <input type="hidden" name="fj" id="fj">
+  </form>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>新增用户</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet" />
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.extension.css" rel="stylesheet" />
+	<link href="${ctx.contextPath}/res/wizard/wizard.css" rel="stylesheet"/>
+	<link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <script src="${ctx.contextPath}/res/datepicker/WdatePicker.js"></script>
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet"/>
+	<link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet"/>
+	<script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/wizard/wizard.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	
+</head>
+<body>
+    <form id="form1">
+<div style="margin-left: 10px; margin-right: 10px;">
+	<ul class="nav nav-tabs">
+        <li class="active"><a href="#BaseInfo" data-toggle="tab">基本信息</a></li>
+        <li><a href="#ExpandInfo" data-toggle="tab">表彰信息</a></li>
+    </ul>
+    <div class="tab-content" style="padding-top: 15px;">
+        <div id="BaseInfo" class="tab-pane active" style=" padding-right: 30px;">
+        <input id="userid" type="hidden" />
+            <table class="form">
+                <tr>
+                    <td class="formTitle">警号<font face="宋体">*</font></td>
+                    <td class="formValue">
+                        <input id="account" type="text" onblur="" class="form-control" placeholder="请输入账户" isvalid="yes" checkexpession="NotNull" />
+                    </td>
+                    <td class="formTitle">登录密码<font face="宋体">*</font></td>
+                    <td class="formValue">
+                        <input id="password" type="password" class="form-control" placeholder="请输入密码" isvalid="yes" checkexpession="NotNull" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">机构<font face="宋体">*</font></td>
+                    <td class="formValue">
+                        <div id="organizeid" type="selectTree" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+                    </td>
+                    <td class="formTitle">部门</td>
+                    <td class="formValue">
+                        <div id="departmentid" type="selectTree" class="ui-select"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">姓名<font face="宋体">*</font></td>
+                    <td class="formValue">
+                        <input id="realname" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+                                        <td class="formTitle">性别</td>
+                    <td class="formValue">
+                        <div id="gender" type="select" class="ui-select">
+                            <ul>
+                                <li data-value="1">男</li>
+                                <li data-value="0">女</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                 <tr>
+                    <td class="formTitle">职务</td>
+                    <td class="formValue">
+                        <div id="dutyid" type="select" class="ui-select"></div>
+                    </td>
+                    <td class="formTitle">职位开始时间</td>
+                    <td class="formValue">
+                    	<input id="quickquery" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                    <td class="formTitle">职位</td>
+                    <td class="formValue">
+                        <div id="F_PostId" type="select" class="ui-select"></div>
+                    </td>
+                    <td class="formTitle">主管</td>
+                    <td class="formValue">
+                        <div id="F_ManagerId" type="select" class="ui-select"></div>
+                    </td>
+                </tr>-->
+                <tr>
+                <td class="formTitle">参加工作时间</td>
+                    <td class="formValue">
+                    	<input id="wechat" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                    <td class="formTitle">生日</td>
+                    <td class="formValue">
+                        <input id="birthday" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                </tr>
+                <tr>
+                	<td class="formTitle">政治面貌</td>
+                    <td class="formValue">
+                        <div id="postid" type="select" class="ui-select"></div>
+                    </td>
+                	<td class="formTitle">学历</td>
+                    <td class="formValue">
+                    	<div id="email" type="select" class="ui-select"></div></td>
+                </tr>
+                <tr>
+                	<td class="formTitle">手机</td>
+                    <td class="formValue">
+                        <input id="mobile" type="text" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <td class="formTitle">专业资格</td>
+                    <td class="formValue" colspan="3">
+                        <input id="question" type="text" class="form-control" />
+                        <input id="answerquestion" type="hidden" value="" />
+                        <span class="input-button" onclick="selZgzs()" title="专业资格">...</span>
+                        </td>
+                </tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top: 4px;">备注
+                    </th>
+                    <td class="formValue" colspan="3">
+                        <textarea id="description" class="form-control" style="height: 50px;"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    <div id="ExpandInfo" class="tab-pane" style="height:400px;overflow:auto;">
+<div class="titlePanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="b_ref" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="b_add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="b_edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="b_delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+    </div><!-- bz -->
+    </div>
+</div>
+    </form>
+<script>
+    var keyValue = request('keyValue');
+    var instanceId = "";
+    var formId = "";
+    $(function () {
+        initControl();
+        GetGrid();
+    })
+    //初始化控件
+    function initControl() {
+        //公司
+        $("#organizeid").ComboBoxTree({
+            url: "${ctx.contextPath}/sys/org/orgTree",
+            description: "==请选择==",
+            height: "200px",
+            allowSearch: true,
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            //加载部门
+            $("#departmentid").attr("data-value","");
+            $("#departmentid").attr("data-text","==请选择==");
+            $("#departmentid").children(0).text("==请选择==");
+            $("#departmentid").ComboBoxTree({
+                url: "${ctx.contextPath}/sys/user/deptTree?organizeid=" + value,
+                description: "==请选择==",
+                allowSearch: true
+            });
+          /**  //加载角色
+            $("#roleid").ComboBox({
+                url: "${ctx.contextPath}/sys/role/getRoleItem?orgid=" + value,
+                id: "id",
+                text: "name",
+                description: "==请选择==",
+                allowSearch: true
+            });
+            //加载岗位
+            $("#postid").ComboBox({
+                url: "${ctx.contextPath}/sys/role/getPostItem?orgid=" + value,
+                id: "id",
+                text: "name",
+                description: "==请选择==",
+                allowSearch: true
+            });*/
+        });
+        //部门
+        $("#departmentid").ComboBoxTree({
+            description: "==请选择==",
+            height: "200px",
+            allowSearch: true
+        });
+        
+        //性别
+        $("#gender").ComboBox({
+            description: "==请选择==",
+        });
+         //班组
+        $("#dutyid").ComboBox({
+            url: "${ctx.contextPath}/sys/dict/getDictItem",
+            param: {classId: "104" },
+            id: "dictid",
+            text: "fullname",
+            description: "==请选择==",
+            height: "200px",
+        });
+        //职位
+        $("#postid").ComboBox({
+            url: "${ctx.contextPath}/sys/dict/getDictItem",
+            param: {classId: "105" },
+            id: "dictid",
+            text: "fullname",
+            description: "==请选择==",
+            height: "200px",
+        });
+        //学历
+        $("#email").ComboBox({
+            url: "${ctx.contextPath}/sys/dict/getDictItem",
+            param: {classId: "103" },
+            id: "dictid",
+            text: "fullname",
+            description: "==请选择==",
+            height: "200px",
+        });
+        /**
+        //加载自定义表单
+        var moduleId = top.$.cookie('currentmoduleId');
+        $.SetForm({
+            url: "../../AuthorizeManage/ModuleForm/GetEntityJsonByModuleId",
+            param: { "keyValue": moduleId, "objectId": keyValue },
+            async: true,
+            success: function (data) {
+                $('#frmpreview').frmPreview({
+                    tablecotent: data.form.F_FormJson,
+                    width: 700
+                });
+                formId = data.form.F_FormId;
+                if (data.instance != null) {
+                    $('#frmpreview').frmSetData(JSON.parse(data.instance.F_FormInstanceJson));
+                    instanceId = data.instance.F_FormInstanceId;
+                }
+            }
+        });*/
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "${ctx.contextPath}/sys/user/getFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    $("#organizeid").trigger("change");
+                    $("#departmentid").ComboBoxTreeSetValue(data.departmentid).trigger("change");
+                  if(data.birthday){
+                  	$("#birthday").val(formatDate(new Date(data.birthday), "yyyy-MM-dd"));
+                  }
+                  if(data.wechat){
+                    $("#wechat").val(formatDate(new Date(data.wechat), "yyyy-MM-dd"));
+                   }
+                    $("#password").val("******").attr('disabled', 'disabled');
+                }
+            });
+        }
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+       // postData["F_DutyName"] = $("#F_DutyId").attr('data-text');
+       // postData["F_PostName"] = $("#F_PostId").attr('data-text');
+       // postData["F_Manager"] = $("#F_ManagerId").attr('data-text');
+       // var _instanceData = $("#frmpreview").frmGetData();
+       // var moduleFormInstanceEntity = { "F_FormId": formId, "F_FormInstanceJson": JSON.stringify(_instanceData) };
+       //console.log(postData);return;
+       Loading(true,"正在保存数据..");
+        $.post("${ctx.contextPath}/sys/user/userSub",
+            postData,//{ "keyValue": keyValue, "strUserEntity": JSON.stringify(postData), "FormInstanceId": instanceId, "strModuleFormInstanceEntity": JSON.stringify(moduleFormInstanceEntity) },
+            function (re) {
+            	//保存表彰信息
+            	if(re.success){
+	            	if(bzxxArr.length>0){
+	            		var data = re.msg;
+			            var pData = JSON.stringify(bzxxArr);
+			            var bzxx = {ryxh:data.userid,rymc:data.realname,listJson:pData,delBz:bzDelArr.join(",")};
+		            	//console.log("-------"+JSON.stringify(bzxx));
+		            	$.post("${ctx.contextPath}/gxpz/newBzxxListSubmit",bzxx,function (re) {
+		            		Loading(false);
+		            		dialogClose();
+		            		$.currentIframe().$("#gridTable").trigger("reloadGrid");
+				        });
+	            	}else{
+	            		Loading(false);
+	            		dialogClose();
+	            	}
+            	}else{
+            		Loading(false);
+            		dialogAlert(re.msg, -1);
+            	}
+            });
+    }
+    function selZgzs() {
+        dialogOpen({
+            id: "selZgzs",
+            title: '选取资格证书',
+            url: '${ctx.contextPath}/gxpz/selZgzs?ids='+$("#answerquestion").val(),
+            width: "570px",
+            height: "580px",
+            callBack: function (iframeId) {
+                var data = top.frames[iframeId].getZsData();
+                $("#answerquestion").val(data.ids);
+                $("#question").val(data.txt);
+                top.frames[iframeId].dialogClose();
+                //
+            }
+        })
+    }
+    var bzxxArr=[];
+    //加载表格
+    var $gridTable = $('#gridTable');
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        $gridTable.jqGrid({
+            datatype: "json",
+            mtype:"POST",
+            prmNames:{rows:"pS"},
+            jsonReader : {total: "pages",records: "total"},
+            height: $(window).height() - 190.5,
+            width: $(window).width() -22,
+            autowidth:false,
+            unwritten: false,//不提示是否找到数据
+            datatype: "jsonstring",
+            datastr: [],//组合使用，初始化显示空数据
+            colModel: [
+                { label: '主键', name: 'xh', hidden: true },
+                { label: '表彰分数', name: 'bzjf', width: 100, align: 'left',sortable:false},
+                { label: '表彰说明', name: 'bzsm', width: 280, align: 'left' ,sortable:false},
+                {
+                    label: '表彰时间', name: 'bzsj',width: 100, align: 'left',sortable:false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue==null?"":formatDate(new Date(cellvalue), 'yyyy-MM-dd');
+                    }
+                },
+            ],
+            viewrecords: true,
+            rowNum: 100,
+            rowList: [100],
+            pager: "#gridPager",
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $("#" + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $("#" + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+        //
+        var userid = $("#userid").val();
+      //加载数据
+        if(userid && userid.length>0){
+	        $.get("${ctx.contextPath}/gxpz/getBzxxList?userid=" + userid,function (data) {
+	            	bzxxArr = data.rows;
+	            	$gridTable.clearGridData();
+	            	$gridTable[0].addJSONData(bzxxArr);
+	            }
+	        );
+        }
+    }
+  //新增
+    function btn_add() {
+        dialogOpen({
+            id: "newBzxx",
+            title: '添加表彰信息',
+            url: "${ctx.contextPath}/gxpz/newBzxx?ryxh="+keyValue,
+            width: "550px",
+            height: "350px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick(function (data) {
+                	bzxxArr.push(data);
+                	$gridTable.clearGridData();
+	            	$gridTable[0].addJSONData(bzxxArr);
+                });
+            }
+        });
+    };
+    //编辑
+    function btn_edit() {
+        var bzxh = $("#gridTable").jqGridRowValue("xh");
+        if (checkedRow(bzxh)) {
+            dialogOpen({
+                id: "editBzxx",
+                title: '修改表彰信息',
+                url: "${ctx.contextPath}/gxpz/newBzxx?keyValue="+bzxh,
+                width: "550px",
+                height: "350px",
+                callBack: function (iframeId) {
+                	top.frames[iframeId].AcceptClick(function (data) {
+                        $.each(bzxxArr, function (i) {
+                            if (bzxxArr[i].xh == bzxh) {
+                            	bzxxArr[i] = data;
+                            }
+                        });
+                        $gridTable.clearGridData();
+    	            	$gridTable[0].addJSONData(bzxxArr);
+                    });
+                }
+            });
+        }
+    }
+    var bzDelArr = [];
+    //删除
+    function btn_delete() {
+        var bzxh = $("#gridTable").jqGridRowValue("xh");
+        if (checkedRow(bzxh)) {
+            $.each(bzxxArr, function (i) {
+                if (bzxxArr[i].xh == bzxh) {
+                	if(bzxh>0){bzDelArr.push(bzxh);}
+                	bzxxArr.splice(i, 1);
+                	$gridTable.clearGridData();
+	            	$gridTable[0].addJSONData(bzxxArr);
+                    return false;
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

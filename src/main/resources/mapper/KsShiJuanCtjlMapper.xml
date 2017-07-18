@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.KsShiJuanCtjlMapper">
+  <resultMap id="BaseResultMap" type="com.power.common.entity.KsShiJuanCtjl">
+    <id column="xh" jdbcType="BIGINT" property="xh" />
+    <result column="ryxh" jdbcType="VARCHAR" property="ryxh" />
+    <result column="sjxh" jdbcType="BIGINT" property="sjxh" />
+    <result column="tmxh" jdbcType="BIGINT" property="tmxh" />
+    <result column="zqda" jdbcType="VARCHAR" property="zqda" />
+    <result column="xzda" jdbcType="VARCHAR" property="xzda" />
+    <result column="kf" jdbcType="INTEGER" property="kf" />
+    <result column="tjsj" jdbcType="TIMESTAMP" property="tjsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    xh, ryxh, sjxh, tmxh, zqda, xzda, kf, tjsj
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ks_shijuan_ctjl
+    where xh = #{xh,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ks_shijuan_ctjl
+    where xh = #{xh,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.power.common.entity.KsShiJuanCtjl">
+    <selectKey keyProperty="xh" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ks_shijuan_ctjl (ryxh, sjxh, tmxh, 
+      zqda, xzda, kf, tjsj
+      )
+    values (#{ryxh,jdbcType=VARCHAR}, #{sjxh,jdbcType=BIGINT}, #{tmxh,jdbcType=BIGINT}, 
+      #{zqda,jdbcType=VARCHAR}, #{xzda,jdbcType=VARCHAR}, #{kf,jdbcType=INTEGER}, #{tjsj,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.power.common.entity.KsShiJuanCtjl">
+    <selectKey keyProperty="xh" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ks_shijuan_ctjl
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ryxh != null">
+        ryxh,
+      </if>
+      <if test="sjxh != null">
+        sjxh,
+      </if>
+      <if test="tmxh != null">
+        tmxh,
+      </if>
+      <if test="zqda != null">
+        zqda,
+      </if>
+      <if test="xzda != null">
+        xzda,
+      </if>
+      <if test="kf != null">
+        kf,
+      </if>
+      <if test="tjsj != null">
+        tjsj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ryxh != null">
+        #{ryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="sjxh != null">
+        #{sjxh,jdbcType=BIGINT},
+      </if>
+      <if test="tmxh != null">
+        #{tmxh,jdbcType=BIGINT},
+      </if>
+      <if test="zqda != null">
+        #{zqda,jdbcType=VARCHAR},
+      </if>
+      <if test="xzda != null">
+        #{xzda,jdbcType=VARCHAR},
+      </if>
+      <if test="kf != null">
+        #{kf,jdbcType=INTEGER},
+      </if>
+      <if test="tjsj != null">
+        #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.power.common.entity.KsShiJuanCtjl">
+    update ks_shijuan_ctjl
+    <set>
+      <if test="ryxh != null">
+        ryxh = #{ryxh,jdbcType=VARCHAR},
+      </if>
+      <if test="sjxh != null">
+        sjxh = #{sjxh,jdbcType=BIGINT},
+      </if>
+      <if test="tmxh != null">
+        tmxh = #{tmxh,jdbcType=BIGINT},
+      </if>
+      <if test="zqda != null">
+        zqda = #{zqda,jdbcType=VARCHAR},
+      </if>
+      <if test="xzda != null">
+        xzda = #{xzda,jdbcType=VARCHAR},
+      </if>
+      <if test="kf != null">
+        kf = #{kf,jdbcType=INTEGER},
+      </if>
+      <if test="tjsj != null">
+        tjsj = #{tjsj,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where xh = #{xh,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.power.common.entity.KsShiJuanCtjl">
+    update ks_shijuan_ctjl
+    set ryxh = #{ryxh,jdbcType=VARCHAR},
+      sjxh = #{sjxh,jdbcType=BIGINT},
+      tmxh = #{tmxh,jdbcType=BIGINT},
+      zqda = #{zqda,jdbcType=VARCHAR},
+      xzda = #{xzda,jdbcType=VARCHAR},
+      kf = #{kf,jdbcType=INTEGER},
+      tjsj = #{tjsj,jdbcType=TIMESTAMP}
+    where xh = #{xh,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>请休假申请</title>
+<!--框架必需start-->
+<link href="${ctx.contextPath}/res/fonts/font-awesome.min.css"
+	rel="stylesheet">
+<script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+<link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css"
+	rel="stylesheet">
+<script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+<link href="${ctx.contextPath}/res/wdTree/tree.css" rel="stylesheet" />
+<script src="${ctx.contextPath}/res/wdTree/tree.js"></script>
+<link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css"
+	rel="stylesheet">
+<script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+<link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+<link href="${ctx.contextPath}/res/wizard/wizard.css" rel="stylesheet" />
+<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+<script src="${ctx.contextPath}/res/wizard/wizard.js"></script>
+<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+<script src="${ctx.contextPath}/res/datepicker/WdatePicker.js"></script>
+
+<style>
+.edit-cell input {
+	color: #000;
+}
+</style>
+</head>
+<body>
+	<form id="form1">
+
+		<link href="${ctx.contextPath}/res/simditor/simditor.css"
+			rel="stylesheet" />
+		<script src="${ctx.contextPath}/res/ui/module.js"></script>
+		<script src="${ctx.contextPath}/res/uploadify/ajaxfileupload.js"></script>
+		<script src="${ctx.contextPath}/res/ui/uploader.js"></script>
+		<script src="${ctx.contextPath}/res/ui/hotkeys.js"></script>
+		<script src="${ctx.contextPath}/res/simditor/simditor.js"></script>
+		<script>
+    var keyValue = request('keyValue');
+    $(function () {
+    	InitialPage();
+        initControl();
+    })
+    //初始化页面
+    function InitialPage() {
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth((800));
+                $("#gridTable").setGridHeight(40);
+            }, 200);
+            e.stopPropagation();
+        });
+        
+        $("#kssj").bind("click",function(){
+        	WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd HH:ss',maxDate:'#F{$dp.$D(\'jssj\')}',onpicked:function(){jssj.click();},autoPickDate:true});
+	    });
+	    $("#jssj").bind("click",function(){
+	        WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd HH:ss',minDate:'#F{$dp.$D(\'kssj\')}',autoPickDate:true});
+	    });
+    }
+    
+
+    //初始化控件
+    function initControl() {
+    
+        if (!!keyValue) {
+            $.SetForm({
+                url: "${ctx.contextPath}/gr/qingjia/getFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    $("#kssj").val(formatDate(new Date(data.kssj), "yyyy-MM-dd hh:ss"));
+                    $("#jssj").val(formatDate(new Date(data.jssj), "yyyy-MM-dd hh:ss"));
+                    $("#uploadPreview").attr("src","${ctx.contextPath}/"+data.pz);
+                    $("#uploadPreview2").attr("src","${ctx.contextPath}/"+data.pz);
+                }
+            });
+            
+        } else {
+            /* $("#jflxid").ComboBoxTreeSetValue(category); */
+        }
+        
+        $('#uploadFile').change(function () {
+            var f = document.getElementById('uploadFile').files[0]
+            var src = window.URL.createObjectURL(f);
+            document.getElementById('uploadPreview').src = src;
+            document.getElementById('uploadPreview2').src = src;
+            //上传应用图标
+            $.ajaxFileUpload({
+                url: "${ctx.contextPath}/fj/imFile",
+                secureuri: false,
+                fileElementId: 'uploadFile',
+                dataType: 'json',
+                success: function (data) {
+                    $("#fj").val(data.msg);
+                    alert(data.msg);
+                }
+            });
+        });
+    }
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }     
+    	
+        var postData = {
+        	id: keyValue,
+        	type: $("#type").val(),
+        	tian: $("#tian").val(),
+            kssj: $("#kssj").val(),
+            jssj: $("#jssj").val(),
+            pz: $("#fj").val(),
+            qjyy: $("#qjyy").val(),
+        }
+        $.SaveForm({
+            url: "${ctx.contextPath}/gr/qingjia/saveForm",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+    
+ 
+    
+    function btn_bigPic(){
+    	dialogContent({
+	        id: "_bDiv",
+	        title: '查看大图',
+	        width: "1100px",
+	        height: "800px",
+	        content:$("#content").html(),
+	        btn: ['确认']
+	       
+	    });
+    	
+    }
+
+</script>
+		<div style="margin-top: 20px; margin-right: 30px;">
+			<table class="form" style="table-layout: auto;">
+				<tr>
+					<th class="formTitle">申请人</th>
+					<td class="formValue" ><input id="sqr" type="text"
+						class="form-control" value="${uname!}" disabled="disabled"/></td>
+					<th class="formTitle">部门</th>
+					<td class="formValue"><input id="sqr" type="text"
+						class="form-control" value="${deptname!}" disabled="disabled"/></td>
+				</tr>
+				<tr>
+					<th class="formTitle">请假类型<font face="宋体">*</font></th>
+					<td class="formValue"><select id="type" style="width:100px;">
+							<option value="1">事假</option>
+							<option value="2">公休假</option>
+							<option value="3">探亲假</option>
+							<option value="4">病假</option>
+							<option value="5">产假</option>
+							<option value="6">婚假</option>
+					</select></td>
+					<th class="formTitle">请假天数<font face="宋体">*</font></th>
+					<td class="formValue"><input id="tian" type="text"
+						class="form-control" placeholder="请输入请假天数" isvalid="yes"
+						checkexpession="NotNull" /></td>
+
+				</tr>
+				<tr>
+					<th class="formTitle">开始时间<font face="宋体">*</font></th>
+					<td class="formValue" ><input id="kssj"
+						type="text" class="form-control input-wdatepicker" isvalid="yes"
+						checkexpession="NotNull" /></td>
+					<th class="formTitle">结束时间<font face="宋体">*</font></th>
+					<td class="formValue" ><input id="jssj"
+						type="text" class="form-control input-wdatepicker" isvalid="yes"
+						checkexpession="NotNull" /></td>
+				</tr>
+				
+				
+				<tr>
+					<th class="formTitle" valign="top" style="padding-top: 8px;">请假说明</th>
+					<td class="formValue" colspan="3"><textarea id="qjyy"
+							class="form-control" rows="5" style="height:100px;"></textarea></td>
+				</tr>
+				<tr>
+					<th class="formTitle" valign="top" style="padding-top: 8px;">图片凭证</th>
+					<td class="formValue" colspan="3">
+					<div class="file" style="width: 100px; height: 100px;">
+                  		<img id="uploadPreview" onclick="btn_bigPic()" style="width: 100px; height: 100px;" src="" />
+                  		<input type="file" name="uploadFile" id="uploadFile">
+                    </div>
+					</td>
+				</tr>
+			</table>
+		</div>
+<div id="content" style="display:none">
+    <img id="uploadPreview2"  src="" />  
+    </div>
+    <input type="hidden" name="fj" id="fj">
+
+	</form>
+	
+</body>
+</html>

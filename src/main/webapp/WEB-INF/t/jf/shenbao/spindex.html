@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html><head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>申报审批</title>
+    <link href="${ctx.contextPath}/res/fonts/font-awesome.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-1.10.2.min.js"></script>
+    <link href="${ctx.contextPath}/res/jquery/jquery-ui.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/jquery/jquery-ui.min.js"></script>
+    <link href="${ctx.contextPath}/res/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx.contextPath}/res/bootstrap/bootstrap.min.js"></script>
+    <link href="${ctx.contextPath}/res/jqgrid/jqgrid.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/zTree3.5/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+	<link href="${ctx.contextPath}/res/ui/power-ui.css" rel="stylesheet">
+	<script src="${ctx.contextPath}/res/jqgrid/jqgrid.min.js"></script>
+	<script src="${ctx.contextPath}/res/zTree3.5/js/jquery.ztree.all.min.js"></script>
+	<script src="${ctx.contextPath}/res/ui/validator.js"></script>
+	<script src="${ctx.contextPath}/res/ui/power-ui.js"></script>
+	
+    <style>
+        body {
+            margin: 10px;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+    
+<script>
+    $(document).ready(function () {
+        initialPage();
+        GetGrid();
+    });
+    //重设(表格)宽高
+    function initialPage() {
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 108.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGridEx({
+            url: "${ctx.contextPath}/jf/jfsb/showJfsbSp",
+            datatype: "json",
+            mtype:"POST",
+            height: $(window).height() - 136.5,
+            autowidth: true,
+            colModel: [
+                { label: '主键', name: 'id', hidden: true,key:true},
+                { label: '申报记录ID', name: 'sbid', hidden: true,key:true},
+                { label: "申报人",name: "uname", width: 80, align: "left", sortable: false },
+                { label: "部门",name: "deptname", width: 80, align: "left", sortable: false },
+                { label: "岗位",name: "zw", width: 80, align: "left", sortable: false },
+                { label: "事件名称",name: "sjmc", width: 300, align: "left", sortable: false },
+                { label: "积分项", name: "jfxmc", width: 150, align: "left", sortable: false },
+                { label: "申请分值", name: "fz", width: 100, align: "center", sortable: false,
+                },
+                {
+                    label: "申报时间", name: "sbsj", width: 140, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                    	if(!cellvalue) return "";
+                        return formatDate(new Date(cellvalue), 'yyyy-MM-dd hh:ss');
+                    }
+                },
+                
+                { label: "审批状态", name: "status", width: 80, align: "center",autowidth: false,sortable: false,
+              	  formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == 1) {
+                            return "<span class=\"label label-success\">已审批</span>";
+                        } else if(cellvalue == 0){
+                            return "<span class=\"label label-danger\">未审批</span>";
+                        }
+                    }
+               },
+               { label: "审批结果", name: "spjg", width: 80, align: "center",autowidth: false,sortable: false,
+                	  formatter: function (cellvalue, options, rowObject) {
+                		  if(!cellvalue){return "";}
+                          if (cellvalue == 1) {
+                              return "<span class=\"label label-success\">已通过</span>";
+                          } else if(cellvalue == 0){
+                              return "<span class=\"label label-danger\">未通过</span>";
+                          }
+                      }
+                },
+                {
+                    label: "审批时间", name: "spsj", width: 140, align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                    	if(!cellvalue) return "";
+                        return formatDate(new Date(cellvalue), 'yyyy-MM-dd hh:ss');
+                    }
+                }
+            ],
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [20, 30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'createdate',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $("#" + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $("#" + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+        //查询条件设置
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            $gridTable.jqGrid('setGridParam', {
+                postData: {
+                    condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                    keyword: $("#txt_Keyword").val()
+                }
+            }).trigger('reloadGrid');
+        });
+        //查询回车事件
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    }
+    //审批
+    function btn_sp() {
+    	var keyValue = $("#gridTable").jqGridRowValue("sbid");
+    	var spid = $("#gridTable").jqGridRowValue("id");
+    	var status = $("#gridTable").jqGridRowValue("status");
+    	
+        if (checkedRow(keyValue)) {
+        	if(status=="<span class=\"label label-success\">已审批</span>"){
+        		dialogMsg('已审批无需重复审批', 0);
+        		return;
+        	}
+            dialogOpen({
+                id: "Form",
+                title: '申报审批',
+                url: "${ctx.contextPath}/jf/jfsb/sp?keyValue="+keyValue+"&spid="+spid,
+                width: "1000px",
+                height: "680px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            });
+        }
+    };
+  //查看审批流程
+    function btn_splc() {
+        var  keyValue = $("#gridTable").jqGridRowValue("sbid");
+        if (keyValue) {
+        	dialogOpen({
+                id: "btn_splc",
+                title: '审批流程',
+                url: "${ctx.contextPath}/jf/jfsb/splcindex?sbid="+keyValue,
+                width: "800px",
+                height: "410px",
+                btn: ['确认'],
+                callBack: function (iframeId) {
+                    top.frames[iframeId].dialogClose();
+                }
+            });
+        } else {
+            dialogMsg('选择需要查看的数据项！', 0);
+        }
+    };
+</script>
+
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <div id="queryCondition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="sjmc">事件名称</a></li>
+                            <li><a data-value="jfxmc">积分项名称</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td style="padding-left: 2px;">
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="b_ref" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="b_edit" class="btn btn-default" onclick="btn_sp()"><i class="fa fa-pencil-square-o"></i>&nbsp;审批</a>
+        </div>
+         <div class="btn-group">
+             <a id="lr-datacategory" class="btn btn-default" onclick="btn_splc()"><i class="fa fa-tags"></i>&nbsp;查看审批流程</a>
+        </div>
+        <!-- <script>$('.toolbar').authorizeButton()</script> -->
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+</body></html>
