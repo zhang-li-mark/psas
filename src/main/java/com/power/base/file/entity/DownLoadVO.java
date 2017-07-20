@@ -8,7 +8,7 @@ package com.power.base.file.entity;
  * @version 1.0
  */
 public class DownLoadVO {
-
+	//=============zm==上传修改测试==============
 	private String name;
 	private String path;
 	private String ext;
