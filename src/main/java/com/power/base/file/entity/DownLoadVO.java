@@ -11,16 +11,15 @@ public class DownLoadVO {
 
 	//=============keeps==上传修改测试2==============
 	private String keeps;
+	private String keeps1;
+	private String keeps2;
+	private String keeps3;
+
 	//=============zm==上传修改测试2==============
-	private String name;
+	
+	private String name_keeps_test;
 	private String path;
 	private String ext;
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public String getPath() {
 		return path;
 	}
