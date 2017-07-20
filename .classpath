@@ -22,10 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="F:/keeps-temp/汝州/汝州市公安局督考一体化平台/psas/lib/power-base-1.0.0.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/power-base-1.0.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
